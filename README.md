@@ -1,3 +1,3 @@
 # Ocular-Motility-Images-Dataset-Generating-System-with-3D-Model
-system requirement
+System Requirement
 > Autodesk Maya
