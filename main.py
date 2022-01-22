@@ -2,7 +2,31 @@ import maya.OpenMaya as om
 import maya.cmds as cmds
 from functools import partial
 import random as rand
+from mtoa.cmds.arnoldRender import arnoldRender
+import mtoa.core as core
+import mtoa.utils as mutils  # skydome
 import maya.app.general.createImageFormats as createImageFormats
+
+skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
+
+
+# def arnoldOpenMtoARenderView():
+#     core.createOptions()
+#     cmds.arnoldRenderView(mode="open")
+
+
+# def arnoldMtoARenderView():
+#     # core.ACTIVE_CAMERA is not set, anything we could do here ?
+#     # if core.ACTIVE_CAMERA != None:
+#     #    cmds.arnoldRenderView(cam=core.ACTIVE_CAMERA)
+#     # so instead we're calling it without any argument
+#     core.createOptions()
+#     cmds.arnoldRenderView()
+
+
+# # execute both functions
+# arnoldOpenMtoARenderView()
+# arnoldMtoARenderView()
 
 
 def createUI(windowTitle):
@@ -21,10 +45,16 @@ def createUI(windowTitle):
     # ------------ Viewport ------------
     cmds.modelEditor(da='smoothShaded', dtx=True,
                      wireframeOnShaded=True, swf=True)
+    cmds.frameLayout(label='Preparation')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 200), (2, 200)], columnOffset=[(1, 'right', 3)], rowSpacing=[1, 5])
+    cmds.button(label='Open Scene1')
+    cmds.button(label='Open Scene2')
+    cmds.setParent('..')
+
     cmds.frameLayout(label='Position')
     cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
         (1, 200), (2, 200)], columnOffset=[(1, 'right', 3)], rowSpacing=[1, 5])
-
     cmds.text('Type of Position :')
     collection1 = cmds.radioCollection()
     # Primary Position
@@ -42,6 +72,7 @@ def createUI(windowTitle):
     DiaPos = cmds.radioButton(
         label='9 Diagnostic Position (9 patterns)', changeCommand=lambda x: action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, AmoutImages))
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
+    cmds.setParent('..')
     cmds.setParent('..')
     cmds.radioCollection(collection1, edit=True, select=PriPos)
 
@@ -252,7 +283,8 @@ def createUI(windowTitle):
     cmds.setParent('..')
 
     # ------- Amount -------
-    cmds.frameLayout(label='Amount of Images')
+    cmds.paneLayout(configuration='quad')
+    cmds.frameLayout(label='Amount of Images1')
     cmds.separator(height=5, style=None)
     cmds.rowColumnLayout(numberOfColumns=3, columnAttach=(
         (1, 'right', 3), (2, 'both', 3), (3, 'both', 3)), columnWidth=[(1, 200), (2, 150)])
@@ -261,6 +293,18 @@ def createUI(windowTitle):
 
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.separator(height=10, style=None)
+
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.frameLayout(label='Create Lighting')
+    cmds.optionMenuGrp('Lighting', w=400, label="HDRIs :")
+    cmds.menuItem(label="Outdoor")
+    cmds.menuItem(label="Skies")
+    cmds.menuItem(label="Indoor")
+    cmds.menuItem(label="Studio")
+    cmds.menuItem(label="Nature")
+    cmds.menuItem(label="Urban")
+    cmds.setParent('..')
     cmds.setParent('..')
 
     def applyButton(*args):
