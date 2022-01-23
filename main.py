@@ -7,8 +7,13 @@ import mtoa.core as core
 import mtoa.utils as mutils  # skydome
 import maya.app.general.createImageFormats as createImageFormats
 
-skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
+# create Lighting Skydome
 
+if cmds.objExists('aiSkyDomeLight1'):
+    cmds.select('aiSkyDomeLight1')
+else:
+    skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
+    print("Warning: no aiSkyDomeLight exists.")
 
 # def arnoldOpenMtoARenderView():
 #     core.createOptions()
