@@ -7,13 +7,20 @@ import mtoa.core as core
 import mtoa.utils as mutils  # skydome
 import maya.app.general.createImageFormats as createImageFormats
 
+
+def openFile():
+    filename = cmds.fileDialog2(fileMode=1, caption="Import File")
+    cmds.file(filename[0], i=True)
+
 # create Lighting Skydome
 
-if cmds.objExists('aiSkyDomeLight1'):
-    cmds.select('aiSkyDomeLight1')
-else:
-    skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
-    print("Warning: no aiSkyDomeLight exists.")
+
+def createLight():
+    if cmds.objExists('aiSkyDomeLight1'):
+        cmds.select('aiSkyDomeLight1')
+    else:
+        skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
+        print("Warning: no aiSkyDomeLight exists.")
 
 # def arnoldOpenMtoARenderView():
 #     core.createOptions()
@@ -51,10 +58,8 @@ def createUI(windowTitle):
     cmds.modelEditor(da='smoothShaded', dtx=True,
                      wireframeOnShaded=True, swf=True)
     cmds.frameLayout(label='Preparation')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 200), (2, 200)], columnOffset=[(1, 'right', 3)], rowSpacing=[1, 5])
-    cmds.button(label='Open Scene1')
-    cmds.button(label='Open Scene2')
+    cmds.rowColumnLayout()
+    cmds.button(label='Open Scene1', command=openFile)
     cmds.setParent('..')
 
     cmds.frameLayout(label='Position')
