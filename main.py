@@ -7,21 +7,6 @@ import mtoa.core as core
 import mtoa.utils as mutils  # skydome
 import maya.app.general.createImageFormats as createImageFormats
 
-
-def openFile():
-    filename = cmds.fileDialog2(fileMode=1, caption="Import File")
-    cmds.file(filename[0], i=True)
-
-# create Lighting Skydome
-
-
-def createLight():
-    if cmds.objExists('aiSkyDomeLight1'):
-        cmds.select('aiSkyDomeLight1')
-    else:
-        skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
-        print("Warning: no aiSkyDomeLight exists.")
-
 # def arnoldOpenMtoARenderView():
 #     core.createOptions()
 #     cmds.arnoldRenderView(mode="open")
@@ -40,6 +25,44 @@ def createLight():
 # arnoldOpenMtoARenderView()
 # arnoldMtoARenderView()
 
+def openFile(self):
+    filename = cmds.fileDialog2(fileMode=1, caption="Import File")
+    cmds.file(filename[0], i=True)
+
+# create Lighting Skydome
+
+
+def apply_texture():
+    i = 0
+    # create a shader
+    shader = cmds.shadingNode("aiSkyDomeLight", asShader=True, n='Red')
+    # a file texture node
+    file_node = cmds.shadingNode("file", asTexture=True, n="text_%s" % i)
+    # defines location where texture is
+    file = ("C:/Users/Khunpang/Documents/GitHub/Ocular-Motility-Images-Dataset-Generating-System-with-3D-Model/" +
+            "abandoned_church" + ".hdr")
+    # a shading group
+    shading_group = cmds.sets(
+        renderable=True, noSurfaceShader=True, empty=True)
+    cmds.select('aiSkyDomeLight1')
+    cmds.setAttr('%s.fileTextureName' % file_node, file, type="string")
+    # connect shader to sg surface shader
+    cmds.connectAttr('%s.outColor' %
+                     shader, '%s.surfaceShader' % shading_group)
+    # connect file texture node to shader's color
+    cmds.connectAttr('%s.outColor' % file_node, '%s.color' % shader)
+    i += 1
+
+
+def createLight():
+    if cmds.objExists('aiSkyDomeLight1'):
+        cmds.select('aiSkyDomeLight1')
+
+    else:
+        skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
+        print("Warning: no aiSkyDomeLight exists.")
+        apply_texture()
+
 
 def createUI(windowTitle):
     window = 'MR_Window'
@@ -49,6 +72,14 @@ def createUI(windowTitle):
     window = cmds.window(window, title=windowTitle,
                          resizeToFitChildren=True, widthHeight=size, sizeable=True)
     cmds.columnLayout(adjustableColumn=True)
+    menuBarLayout = cmds.menuBarLayout()
+    cmds.menu(label='File')
+    cmds.menuItem(label='New')
+    cmds.menuItem(label='Open')
+    cmds.menuItem(label='Close')
+
+    cmds.menu(label='Help', helpMenu=True)
+    cmds.menuItem(label='About...')
 
     # ------------ Position ------------
     infoColumnLayout = cmds.columnLayout(
@@ -58,8 +89,10 @@ def createUI(windowTitle):
     cmds.modelEditor(da='smoothShaded', dtx=True,
                      wireframeOnShaded=True, swf=True)
     cmds.frameLayout(label='Preparation')
-    cmds.rowColumnLayout()
-    cmds.button(label='Open Scene1', command=openFile)
+    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
+        (1, 200), (2, 150)], columnOffset=[(1, 'both', 3)])
+    cmds.separator(height=30, style=None)
+    cmds.button(label='Open Scene', command=openFile)
     cmds.setParent('..')
 
     cmds.frameLayout(label='Position')
@@ -150,12 +183,12 @@ def createUI(windowTitle):
     frameCarSetting_r_ug = cmds.frameLayout(
         'frameCarSetting_r_ug', label='Right and up gaze')
     cmds.text('Right eye:')
-    RU_R_Scale = cmds.intSliderGrp(field=True, label='R_Scale:', minValue=-4,
+    RU_R_Scale = cmds.intSliderGrp(field=True, label='RSR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(RU_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_r_ug', RU_R_Scale, 'RU_R_Scale'))
     cmds.text('Left eye:')
-    RU_L_Scale = cmds.intSliderGrp(field=True, label='L_Scale:', minValue=-4,
+    RU_L_Scale = cmds.intSliderGrp(field=True, label='LIO:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(RU_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_r_ug', RU_L_Scale, 'RU_L_Scale'))
@@ -164,12 +197,12 @@ def createUI(windowTitle):
     frameCarSetting_ug = cmds.frameLayout(
         'frameCarSetting_ug', label='Up gaze')
     cmds.text('Right eye:')
-    Up_R_Scale = cmds.intSliderGrp(field=True, label='R_Scale:', minValue=-4,
+    Up_R_Scale = cmds.intSliderGrp(field=True, label='RSR/RIO:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(Up_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_ug', Up_R_Scale, 'Up_R_Scale'))
     cmds.text('Left eye:')
-    Up_L_Scale = cmds.intSliderGrp(field=True, label='L_Scale:', minValue=-4,
+    Up_L_Scale = cmds.intSliderGrp(field=True, label='LIO/LSR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(Up_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_ug', Up_L_Scale, 'Up_L_Scale'))
@@ -178,12 +211,12 @@ def createUI(windowTitle):
     frameCarSetting_l_ug = cmds.frameLayout(
         'frameCarSetting_l_ug', label='Left and up gaze')
     cmds.text('Right eye:')
-    LU_R_Scale = cmds.intSliderGrp(field=True, label='R_Scale:', minValue=-4,
+    LU_R_Scale = cmds.intSliderGrp(field=True, label='RIO:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(LU_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_l_ug', LU_R_Scale, 'LU_R_Scale'))
     cmds.text('Left eye:')
-    LU_L_Scale = cmds.intSliderGrp(field=True, label='L_Scale:', minValue=-4,
+    LU_L_Scale = cmds.intSliderGrp(field=True, label='LSR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(LU_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_l_ug', LU_L_Scale, 'LU_L_Scale'))
@@ -192,12 +225,12 @@ def createUI(windowTitle):
     frameCarSetting_rg = cmds.frameLayout(
         'frameCarSetting_rg', label='Right gaze')
     cmds.text('Right eye:')
-    RG_R_Scale = cmds.intSliderGrp(field=True, label='R_Scale:', minValue=-4,
+    RG_R_Scale = cmds.intSliderGrp(field=True, label='RLR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(RG_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_rg', RG_R_Scale, 'RG_R_Scale'))
     cmds.text('Left eye:')
-    RG_L_Scale = cmds.intSliderGrp(field=True, label='L_Scale:', minValue=-4,
+    RG_L_Scale = cmds.intSliderGrp(field=True, label='LMR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(RG_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_rg', RG_L_Scale, 'RG_L_Scale'))
@@ -238,12 +271,12 @@ def createUI(windowTitle):
     frameCarSetting_lg = cmds.frameLayout(
         'frameCarSetting_lg', label='Left gaze')
     cmds.text('Right eye:')
-    LG_R_Scale = cmds.intSliderGrp(field=True, label='R_Scale:', minValue=-4,
+    LG_R_Scale = cmds.intSliderGrp(field=True, label='RMR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(LG_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_lg', LG_R_Scale, 'LG_R_Scale'))
     cmds.text('Left eye:')
-    LG_L_Scale = cmds.intSliderGrp(field=True, label='L_Scale:', minValue=-4,
+    LG_L_Scale = cmds.intSliderGrp(field=True, label='LLR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(LG_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_lg', LG_L_Scale, 'LG_L_Scale'))
@@ -251,12 +284,12 @@ def createUI(windowTitle):
     frameCarSetting_r_dg = cmds.frameLayout(
         'frameCarSetting_r_dg', label='Right and down gaze')
     cmds.text('Right eye:')
-    RD_R_Scale = cmds.intSliderGrp(field=True, label='R_Scale:', minValue=-4,
+    RD_R_Scale = cmds.intSliderGrp(field=True, label='RIR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(RD_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_r_dg', RD_R_Scale, 'RD_R_Scale'))
     cmds.text('Left eye:')
-    RD_L_Scale = cmds.intSliderGrp(field=True, label='L_Scale:', minValue=-4,
+    RD_L_Scale = cmds.intSliderGrp(field=True, label='LSO:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(RD_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_r_dg', RD_L_Scale, 'RD_L_Scale'))
@@ -266,12 +299,12 @@ def createUI(windowTitle):
     frameCarSetting_dg = cmds.frameLayout(
         'frameCarSetting_dg', label='Downgaze')
     cmds.text('Right eye:')
-    D_R_Scale = cmds.intSliderGrp(field=True, label='R_Scale:', minValue=-4,
+    D_R_Scale = cmds.intSliderGrp(field=True, label='IR/SO:', minValue=-4,
                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(D_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_dg', D_R_Scale, 'D_R_Scale'))
     cmds.text('Left eye:')
-    D_L_Scale = cmds.intSliderGrp(field=True, label='L_Scale:', minValue=-4,
+    D_L_Scale = cmds.intSliderGrp(field=True, label='SO/IR:', minValue=-4,
                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(D_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_dg', D_L_Scale, 'D_L_Scale'))
@@ -279,12 +312,12 @@ def createUI(windowTitle):
     frameCarSetting_l_dg = cmds.frameLayout(
         'frameCarSetting_l_dg', label='Left and down gaze')
     cmds.text('Right eye:')
-    LD_R_Scale = cmds.intSliderGrp(field=True, label='R_Scale:', minValue=-4,
+    LD_R_Scale = cmds.intSliderGrp(field=True, label='RSO:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(LD_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_l_dg', LD_R_Scale, 'LD_R_Scale'))
     cmds.text('Left eye:')
-    LD_L_Scale = cmds.intSliderGrp(field=True, label='L_Scale:', minValue=-4,
+    LD_L_Scale = cmds.intSliderGrp(field=True, label='LIR:', minValue=-4,
                                    maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
     cmds.intSliderGrp(LD_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
         'frameCarSetting_l_dg', LD_L_Scale, 'LD_L_Scale'))
@@ -294,7 +327,7 @@ def createUI(windowTitle):
 
     # ------- Amount -------
     cmds.paneLayout(configuration='quad')
-    cmds.frameLayout(label='Amount of Images1')
+    cmds.frameLayout(label='Amount of Images')
     cmds.separator(height=5, style=None)
     cmds.rowColumnLayout(numberOfColumns=3, columnAttach=(
         (1, 'right', 3), (2, 'both', 3), (3, 'both', 3)), columnWidth=[(1, 200), (2, 150)])
@@ -381,8 +414,8 @@ def createUI(windowTitle):
     cmds.button(label='Close', command=cancelCallback)
     cmds.setParent('..')
     # display new window
+    createLight()
     cmds.showWindow()
-
 
 # ------------------- set Preview Degree -------------------
 
