@@ -29,40 +29,6 @@ def openFile(self):
     filename = cmds.fileDialog2(fileMode=1, caption="Import File")
     cmds.file(filename[0], i=True)
 
-# create Lighting Skydome
-
-
-def apply_texture():
-    i = 0
-    # create a shader
-    shader = cmds.shadingNode("aiSkyDomeLight", asShader=True, n='Red')
-    # a file texture node
-    file_node = cmds.shadingNode("file", asTexture=True, n="text_%s" % i)
-    # defines location where texture is
-    file = ("C:/Users/Khunpang/Documents/GitHub/Ocular-Motility-Images-Dataset-Generating-System-with-3D-Model/" +
-            "abandoned_church" + ".hdr")
-    # a shading group
-    shading_group = cmds.sets(
-        renderable=True, noSurfaceShader=True, empty=True)
-    cmds.select('aiSkyDomeLight1')
-    cmds.setAttr('%s.fileTextureName' % file_node, file, type="string")
-    # connect shader to sg surface shader
-    cmds.connectAttr('%s.outColor' %
-                     shader, '%s.surfaceShader' % shading_group)
-    # connect file texture node to shader's color
-    cmds.connectAttr('%s.outColor' % file_node, '%s.color' % shader)
-    i += 1
-
-
-def createLight():
-    if cmds.objExists('aiSkyDomeLight1'):
-        cmds.select('aiSkyDomeLight1')
-
-    else:
-        skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
-        print("Warning: no aiSkyDomeLight exists.")
-        apply_texture()
-
 
 def createUI(windowTitle):
     window = 'MR_Window'
@@ -340,7 +306,8 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.frameLayout(label='Create Lighting')
-    cmds.optionMenuGrp('Lighting', w=400, label="HDRIs :")
+    cmds.optionMenuGrp('optionLighting', w=400, label="HDRIs :",
+                       changeCommand=lambda x: apply_texture())
     cmds.menuItem(label="Outdoor")
     cmds.menuItem(label="Skies")
     cmds.menuItem(label="Indoor")
@@ -416,6 +383,41 @@ def createUI(windowTitle):
     # display new window
     createLight()
     cmds.showWindow()
+
+
+# create Lighting Skydome
+def apply_texture():
+    selectedMenuItem = cmds.optionMenuGrp('optionLighting', q=True, value=True)
+    i = 0
+    # create a shader
+    shader = cmds.shadingNode("aiSkyDomeLight", asShader=True, n='shaderNode')
+    # a file texture node
+    file_node = cmds.shadingNode(
+        "file", asTexture=True, n="fileTexture_%s" % i)
+    # defines location where texture is
+    file = ("C:/Users/Khunpang/Documents/GitHub/Ocular-Motility-Images-Dataset-Generating-System-with-3D-Model/" +
+            "abandoned_" + selectedMenuItem+".hdr")
+    # a shading group
+    shading_group = cmds.sets(
+        renderable=True, noSurfaceShader=True, empty=True)
+    cmds.select('aiSkyDomeLight1')
+    cmds.setAttr('%s.fileTextureName' % file_node, file, type="string")
+    # connect shader to sg surface shader
+    cmds.connectAttr('%s.outColor' %
+                     shader, '%s.surfaceShader' % shading_group)
+    # connect file texture node to shader's color
+    cmds.connectAttr('%s.outColor' % file_node, '%s.color' % shader)
+    i += 1
+
+
+def createLight():
+    if cmds.objExists('aiSkyDomeLight1'):
+        cmds.select('aiSkyDomeLight1')
+
+    else:
+        skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
+        print("Warning: no aiSkyDomeLight exists.")
+        apply_texture()
 
 # ------------------- set Preview Degree -------------------
 
