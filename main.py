@@ -390,7 +390,7 @@ def apply_texture():
     selectedMenuItem = cmds.optionMenuGrp('optionLighting', q=True, value=True)
     i = 0
     # create a shader
-    shader = cmds.shadingNode("aiSkyDomeLight", asShader=True, n='shaderNode')
+    shader = cmds.shadingNode("aiSkyDomeLight", asLight=True, n='shaderNode')
     # a file texture node
     file_node = cmds.shadingNode(
         "file", asTexture=True, n="fileTexture_%s" % i)
