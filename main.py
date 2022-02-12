@@ -85,20 +85,7 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.radioCollection(collection1, edit=True, select=PriPos)
 
-    # ------------ Classify ------------
-    cmds.frameLayout(label='Classify')
-    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 200), (2, 200)], columnOffset=[(1, 'right', 3)], rowSpacing=[1, 5])
 
-    cmds.text('Type of eyes :')
-    collection_eyes = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(
-        label='normal', select=True, changeCommand=lambda x: action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, AmoutImages))
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.separator(height=10, style=None)
-    abnormal_eyes = cmds.radioButton(
-        label='abnormal', changeCommand=lambda x: action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, AmoutImages))
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
