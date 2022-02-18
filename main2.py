@@ -15,16 +15,6 @@ def createUI(windowTitle):
     cmds.menu(label='Help', helpMenu=True)
     cmds.menuItem(label='About...')
 
-    # ------------ Position ------------
-    infoColumnLayout = cmds.columnLayout(
-        'infoColumnLayout', adjustableColumn=True, columnOffset=['both', 5], parent=window)
-    cmds.paneLayout(configuration='quad', height=250)
-    # ------------ Viewport ------------
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
     # ------------ Preparation ------------
     cmds.frameLayout(label='Preparation', collapsable=True)
     cmds.rowColumnLayout(numberOfColumns=3, columnAttach=(
@@ -33,49 +23,41 @@ def createUI(windowTitle):
     cmds.button(label='Open Scene', command=openFile)
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.setParent('..')
-    # # ------------ Setting for Primary  Position ------------
-    # framePriSetting = cmds.frameLayout('framePriSetting',
-    #                                    label='Setting for Primary  Position', collapsable=True, enable=True)
-    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-    #     (1, 300), (2, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
-    # cmds.frameLayout(label='Right eye')
-    # cmds.rowColumnLayout(numberOfColumns=1)
-    # Pri_TypeofStrabismus_R = cmds.optionMenuGrp(
-    #     'TypeofStrabismus_R_1', w=300, label="Type of Strabismus :")
-    # cmds.menuItem(label="esotropia")
-    # cmds.menuItem(label="exotropia")
-    # cmds.optionMenuGrp('TypeofStrabismus_R_2', w=300, label="")
-    # cmds.menuItem(label="hypertropia")
-    # cmds.menuItem(label="hypotropia")
-
-    # cmds.setParent('..')
-    # cmds.setParent('..')
-    # cmds.frameLayout(label='Left eye')
-    # cmds.rowColumnLayout(numberOfColumns=1)
-    # Pri_TypeofStrabismus_L = cmds.optionMenuGrp(
-    #     'TypeofStrabismus_L_1', w=300, label="Type of Strabismus :")
-    # cmds.menuItem(label="esotropia")
-    # cmds.menuItem(label="exotropia")
-    # cmds.optionMenuGrp(
-    #     'TypeofStrabismus_L_2', w=300, label="")
-    # cmds.menuItem(label="hypertropia")
-    # cmds.menuItem(label="hypotropia")
-    # cmds.setParent('..')
-    # cmds.setParent('..')
-    # cmds.setParent('..')
 
     frameDiaSetting = cmds.frameLayout('frameDiaSetting',
                                        label='Setting for 9 diagnostic positions of gaze', enable=True, borderVisible=False, collapsable=True)
+    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
+        (1, 300), (2, 300), (3, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
+    cmds.frameLayout(label='Right & Up Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 300), (2, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
-    cmds.frameLayout(label='Right eye')
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('SR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('IO', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 300)])
+    # cmds.picture(image=(
+    #     'C:/Users/Khunpang/Documents/maya/projects/mermaid/images/abnormal/1/scale_(2)/mermaid_model_use_3_normal_1_1.jpg'))
+    # cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 100)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
-    cmds.text('right eye of all muscles : ')
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
     cmds.setParent('..')
     cmds.setParent('..')
-    cmds.frameLayout(label='Left eye')
+    cmds.setParent('..')
+
+    cmds.frameLayout(label='Up Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 100)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
     cmds.text('left eye of all muscles : ')
@@ -83,85 +65,151 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.setParent('..')
 
-    # Right Eye Muscles
-    cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
-        (1, 50), (2, 70), (3, 80), (4, 80)], columnOffset=[(1, 'both', 3), (2, 'both', 3)], bgc=[0.3, 0.3, 0.3])
-    collectEyes_SR = cmds.radioCollection()
-    cmds.text('SR')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_IO = cmds.radioCollection()
-    cmds.text('IO')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_LR = cmds.radioCollection()
-    cmds.text('LR')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_MR = cmds.radioCollection()
-    cmds.text('MR')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_IR = cmds.radioCollection()
-    cmds.text('IR')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_SO = cmds.radioCollection()
-    cmds.text('SO')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
+    cmds.frameLayout(label='Left & Up Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('IO', bgc=[0.1, 0.1, 0.1])
+    cmds.text('SR', bgc=[0.1, 0.1, 0.1])
     cmds.setParent('..')
-    # Left Eye Muscles
-    cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
-        (1, 50), (2, 70), (3, 80), (4, 80)], columnOffset=[(1, 'both', 3), (2, 'both', 3)], bgc=[0.3, 0.3, 0.3])
+
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
     collectEyes_SR = cmds.radioCollection()
-    cmds.text('SR')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_IO = cmds.radioCollection()
-    cmds.text('IO')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_LR = cmds.radioCollection()
-    cmds.text('LR')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_MR = cmds.radioCollection()
-    cmds.text('MR')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_IR = cmds.radioCollection()
-    cmds.text('IR')
-    cmds.checkBox(label='normal')
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
-
-    collectEyes_SO = cmds.radioCollection()
-    cmds.text('SO')
-    cmds.checkBox(label='normal')
     normal_eyes = cmds.radioButton(label='overaction', select=True)
     abnormal_eyes = cmds.radioButton(label='underaction')
     cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    cmds.frameLayout(label='Right Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('LR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('MR', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    cmds.frameLayout(label='Primary Position')
+    cmds.paneLayout(configuration='quad', height=200)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    cmds.frameLayout(label='Left Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('MR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('LR', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    cmds.frameLayout(label='Right & Down Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('IR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('SO', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    cmds.frameLayout(label='Down Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 100)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
+    cmds.text('left eye of all muscles : ')
+    cmds.checkBox(label='normal')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    cmds.frameLayout(label='Left & Down Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('IR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('SO', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
     cmds.setParent('..')
     cmds.setParent('..')
 
@@ -201,7 +249,7 @@ def createUI(windowTitle):
         loadWindowPreview()
 
     cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 200), (2, 200), (3, 200)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
+        (1, 300), (2, 300), (3, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
     cmds.button(label='Apply', height=30, command=applyButton)
     cmds.button(label='Render')
     cmds.button(label='Close', command=cancelCallback)
