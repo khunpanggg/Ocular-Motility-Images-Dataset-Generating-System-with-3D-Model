@@ -7,37 +7,53 @@ def createUI(windowTitle):
     window = cmds.window(window, title=windowTitle,
                          resizeToFitChildren=True, sizeable=True)
     cmds.columnLayout(adjustableColumn=True)
-    menuBarLayout = cmds.menuBarLayout()
-    cmds.menu(label='File')
-    cmds.menuItem(label='New')
-    cmds.menuItem(label='Open')
-    cmds.menuItem(label='Close')
-    cmds.menu(label='Help', helpMenu=True)
-    cmds.menuItem(label='About...')
+    cmds.rowColumnLayout(numberOfColumns=2, columnAttach=(
+        (1, 'right', 2), (2, 'both', 3)), columnWidth=[(1, 250)], columnOffset=[(1, 'both', 2)])
 
     # ------------ Preparation ------------
-    cmds.frameLayout(label='Preparation', collapsable=True)
-    cmds.rowColumnLayout(numberOfColumns=3, columnAttach=(
-        (1, 'right', 2), (2, 'both', 3), (3, 'both', 3)), columnWidth=[(1, 200), (2, 150)])
-    cmds.separator(height=30, style=None)
-    cmds.button(label='Open Scene', command=openFile)
+    cmds.frameLayout(label='Preparation', collapsable=True, marginWidth=5)
+    cmds.frameLayout(label='Import Flie', collapsable=True)
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+                         (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
+    cmds.button(label='Open Scene', command=openFile, bgc=[0.4, 0.4, 0.4])
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.setParent('..')
+    cmds.frameLayout(label='Setting Gaze', collapsable=True)
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+                         (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
+    cmds.button(label='Blend Shape', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
+    cmds.button(label='Set Gaze', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
+    cmds.setParent('..')
+    cmds.frameLayout(label='Tool', collapsable=True)
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+                         (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
+    cmds.button(label='Reset', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
 
+    # ------------------ Setting for 9 diagnostic positions of gaze ------------------
     frameDiaSetting = cmds.frameLayout('frameDiaSetting',
                                        label='Setting for 9 diagnostic positions of gaze', enable=True, borderVisible=False, collapsable=True)
     cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
         (1, 300), (2, 300), (3, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
+
+    # ------------------ Right & Up Gaze ------------------
     cmds.frameLayout(label='Right & Up Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.text('SR', bgc=[0.1, 0.1, 0.1])
     cmds.text('IO', bgc=[0.1, 0.1, 0.1])
     cmds.setParent('..')
-    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[(1, 300)])
-    # cmds.picture(image=(
-    #     'C:/Users/Khunpang/Documents/maya/projects/mermaid/images/abnormal/1/scale_(2)/mermaid_model_use_3_normal_1_1.jpg'))
-    # cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
@@ -57,21 +73,47 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.setParent('..')
 
+    # ------------------ Up Gaze ------------------
     cmds.frameLayout(label='Up Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 100)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
-    cmds.text('left eye of all muscles : ')
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('SR (IO)', bgc=[0.1, 0.1, 0.1])
+    cmds.text('SR (IO)', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
 
+    # ------------------ Left & Up Gaze ------------------
     cmds.frameLayout(label='Left & Up Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.text('IO', bgc=[0.1, 0.1, 0.1])
     cmds.text('SR', bgc=[0.1, 0.1, 0.1])
     cmds.setParent('..')
-
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
@@ -91,13 +133,17 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.setParent('..')
 
+    # ------------------ Right Gaze ------------------
     cmds.frameLayout(label='Right Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.text('LR', bgc=[0.1, 0.1, 0.1])
     cmds.text('MR', bgc=[0.1, 0.1, 0.1])
     cmds.setParent('..')
-
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
@@ -117,20 +163,25 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.setParent('..')
 
+    # ------------------ Primary Position ------------------
     cmds.frameLayout(label='Primary Position')
-    cmds.paneLayout(configuration='quad', height=200)
+    cmds.paneLayout(configuration='quad', height=100)
     cmds.modelEditor(da='smoothShaded', dtx=True,
                      wireframeOnShaded=False, swf=True, displayLights='all')
     cmds.setParent('..')
     cmds.setParent('..')
 
+    # ------------------ Left Gaze ------------------
     cmds.frameLayout(label='Left Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.text('MR', bgc=[0.1, 0.1, 0.1])
     cmds.text('LR', bgc=[0.1, 0.1, 0.1])
     cmds.setParent('..')
-
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
@@ -150,13 +201,17 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.setParent('..')
 
+    # ------------------ Right & Down Gaze ------------------
     cmds.frameLayout(label='Right & Down Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.text('IR', bgc=[0.1, 0.1, 0.1])
     cmds.text('SO', bgc=[0.1, 0.1, 0.1])
     cmds.setParent('..')
-
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
@@ -176,21 +231,47 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.setParent('..')
 
-    cmds.frameLayout(label='Down Gaze')
+    # ------------------ Down Gaze ------------------
+    cmds.frameLayout(label='Up Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 100)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
-    cmds.text('left eye of all muscles : ')
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('IR (SO)', bgc=[0.1, 0.1, 0.1])
+    cmds.text('IR (SO)', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.checkBox(label='normal')
+    collectEyes_SR = cmds.radioCollection()
+    normal_eyes = cmds.radioButton(label='overaction', select=True)
+    abnormal_eyes = cmds.radioButton(label='underaction')
+    cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
 
+    # ------------------ Left & Down Gaze ------------------
     cmds.frameLayout(label='Left & Down Gaze')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('IR', bgc=[0.1, 0.1, 0.1])
     cmds.text('SO', bgc=[0.1, 0.1, 0.1])
+    cmds.text('IR', bgc=[0.1, 0.1, 0.1])
     cmds.setParent('..')
-
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all')
+    cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
@@ -211,10 +292,10 @@ def createUI(windowTitle):
     cmds.setParent('..')
 
     cmds.setParent('..')
-    cmds.setParent('..')
 
-    # ------- Amount -------
-    cmds.paneLayout(configuration='quad')
+    # ------------------ Amount ------------------
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 450), (2, 450)], columnOffset=[(1, 'both', 2)])
     cmds.frameLayout(label='Amount of Images', collapsable=True)
     cmds.separator(height=5, style=None)
     cmds.rowColumnLayout(numberOfColumns=3, columnAttach=(
@@ -226,6 +307,8 @@ def createUI(windowTitle):
     cmds.separator(height=5, style=None)
     cmds.setParent('..')
     cmds.setParent('..')
+
+    # ------------------ Create Lighting ------------------
     cmds.frameLayout(label='Create Lighting', collapsable=True)
     cmds.separator(height=5, style=None)
     cmds.rowColumnLayout(numberOfColumns=2, columnAttach=((1, 'both', 2)))
@@ -248,6 +331,7 @@ def createUI(windowTitle):
     def applyButton(*args):
         loadWindowPreview()
 
+    cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
         (1, 300), (2, 300), (3, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
     cmds.button(label='Apply', height=30, command=applyButton)
