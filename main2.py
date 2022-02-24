@@ -58,17 +58,25 @@ def createUI(windowTitle):
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # RSR
+    checkBox_RSR = cmds.checkBox('checkBox_RSR', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    collectEyes_RSR = cmds.radioCollection()
+    radioOver_RSR = cmds.radioButton('radioOver_RSR', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    radioUnder_RSR = cmds.radioButton('radioUnder_RSR', label='underaction', changeCommand=lambda x: action_checkBox_Right(
+        checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO))
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # LIO
+    checkBox_LIO = cmds.checkBox('checkBox_LIO', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    collectEyes_LIO = cmds.radioCollection()
+    radioOver_LIO = cmds.radioButton('radioOver_LIO', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    radioUnder_LIO = cmds.radioButton('radioUnder_LIO', label='underaction',
+                                      changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -88,17 +96,25 @@ def createUI(windowTitle):
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # RSR
+    checkBox_RSRIO = cmds.checkBox('checkBox_RSRIO', label='normal', value=False,
+                                   changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    collectEyes_RSRIO = cmds.radioCollection()
+    radioOver_RSRIO = cmds.radioButton('radioOver_RSRIO', label='overaction', select=True,
+                                       changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    radioUnder_RSRIO = cmds.radioButton('radioUnder_RSRIO', label='underaction', changeCommand=lambda x: action_checkBox_Right(
+        checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO))
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # LIO
+    checkBox_LSRIO = cmds.checkBox('checkBox_LSRIO', label='normal', value=False,
+                                   changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    collectEyes_LSRIO = cmds.radioCollection()
+    radioOver_LSRIO = cmds.radioButton('radioOver_LSRIO', label='overaction', select=True,
+                                       changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    radioUnder_LSRIO = cmds.radioButton('radioUnder_LSRIO', label='underaction',
+                                        changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -118,17 +134,25 @@ def createUI(windowTitle):
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # RIO
+    checkBox_RIO = cmds.checkBox('checkBox_RIO', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    collectEyes_RIO = cmds.radioCollection()
+    radioOver_RIO = cmds.radioButton('radioOver_RIO', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    radioUnder_RIO = cmds.radioButton('radioUnder_RIO', label='underaction', changeCommand=lambda x: action_checkBox_Right(
+        checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO))
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # LSR
+    checkBox_LSR = cmds.checkBox('checkBox_LSR', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    collectEyes_LSR = cmds.radioCollection()
+    radioOver_LSR = cmds.radioButton('radioOver_LSR', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    radioUnder_LSR = cmds.radioButton('radioUnder_LSR', label='underaction',
+                                      changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -148,17 +172,25 @@ def createUI(windowTitle):
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # RLR
+    checkBox_RLR = cmds.checkBox('checkBox_RLR', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    collectEyes_RLR = cmds.radioCollection()
+    radioOver_RLR = cmds.radioButton('radioOver_RLR', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    radioUnder_RLR = cmds.radioButton('radioUnder_RLR', label='underaction', changeCommand=lambda x: action_checkBox_Right(
+        checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO))
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # LMR
+    checkBox_LMR = cmds.checkBox('checkBox_LMR', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    collectEyes_LMR = cmds.radioCollection()
+    radioOver_LMR = cmds.radioButton('radioOver_LMR', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    radioUnder_LMR = cmds.radioButton('radioUnder_LMR', label='underaction',
+                                      changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -186,17 +218,25 @@ def createUI(windowTitle):
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # RMR
+    checkBox_RMR = cmds.checkBox('checkBox_RMR', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    collectEyes_RMR = cmds.radioCollection()
+    radioOver_RMR = cmds.radioButton('radioOver_RMR', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    radioUnder_RMR = cmds.radioButton('radioUnder_RMR', label='underaction', changeCommand=lambda x: action_checkBox_Right(
+        checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO))
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # LLR
+    checkBox_LLR = cmds.checkBox('checkBox_LLR', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    collectEyes_LLR = cmds.radioCollection()
+    radioOver_LLR = cmds.radioButton('radioOver_LLR', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    radioUnder_LLR = cmds.radioButton('radioUnder_LLR', label='underaction',
+                                      changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -216,17 +256,25 @@ def createUI(windowTitle):
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # RIR
+    checkBox_RIR = cmds.checkBox('checkBox_RIR', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    collectEyes_RIR = cmds.radioCollection()
+    radioOver_RIR = cmds.radioButton('radioOver_RIR', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    radioUnder_RIR = cmds.radioButton('radioUnder_RIR', label='underaction', changeCommand=lambda x: action_checkBox_Right(
+        checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO))
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # LSO
+    checkBox_LSO = cmds.checkBox('checkBox_LSO', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    collectEyes_LSO = cmds.radioCollection()
+    radioOver_LSO = cmds.radioButton('radioOver_LSO', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    radioUnder_LSO = cmds.radioButton('radioUnder_LSO', label='underaction',
+                                      changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -246,17 +294,25 @@ def createUI(windowTitle):
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # RIR
+    checkBox_RIRSO = cmds.checkBox('checkBox_RIRSO', label='normal', value=False,
+                                   changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    collectEyes_RIRSO = cmds.radioCollection()
+    radioOver_RIRSO = cmds.radioButton('radioOver_RIRSO', label='overaction', select=True,
+                                       changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    radioUnder_RIRSO = cmds.radioButton('radioUnder_RIRSO', label='underaction', changeCommand=lambda x: action_checkBox_Right(
+        checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO))
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # LSO
+    checkBox_LIRSO = cmds.checkBox('checkBox_LSO', label='normal', value=False,
+                                   changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    collectEyes_LIRSO = cmds.radioCollection()
+    radioOver_LIRSO = cmds.radioButton('radioOver_LIRSO', label='overaction', select=True,
+                                       changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    radioUnder_LIRSO = cmds.radioButton('radioUnder_LIRSO', label='underaction',
+                                        changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -276,17 +332,25 @@ def createUI(windowTitle):
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # RSO
+    checkBox_RSO = cmds.checkBox('checkBox_RSO', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    collectEyes_RSO = cmds.radioCollection()
+    radioOver_RSO = cmds.radioButton('radioOver_RSO', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO))
+    radioUnder_RSO = cmds.radioButton('radioUnder_RSO', label='underaction', changeCommand=lambda x: action_checkBox_Right(
+        checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO))
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.checkBox(label='normal')
-    collectEyes_SR = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(label='overaction', select=True)
-    abnormal_eyes = cmds.radioButton(label='underaction')
+    # LIR
+    checkBox_LIR = cmds.checkBox('checkBox_LIR', label='normal', value=False,
+                                 changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    collectEyes_LIR = cmds.radioCollection()
+    radioOver_LIR = cmds.radioButton('radioOver_LIR', label='overaction', select=True,
+                                     changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
+    radioUnder_LIR = cmds.radioButton('radioUnder_LIR', label='underaction',
+                                      changeCommand=lambda x: action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO))
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -340,10 +404,14 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.showWindow()
 
+# ------------------ openFile ------------------
+
 
 def openFile(self):
     filename = cmds.fileDialog2(fileMode=1, caption="Import File")
     cmds.file(filename[0], i=True)
+
+# ------------------ loadWindowPreview ------------------
 
 
 def loadWindowPreview():
@@ -405,12 +473,6 @@ def loadWindowPreview():
     cmds.setParent('..')
     cmds.setParent('..')
 
-    # cmds.rowColumnLayout(numberOfColumns=2, columnOffset=(
-    #     1, 'both', 5), columnWidth=[(1, 380), (2, 380)])
-    # cmds.text('total of gaze : 6 ')
-    # cmds.text('total of picture : 36 ')
-
-    # cmds.setParent('..')
     rc = cmds.rowColumnLayout(numberOfColumns=2, columnOffset=(
         1, 'both', 5), columnWidth=[(1, 380), (2, 380)])
     cmds.text('total 9 diagnostic positions of gaze : 6 ')
@@ -425,6 +487,83 @@ def loadWindowPreview():
         sl, 'top', 5), (sl, 'bottom', 60), (rc, 'bottom', 5), (rc, 'left', 5), (rc, 'right', 5)])
 
     cmds.showWindow(window)
+
+# ----------------- set Position Of Gaze (ABNORMAL) -----------------
+
+# ----------------- action_radioButton -----------------
+
+
+def action_checkBox_Right(checkBox_RSR, checkBox_RIO, checkBox_RLR, checkBox_RMR, checkBox_RIR, checkBox_RSO, checkBox_RSRIO, checkBox_RIRSO):
+    # chackbox values
+    if cmds.checkBox(checkBox_RSR, query=True, value=True):
+        cmds.radioButton('radioOver_RSR', edit=True, enable=False)
+        cmds.radioButton('radioUnder_RSR', edit=True, enable=False)
+        print("checkBox_RSR")
+
+    if cmds.checkBox(checkBox_RIO, query=True, value=True):
+        cmds.radioButton('radioOver_RIO', edit=True, enable=False)
+        cmds.radioButton('radioUnder_RIO', edit=True, enable=False)
+        print("checkBox_RIO")
+    if cmds.checkBox(checkBox_RLR, query=True, value=True):
+        cmds.radioButton('radioOver_RLR', edit=True, enable=False)
+        cmds.radioButton('radioUnder_RLR', edit=True, enable=False)
+        print("checkBox_RLR")
+    if cmds.checkBox(checkBox_RMR, query=True, value=True):
+        cmds.radioButton('radioOver_RMR', edit=True, enable=False)
+        cmds.radioButton('radioUnder_RMR', edit=True, enable=False)
+        print("checkBox_RMR")
+    if cmds.checkBox(checkBox_RIR, query=True, value=True):
+        cmds.radioButton('radioOver_RIR', edit=True, enable=False)
+        cmds.radioButton('radioUnder_RIR', edit=True, enable=False)
+        print("checkBox_RIR")
+    if cmds.checkBox(checkBox_RSO, query=True, value=True):
+        cmds.radioButton('radioOver_RSO', edit=True, enable=False)
+        cmds.radioButton('radioUnder_RSO', edit=True, enable=False)
+        print("checkBox_RSO")
+    if cmds.checkBox(checkBox_RSRIO, query=True, value=True):
+        cmds.radioButton('radioOver_RSRIO', edit=True, enable=False)
+        cmds.radioButton('radioUnder_RSRIO', edit=True, enable=False)
+        print("checkBox_RSRIO")
+    if cmds.checkBox(checkBox_RIRSO, query=True, value=True):
+        cmds.radioButton('radioOver_RIRSO', edit=True, enable=False)
+        cmds.radioButton('radioUnder_RIRSO', edit=True, enable=False)
+        print("checkBox_RIRSO")
+
+
+def action_checkBox_Left(checkBox_LSR, checkBox_LIO, checkBox_LLR, checkBox_LMR, checkBox_LIR, checkBox_LSO, checkBox_LSRIO, checkBox_LIRSO):
+    # chackbox values
+    if cmds.checkBox(checkBox_LSR, query=True, value=True):
+        cmds.radioButton('radioOver_LSR', edit=True, enable=False)
+        cmds.radioButton('radioUnder_LSR', edit=True, enable=False)
+        print("checkBox_LSR")
+    if cmds.checkBox(checkBox_LIO, query=True, value=True):
+        cmds.radioButton('radioOver_LIO', edit=True, enable=False)
+        cmds.radioButton('radioUnder_LIO', edit=True, enable=False)
+        print("checkBox_LIO")
+    if cmds.checkBox(checkBox_LLR, query=True, value=True):
+        cmds.radioButton('radioOver_LLR', edit=True, enable=False)
+        cmds.radioButton('radioUnder_LLR', edit=True, enable=False)
+        print("checkBox_LLR")
+    if cmds.checkBox(checkBox_LMR, query=True, value=True):
+        cmds.radioButton('radioOver_LMR', edit=True, enable=False)
+        cmds.radioButton('radioUnder_LMR', edit=True, enable=False)
+        print("checkBox_LMR")
+    if cmds.checkBox(checkBox_LIR, query=True, value=True):
+        cmds.radioButton('radioOver_LIR', edit=True, enable=False)
+        cmds.radioButton('radioUnder_LIR', edit=True, enable=False)
+        print("checkBox_LIR")
+    if cmds.checkBox(checkBox_LSO, query=True, value=True):
+        cmds.radioButton('radioOver_LSO', edit=True, enable=False)
+        cmds.radioButton('radioUnder_LSO', edit=True, enable=False)
+        print("checkBox_LSO")
+    if cmds.checkBox(checkBox_LSRIO, query=True, value=True):
+        cmds.radioButton('radioOver_LSRIO', edit=True, enable=False)
+        cmds.radioButton('radioUnder_LSRIO', edit=True, enable=False)
+        print("checkBox_LSRIO")
+    if cmds.checkBox(checkBox_LIRSO, query=True, value=True):
+        cmds.radioButton('radioOver_LIRSO', edit=True, enable=False)
+        cmds.radioButton('radioUnder_LIRSO', edit=True, enable=False)
+        print("checkBox_LIRSO")
 
 
 if __name__ == "__main__":
