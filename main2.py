@@ -709,17 +709,22 @@ new_lstSelectedAction = []
 def action_checkRadioButton(radioSelected):
     # chackbox values
     if cmds.radioButton(radioSelected, query=True, select=True):
+
         # print(radioSelected)
         for _, j in enumerate(lstActionOU):
             if j[0] == radioSelected:
                 # print(lstActionOU[i][0])
                 lstSelectedAction.append(j[0])
-                # print(lstSelectedAction)
-        for k in range(len(lstSelectedAction)):
-            # print(lstSelectedAction[k].index(lstSelectedAction[k][-3:]))
-            new_lstSelectedAction = list(
-                dict.fromkeys(lstSelectedAction[k][-3:]))
-            print(new_lstSelectedAction)
+        # # print(lstSelectedAction)
+        # for k in lstSelectedAction:
+        #     # print(lstSelectedAction[k].index(lstSelectedAction[k][-3:]))
+        #     s = k[-3:]
+        #     index_ = lstSelectedAction.index(s)
+        #     if lstSelectedAction[index_] not in new_lstSelectedAction:
+        #         new_lstSelectedAction.append(lstSelectedAction[index_])
+        # print(new_lstSelectedAction)
+        #     # new_lstSelectedAction = list(
+        #     #     dict.fromkeys(lstSelectedAction[k][-3:]))
 
 
 if __name__ == "__main__":
