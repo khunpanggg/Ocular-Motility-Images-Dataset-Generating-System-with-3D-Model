@@ -702,12 +702,6 @@ def setDefaultCardinal(Scale_R_1, Scale_L_1, Scale_R_2, Scale_L_2, Scale_R_3, Sc
     return thisdict
 
 
-# def setDefaultNine(Scale_R_1, Scale_L_1, Scale_R_2, Scale_L_2, thisdict):
-#     value_up = (getSliderValue(Scale_R_1, Scale_L_1))
-#     value_down = getSliderValue(Scale_R_2, Scale_L_2)
-#     thisdict.insert(index, num)
-
-
 def setCardinalPositionOfGaze(lst_ScaleSelected, textfieldAmount):
     amount = getAmountValue(textfieldAmount)
     lst_namegaze = []
@@ -765,7 +759,7 @@ def setCardinalPositionOfGaze(lst_ScaleSelected, textfieldAmount):
     return time_value, lst_namegaze, lst_scalegaze
 
 
-# ------------------- get Degree -------------------
+# ------------------- get Degree (Primary) -------------------
 
 
 def getMenuitemDegree(menuRight_H, menuLeft_H):
