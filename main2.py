@@ -1,5 +1,6 @@
 import maya.cmds as cmds
 import random as rand
+from collections import OrderedDict
 
 
 def createUI(windowTitle):
@@ -60,9 +61,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RSR
-    checkBox_RSR = cmds.checkBox('checkBox_RSR', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_RSR', 'radioOver_RSR', 'radioUnder_RSR'))
-    collectEyes_RSR = cmds.radioCollection()
+    RSR = cmds.checkBox('RSR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('RSR', 'radioOver_RSR', 'radioUnder_RSR'))
+    collectEyes_RSR = cmds.radioCollection('collectEyes_RSR')
     radioOver_RSR = cmds.radioButton(
         'radioOver_RSR', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RSR'))
     radioUnder_RSR = cmds.radioButton('radioUnder_RSR', label='underaction',
@@ -71,9 +72,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LIO
-    checkBox_LIO = cmds.checkBox('checkBox_LIO', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_LIO', 'radioOver_LIO', 'radioUnder_LIO'))
-    collectEyes_LIO = cmds.radioCollection()
+    LIO = cmds.checkBox('LIO', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('LIO', 'radioOver_LIO', 'radioUnder_LIO'))
+    collectEyes_LIO = cmds.radioCollection('collectEyes_LIO')
     radioOver_LIO = cmds.radioButton(
         'radioOver_LIO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LIO'))
     radioUnder_LIO = cmds.radioButton('radioUnder_LIO', label='underaction',
@@ -84,42 +85,42 @@ def createUI(windowTitle):
 
     # ------------------ Up Gaze ------------------
     cmds.frameLayout(label='Up Gaze')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('SR (IO)', bgc=[0.1, 0.1, 0.1])
-    cmds.text('SR (IO)', bgc=[0.1, 0.1, 0.1])
-    cmds.setParent('..')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # RSR
-    checkBox_RSRIO = cmds.checkBox('checkBox_RSRIO', label='normal', value=False,
-                                   changeCommand=lambda x: action_checkBox('checkBox_RSRIO', 'radioOver_RSRIO', 'radioUnder_RSRIO'))
-    collectEyes_RSRIO = cmds.radioCollection()
-    radioOver_RSRIO = cmds.radioButton(
-        'radioOver_RSRIO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RSRIO'))
-    radioUnder_RSRIO = cmds.radioButton(
-        'radioUnder_RSRIO', label='underaction',
-        changeCommand=lambda x: action_checkRadioButton('radioUnder_RSRIO'))
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # LIO
-    checkBox_LSRIO = cmds.checkBox('checkBox_LSRIO', label='normal', value=False,
-                                   changeCommand=lambda x: action_checkBox('checkBox_LSRIO', 'radioOver_LSRIO', 'radioUnder_LSRIO'))
-    collectEyes_LSRIO = cmds.radioCollection()
-    radioOver_LSRIO = cmds.radioButton(
-        'radioOver_LSRIO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LSRIO'))
-    radioUnder_LSRIO = cmds.radioButton(
-        'radioUnder_LSRIO', label='underaction',
-        changeCommand=lambda x: action_checkRadioButton('radioUnder_LSRIO'))
-    cmds.setParent('..')
-    cmds.setParent('..')
+    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # cmds.text('SR (IO)', bgc=[0.1, 0.1, 0.1])
+    # cmds.text('SR (IO)', bgc=[0.1, 0.1, 0.1])
+    # cmds.setParent('..')
+    # cmds.paneLayout(configuration='quad', height=100)
+    # cmds.modelEditor(da='smoothShaded', dtx=True,
+    #                  wireframeOnShaded=False, swf=True, displayLights='all')
+    # cmds.setParent('..')
+    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # # RSR
+    # RSRIO = cmds.checkBox('RSRIO', label='normal', value=False,
+    #                                changeCommand=lambda x: action_checkBox('RSRIO', 'radioOver_RSRIO', 'radioUnder_RSRIO'))
+    # collectEyes_RSRIO = cmds.radioCollection('collectEyes_RSRIO')
+    # radioOver_RSRIO = cmds.radioButton(
+    #     'radioOver_RSRIO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RSRIO'))
+    # radioUnder_RSRIO = cmds.radioButton(
+    #     'radioUnder_RSRIO', label='underaction',
+    #     changeCommand=lambda x: action_checkRadioButton('radioUnder_RSRIO'))
+    # cmds.setParent('..')
+    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # # LIO
+    # LSRIO = cmds.checkBox('LSRIO', label='normal', value=False,
+    #                                changeCommand=lambda x: action_checkBox('LSRIO', 'radioOver_LSRIO', 'radioUnder_LSRIO'))
+    # collectEyes_LSRIO = cmds.radioCollection('collectEyes_LSRIO')
+    # radioOver_LSRIO = cmds.radioButton(
+    #     'radioOver_LSRIO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LSRIO'))
+    # radioUnder_LSRIO = cmds.radioButton(
+    #     'radioUnder_LSRIO', label='underaction',
+    #     changeCommand=lambda x: action_checkRadioButton('radioUnder_LSRIO'))
+    # cmds.setParent('..')
+    # cmds.setParent('..')
     cmds.setParent('..')
 
     # ------------------ Left & Up Gaze ------------------
@@ -138,9 +139,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RIO
-    checkBox_RIO = cmds.checkBox('checkBox_RIO', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_RIO', 'radioOver_RIO', 'radioUnder_RIO'))
-    collectEyes_RIO = cmds.radioCollection()
+    RIO = cmds.checkBox('RIO', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('RIO', 'radioOver_RIO', 'radioUnder_RIO'))
+    collectEyes_RIO = cmds.radioCollection('collectEyes_RIO')
     radioOver_RIO = cmds.radioButton(
         'radioOver_RIO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RIO'))
     radioUnder_RIO = cmds.radioButton('radioUnder_RIO', label='underaction',
@@ -149,9 +150,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
                         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LSR
-    checkBox_LSR = cmds.checkBox('checkBox_LSR', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_LSR', 'radioOver_LSR', 'radioUnder_LSR'))
-    collectEyes_LSR = cmds.radioCollection()
+    LSR = cmds.checkBox('LSR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('LSR', 'radioOver_LSR', 'radioUnder_LSR'))
+    collectEyes_LSR = cmds.radioCollection('collectEyes_LSR')
     radioOver_LSR = cmds.radioButton(
         'radioOver_LSR', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LSR'))
     radioUnder_LSR = cmds.radioButton('radioUnder_LSR', label='underaction',
@@ -176,9 +177,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RLR
-    checkBox_RLR = cmds.checkBox('checkBox_RLR', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_RLR', 'radioOver_RLR', 'radioUnder_RLR'))
-    collectEyes_RLR = cmds.radioCollection()
+    RLR = cmds.checkBox('RLR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('RLR', 'radioOver_RLR', 'radioUnder_RLR'))
+    collectEyes_RLR = cmds.radioCollection('collectEyes_RLR')
     radioOver_RLR = cmds.radioButton(
         'radioOver_RLR', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RLR'))
     radioUnder_RLR = cmds.radioButton('radioUnder_RLR', label='underaction',
@@ -187,9 +188,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LMR
-    checkBox_LMR = cmds.checkBox('checkBox_LMR', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_LMR', 'radioOver_LMR', 'radioUnder_LMR'))
-    collectEyes_LMR = cmds.radioCollection()
+    LMR = cmds.checkBox('LMR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('LMR', 'radioOver_LMR', 'radioUnder_LMR'))
+    collectEyes_LMR = cmds.radioCollection('collectEyes_LMR')
     radioOver_LMR = cmds.radioButton(
         'radioOver_LMR', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LMR'))
     radioUnder_LMR = cmds.radioButton('radioUnder_LMR', label='underaction',
@@ -222,9 +223,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RMR
-    checkBox_RMR = cmds.checkBox('checkBox_RMR', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_RMR', 'radioOver_RMR', 'radioUnder_RMR'))
-    collectEyes_RMR = cmds.radioCollection()
+    RMR = cmds.checkBox('RMR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('RMR', 'radioOver_RMR', 'radioUnder_RMR'))
+    collectEyes_RMR = cmds.radioCollection('collectEyes_RMR')
     radioOver_RMR = cmds.radioButton(
         'radioOver_RMR', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RMR'))
     radioUnder_RMR = cmds.radioButton('radioUnder_RMR', label='underaction',
@@ -233,9 +234,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LLR
-    checkBox_LLR = cmds.checkBox('checkBox_LLR', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_LLR', 'radioOver_LLR', 'radioUnder_LLR'))
-    collectEyes_LLR = cmds.radioCollection()
+    LLR = cmds.checkBox('LLR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('LLR', 'radioOver_LLR', 'radioUnder_LLR'))
+    collectEyes_LLR = cmds.radioCollection('collectEyes_LLR')
     radioOver_LLR = cmds.radioButton(
         'radioOver_LLR', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LLR'))
     radioUnder_LLR = cmds.radioButton('radioUnder_LLR', label='underaction',
@@ -260,9 +261,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RIR
-    checkBox_RIR = cmds.checkBox('checkBox_RIR', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_RIR', 'radioOver_RIR', 'radioUnder_RIR'))
-    collectEyes_RIR = cmds.radioCollection()
+    RIR = cmds.checkBox('RIR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('RIR', 'radioOver_RIR', 'radioUnder_RIR'))
+    collectEyes_RIR = cmds.radioCollection('collectEyes_RIR')
     radioOver_RIR = cmds.radioButton(
         'radioOver_RIR', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RIR'))
     radioUnder_RIR = cmds.radioButton('radioUnder_RIR', label='underaction',
@@ -271,9 +272,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LSO
-    checkBox_LSO = cmds.checkBox('checkBox_LSO', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_LSO', 'radioOver_LSO', 'radioUnder_LSO'))
-    collectEyes_LSO = cmds.radioCollection()
+    LSO = cmds.checkBox('LSO', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('LSO', 'radioOver_LSO', 'radioUnder_LSO'))
+    collectEyes_LSO = cmds.radioCollection('collectEyes_LSO')
     radioOver_LSO = cmds.radioButton(
         'radioOver_LSO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LSO'))
     radioUnder_LSO = cmds.radioButton('radioUnder_LSO', label='underaction',
@@ -284,40 +285,40 @@ def createUI(windowTitle):
 
     # ------------------ Down Gaze ------------------
     cmds.frameLayout(label='Up Gaze')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('IR (SO)', bgc=[0.1, 0.1, 0.1])
-    cmds.text('IR (SO)', bgc=[0.1, 0.1, 0.1])
-    cmds.setParent('..')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # RIR
-    checkBox_RIRSO = cmds.checkBox('checkBox_RIRSO', label='normal', value=False,
-                                   changeCommand=lambda x: action_checkBox('checkBox_RIRSO', 'radioOver_RIRSO', 'radioUnder_RIRSO'))
-    collectEyes_RIRSO = cmds.radioCollection()
-    radioOver_RIRSO = cmds.radioButton(
-        'radioOver_RIRSO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RIRSO'))
-    radioUnder_RIRSO = cmds.radioButton('radioUnder_RIRSO', label='underaction',
-                                        changeCommand=lambda x: action_checkRadioButton('radioUnder_RIRSO'))
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # LSO
-    checkBox_LIRSO = cmds.checkBox('checkBox_LSO', label='normal', value=False,
-                                   changeCommand=lambda x: action_checkBox('checkBox_LSO', 'radioOver_LIRSO', 'radioUnder_LIRSO'))
-    collectEyes_LIRSO = cmds.radioCollection()
-    radioOver_LIRSO = cmds.radioButton(
-        'radioOver_LIRSO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LIRSO'))
-    radioUnder_LIRSO = cmds.radioButton('radioUnder_LIRSO', label='underaction',
-                                        changeCommand=lambda x: action_checkRadioButton('radioUnder_LIRSO'))
-    cmds.setParent('..')
-    cmds.setParent('..')
+    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # cmds.text('IR (SO)', bgc=[0.1, 0.1, 0.1])
+    # cmds.text('IR (SO)', bgc=[0.1, 0.1, 0.1])
+    # cmds.setParent('..')
+    # cmds.paneLayout(configuration='quad', height=100)
+    # cmds.modelEditor(da='smoothShaded', dtx=True,
+    #                  wireframeOnShaded=False, swf=True, displayLights='all')
+    # cmds.setParent('..')
+    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # # RIR
+    # RIRSO = cmds.checkBox('RIRSO', label='normal', value=False,
+    #                                changeCommand=lambda x: action_checkBox('RIRSO', 'radioOver_RIRSO', 'radioUnder_RIRSO'))
+    # collectEyes_RIRSO = cmds.radioCollection('collectEyes_RIRSO')
+    # radioOver_RIRSO = cmds.radioButton(
+    #     'radioOver_RIRSO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RIRSO'))
+    # radioUnder_RIRSO = cmds.radioButton('radioUnder_RIRSO', label='underaction',
+    #                                     changeCommand=lambda x: action_checkRadioButton('radioUnder_RIRSO'))
+    # cmds.setParent('..')
+    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # # LSO
+    # LIRSO = cmds.checkBox('LSO', label='normal', value=False,
+    #                                changeCommand=lambda x: action_checkBox('LSO', 'radioOver_LIRSO', 'radioUnder_LIRSO'))
+    # collectEyes_LIRSO = cmds.radioCollection('collectEyes_LIRSO')
+    # radioOver_LIRSO = cmds.radioButton(
+    #     'radioOver_LIRSO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LIRSO'))
+    # radioUnder_LIRSO = cmds.radioButton('radioUnder_LIRSO', label='underaction',
+    #                                     changeCommand=lambda x: action_checkRadioButton('radioUnder_LIRSO'))
+    # cmds.setParent('..')
+    # cmds.setParent('..')
     cmds.setParent('..')
 
     # ------------------ Left & Down Gaze ------------------
@@ -336,9 +337,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RSO
-    checkBox_RSO = cmds.checkBox('checkBox_RSO', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_RSO', 'radioOver_RSO', 'radioUnder_RSO'))
-    collectEyes_RSO = cmds.radioCollection()
+    RSO = cmds.checkBox('RSO', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('RSO', 'radioOver_RSO', 'radioUnder_RSO'))
+    collectEyes_RSO = cmds.radioCollection('collectEyes_RSO')
     radioOver_RSO = cmds.radioButton(
         'radioOver_RSO', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_RSO'))
     radioUnder_RSO = cmds.radioButton('radioUnder_RSO', label='underaction',
@@ -347,9 +348,9 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LIR
-    checkBox_LIR = cmds.checkBox('checkBox_LIR', label='normal', value=False,
-                                 changeCommand=lambda x: action_checkBox('checkBox_LIR', 'radioOver_LIR', 'radioUnder_LIR'))
-    collectEyes_LIR = cmds.radioCollection()
+    LIR = cmds.checkBox('LIR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('LIR', 'radioOver_LIR', 'radioUnder_LIR'))
+    collectEyes_LIR = cmds.radioCollection('collectEyes_LIR')
     radioOver_LIR = cmds.radioButton(
         'radioOver_LIR', label='overaction', select=True, changeCommand=lambda x: action_checkRadioButton('radioOver_LIR'))
     radioUnder_LIR = cmds.radioButton('radioUnder_LIR', label='underaction',
@@ -392,10 +393,10 @@ def createUI(windowTitle):
     cmds.setParent('..')
 
     def applyButton(*args):
-
-        getValueNine = setNinePositionOfGaze(AmoutImages)
-        loadWindowPreview_Abnormal(
-            getValueNine[0], getValueNine[1], getValueNine[2], AmoutImages)
+        Gaze()
+        # getValueNine = setNinePositionOfGaze(AmoutImages)
+        # loadWindowPreview_Abnormal(
+        #     getValueNine[0], getValueNine[1], getValueNine[2], AmoutImages)
 
     def cancelCallback(*args):
         if cmds.window(window, exists=True):
@@ -535,42 +536,54 @@ lst_Nine = [('Right Up', [-1, 1]), ('Up gaze', [0, 1]), ('Left Up', [1, 1]),
 lstActionOU = [  # OVER ACTION
     ('radioOver_RSR', [rand.uniform(-0.5, -1), rand.uniform(0.5, 1)]),
     ('radioOver_RLR', [rand.uniform(-0.8, -0.5), 0]),
-    ('radioOver_RIR', [
-        rand.uniform(-1.5, -0.5), rand.uniform(-1.5, -0.5)]),
-    ('radioOver_LIO', [
-        rand.uniform(-1, -0.5), rand.uniform(0.5, 1)]),
+    ('radioOver_RIR', [rand.uniform(-1.5, -0.5), rand.uniform(-1.5, -0.5)]),
+    ('radioOver_LIO', [rand.uniform(-1, -0.5), rand.uniform(0.5, 1)]),
     ('radioOver_LMR', [rand.uniform(0, -1), 0]),
-    ('radioOver_LSO', [
-        rand.uniform(-1.5, -0.5), rand.uniform(-1, -0.5)]),
-    ('radioOver_RIO', [rand.uniform(
-        0.5, 1), rand.uniform(0.5, 1)]),
+    ('radioOver_LSO', [rand.uniform(-1.5, -0.5), rand.uniform(-1, -0.5)]),
+    ('radioOver_RIO', [rand.uniform(0.5, 1), rand.uniform(0.5, 1)]),
     ('radioOver_RMR', [rand.uniform(0.8, 0.5), 0]),
-    ('radioOver_RSO', [rand.uniform(
-        0.5, 0.3), rand.uniform(-0.5, -0.3)]),
-    ('radioOver_LSR', [rand.uniform(
-        0.5, 1), rand.uniform(0.5, 1)]),
+    ('radioOver_RSO', [rand.uniform(0.5, 0.3), rand.uniform(-0.5, -0.3)]),
+    ('radioOver_LSR', [rand.uniform(0.5, 1), rand.uniform(0.5, 1)]),
     ('radioOver_LLR', [rand.uniform(-1, 0), 0]),
-    ('radioOver_LIR', [rand.uniform(
-        0.5, 0.3), rand.uniform(-0.5, -0.3)]),
+    ('radioOver_LIR', [rand.uniform(0.5, 0.3), rand.uniform(-0.5, -0.3)]),
     # UNDER ACTION
     ('radioUnder_RSR', [rand.uniform(4, 0.5), rand.uniform(-0.5, -4)]),
     ('radioUnder_RLR', [rand.uniform(15, 0.5), 0]),
-    ('radioUnder_RIR', [rand.uniform(
-        10, 0.5), rand.uniform(10, 0.5)]),
-    ('radioUnder_LIO', [rand.uniform(
-        1, 0.5), rand.uniform(-0.5, -1)]),
+    ('radioUnder_RIR', [rand.uniform(10, 0.5), rand.uniform(10, 0.5)]),
+    ('radioUnder_LIO', [rand.uniform(1, 0.5), rand.uniform(-0.5, -1)]),
     ('radioUnder_LMR', [rand.uniform(15, 0.5), 0]),
-    ('radioUnder_LSO', [rand.uniform(
-        10, 0.5), rand.uniform(10, 0.5)]),
-    ('radioUnder_RIO', [
-        rand.uniform(-0.5, -1), rand.uniform(-0.5, -1)]),
+    ('radioUnder_LSO', [rand.uniform(10, 0.5), rand.uniform(10, 0.5)]),
+    ('radioUnder_RIO', [rand.uniform(-0.5, -1), rand.uniform(-0.5, -1)]),
     ('radioUnder_RMR', [rand.uniform(-15, -0.5), 0]),
-    ('radioUnder_RSO', [
-        rand.uniform(-15, -0.5), rand.uniform(10, 0.5)]),
-    ('radioUnder_LSR', [
-        rand.uniform(-4, -0.5), rand.uniform(-4, -0.5)]),
+    ('radioUnder_RSO', [rand.uniform(-15, -0.5), rand.uniform(10, 0.5)]),
+    ('radioUnder_LSR', [rand.uniform(-4, -0.5), rand.uniform(-4, -0.5)]),
     ('radioUnder_LLR', [rand.uniform(15, 0.5), 0]),
     ('radioUnder_LIR', [rand.uniform(-15, -0.5), rand.uniform(10, 0.5)])]
+
+lstCollectEyes = [
+    'collectEyes_RSR',
+    'collectEyes_LIO',
+
+    'collectEyes_RIO',
+    'collectEyes_LSR',
+
+    'collectEyes_RLR',
+    'collectEyes_LMR',
+
+    'collectEyes_RMR',
+    'collectEyes_LLR',
+
+    'collectEyes_RIR',
+    'collectEyes_LSO',
+
+    'collectEyes_RSO',
+    'collectEyes_LIR'
+
+]
+
+# ------------------- setMovementGaze -------------------
+# def setMovementGaze():
+
 
 # ------------------- set Position Of Gaze (NORMAL) -------------------
 
@@ -655,45 +668,46 @@ def setNinePositionOfGaze(checkBoxValue, radioSelected, textfieldAmount):
             cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
                              v=scale[1], t=time_value)
     # Add value selected
-    for i in range(amount):
-        for x, scale in lst_Nine:
-            # print(scale)
-            lst_namegaze.append(x)
-            time_scale += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            value_noise.append(round(rand.uniform(-1, 0.5), 4))
-            if 'Right' in x:
-                scale_R_r = round(scale[0]*(-1)+value_noise[i], 4)
-                scale_L_r = round(scale[1]*(-1)+value_noise[i], 4)
-                all_scale_R_r = [scale, [scale_R_r, scale_L_r]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_r, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_r, t=time_scale)
-                print('R', all_scale_R_r)
-                lst_scalegaze.append(all_scale_R_r)
-            elif 'Right' not in x:
-                scale_R_l = round(scale[0]+value_noise[i], 4)
-                scale_L_l = round(scale[1]+value_noise[i], 4)
-                all_scale_R_l = [scale, [scale_R_l, scale_L_l]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_l, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_l, t=time_scale)
-                print('L', all_scale_R_l)
-                lst_scalegaze.append(all_scale_R_l)
 
-    return time_value, lst_namegaze, lst_scalegaze
+    # for i in range(amount):
+    #     for x, scale in lstActionOU:
+    #         print(scale)
+            # lst_namegaze.append(x)
+            # time_scale += 1
+            # cmds.playbackOptions(edit=True, maxTime=time_value)
+            # value_noise.append(round(rand.uniform(-1, 0.5), 4))
+            # if 'Right' in x:
+            #     scale_R_r = round(scale[0]*(-1)+value_noise[i], 4)
+            #     scale_L_r = round(scale[1]*(-1)+value_noise[i], 4)
+            #     all_scale_R_r = [scale, [scale_R_r, scale_L_r]]
+            #     cmds.setKeyframe('AimEye_R.translateX',
+            #                      at='tx', v=scale_R_r, t=time_scale)
+            #     cmds.setKeyframe('AimEye_L.translateX',
+            #                      at='tx', v=scale_L_r, t=time_scale)
+            #     print('R', all_scale_R_r)
+            #     lst_scalegaze.append(all_scale_R_r)
+            # elif 'Right' not in x:
+            #     scale_R_l = round(scale[0]+value_noise[i], 4)
+            #     scale_L_l = round(scale[1]+value_noise[i], 4)
+            #     all_scale_R_l = [scale, [scale_R_l, scale_L_l]]
+            #     cmds.setKeyframe('AimEye_R.translateX',
+            #                      at='tx', v=scale_R_l, t=time_scale)
+            #     cmds.setKeyframe('AimEye_L.translateX',
+            #                      at='tx', v=scale_L_l, t=time_scale)
+            #     print('L', all_scale_R_l)
+            #     lst_scalegaze.append(all_scale_R_l)
+
+    # return time_value, lst_namegaze, lst_scalegaze
 
 
 # ----------------- action_radioButton -----------------
-lstcheckBox = ['checkBox_RSR', 'checkBox_RIO', 'checkBox_RLR', 'checkBox_RMR', 'checkBox_RIR', 'checkBox_RSO', 'checkBox_RSRIO', 'checkBox_RIRSO',
-               'checkBox_LSR', 'checkBox_LIO', 'checkBox_LLR', 'checkBox_LMR', 'checkBox_LIR', 'checkBox_LSO', 'checkBox_LSRIO', 'checkBox_LIRSO']
+lstcheckBox = ['RSR', 'LIO', 'RIO', 'LSR', 'RLR', 'LMR',
+               'RMR', 'LLR', 'RIR', 'LSO', 'RSO', 'LIR']
 
 
 def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
     if cmds.checkBox(checkBoxValue, query=True, value=True):
-        for i, j in enumerate(lstcheckBox):
+        for _, j in enumerate(lstcheckBox):
             if j == checkBoxValue:
                 cmds.radioButton(radioSelected1, edit=True, enable=False)
                 cmds.radioButton(radioSelected2, edit=True, enable=False)
@@ -703,28 +717,68 @@ def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
 
 
 lstSelectedAction = []
-new_lstSelectedAction = []
+lstSelectRadioVal = []
+dictSelectRadioVal = {}
+
+lstcheckNormal = []
+lstcheckDisorder = []
+
+
+def passValue(DirectionControl, *args):
+    for j in lstcheckBox:
+        checkboxVal = cmds.checkBox(j, query=True, value=True)
+        # print(j, checkbox)
+        if checkboxVal == True:
+            lstcheckNormal.append(j)
+        else:
+            lstcheckDisorder.append(j)
+    print('Normal', lstcheckNormal)
+    print('Disorder', lstcheckDisorder)
+
+    # for i in DirectionControl:
+    #     print(i)
+    #         radioCol = cmds.radioCollection(i, query=True, sl=True)
+    #         if radioCol == i:
+    #             getSelectRadioVal = cmds.radioButton(
+    #                 radioCol, query=True, label=True)
+    #             lstSelectRadioVal.append(radioCol)
+    #         # lstSelectRadioVal.append(getSelectRadioVal)
+    # print(lstSelectRadioVal)
+
+    # for key, value in dictSelectRadioVal.items():
+    #     print(key, value)
 
 
 def action_checkRadioButton(radioSelected):
     # chackbox values
     if cmds.radioButton(radioSelected, query=True, select=True):
+        lstSelectedAction.append(radioSelected)
+        return lstSelectedAction
+    # for _, j in enumerate(lstActionOU):
+    #     if j[0] == radioSelected:
+    #         # print(lstActionOU[i][0])
+    #         lstSelectedAction.append(j[0])
+    # return lstSelectedAction
+        # print(lstSelectedAction)
+        # delDupilcateSelected = list(OrderedDict.fromkeys(lstSelectedAction))
+        # print(delDupilcateSelected)
 
-        # print(radioSelected)
-        for _, j in enumerate(lstActionOU):
-            if j[0] == radioSelected:
-                # print(lstActionOU[i][0])
-                lstSelectedAction.append(j[0])
-        # # print(lstSelectedAction)
-        # for k in lstSelectedAction:
-        #     # print(lstSelectedAction[k].index(lstSelectedAction[k][-3:]))
-        #     s = k[-3:]
-        #     index_ = lstSelectedAction.index(s)
-        #     if lstSelectedAction[index_] not in new_lstSelectedAction:
-        #         new_lstSelectedAction.append(lstSelectedAction[index_])
-        # print(new_lstSelectedAction)
-        #     # new_lstSelectedAction = list(
-        #     #     dict.fromkeys(lstSelectedAction[k][-3:]))
+        # for k in delDupilcateSelected:
+        #     print(k[-3:])
+        # c = k[-3:]
+        # print(s.rfind(c))
+        # print(lstSelectedAction[k].index(lstSelectedAction[k][-3:]))
+        # s = k[-3:]
+        # index_ = lstSelectedAction.index(k[-3:])
+        # print(index_)
+        # if lstSelectedAction[index_] not in new_lstSelectedAction:
+        #     new_lstSelectedAction.append(lstSelectedAction[index_])
+        #     print(new_lstSelectedAction)
+        # new_lstSelectedAction = list(dict.fromkeys(lstSelectedAction[k][-3:]))
+
+
+def Gaze():
+    passValue(lstCollectEyes)
 
 
 if __name__ == "__main__":
