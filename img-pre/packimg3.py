@@ -243,11 +243,11 @@ for i in range(numlabel1):
 #for label2(abRnL)
 for i in range(numlabel2):
     img1 = cv2.imread(path+path_p1_l2 + '/' + box1_l2[i])
-    img2 = cv2.imread(path+path_p2_l2+'/'+box2_l2[i])
-    img3 = cv2.imread(path+path_p3_l2+'/'+box3_l2[i])
-    img4 = cv2.imread(path+path_p4_l2+'/'+box4_l2[i])
-    img5 = cv2.imread(path+path_p5_l2+'/'+box5_l2[i])
-    img6 = cv2.imread(path+path_p6_l2+'/'+box6_l2[i])
+    img2 = cv2.imread(path+path_p2_l2 + '/' + box2_l2[i])
+    img3 = cv2.imread(path+path_p3_l2 + '/' + box3_l2[i])
+    img4 = cv2.imread(path+path_p4_l2 + '/' + box4_l2[i])
+    img5 = cv2.imread(path+path_p5_l2 + '/' + box5_l2[i])
+    img6 = cv2.imread(path+path_p6_l2 + '/' + box6_l2[i])
     
     row1 = np.hstack((img1, img2))
     row2 = np.hstack((img3, img4))
@@ -259,12 +259,12 @@ for i in range(numlabel2):
 
 #for label3(nRabL)
 for i in range(numlabel3):
-    img1 = cv2.imread(path+path_p1_l3+'/'+box1_l3[i])
-    img2 = cv2.imread(path+path_p2_l3+'/'+box2_l3[i])
-    img3 = cv2.imread(path+path_p3_l3+'/'+box3_l3[i])
-    img4 = cv2.imread(path+path_p4_l3+'/'+box4_l3[i])
-    img5 = cv2.imread(path+path_p5_l3+'/'+box5_l3[i])
-    img6 = cv2.imread(path+path_p6_l3+'/'+box6_l3[i])
+    img1 = cv2.imread(path+path_p1_l3 + '/' + box1_l3[i])
+    img2 = cv2.imread(path+path_p2_l3 + '/' + box2_l3[i])
+    img3 = cv2.imread(path+path_p3_l3 + '/' + box3_l3[i])
+    img4 = cv2.imread(path+path_p4_l3 + '/' + box4_l3[i])
+    img5 = cv2.imread(path+path_p5_l3 + '/' + box5_l3[i])
+    img6 = cv2.imread(path+path_p6_l3 + '/' + box6_l3[i])
     
     row1 = np.hstack((img1, img2))
     row2 = np.hstack((img3, img4))
@@ -276,12 +276,12 @@ for i in range(numlabel3):
 
 #for label3(abRabL)
 for i in range(numlabel4):
-    img1 = cv2.imread(path+path_p1_l4+'/'+box1_l4[i])
-    img2 = cv2.imread(path+path_p2_l4+'/'+box2_l4[i])
-    img3 = cv2.imread(path+path_p3_l4+'/'+box3_l4[i])
-    img4 = cv2.imread(path+path_p4_l4+'/'+box4_l4[i])
-    img5 = cv2.imread(path+path_p5_l4+'/'+box5_l4[i])
-    img6 = cv2.imread(path+path_p6_l4+'/'+box6_l4[i])
+    img1 = cv2.imread(path+path_p1_l4 + '/' + box1_l4[i])
+    img2 = cv2.imread(path+path_p2_l4 + '/' + box2_l4[i])
+    img3 = cv2.imread(path+path_p3_l4 + '/' + box3_l4[i])
+    img4 = cv2.imread(path+path_p4_l4 + '/' + box4_l4[i])
+    img5 = cv2.imread(path+path_p5_l4 + '/' + box5_l4[i])
+    img6 = cv2.imread(path+path_p6_l4 + '/' + box6_l4[i])
     
     row1 = np.hstack((img1, img2))
     row2 = np.hstack((img3, img4))
