@@ -19,6 +19,7 @@ path12 = 'C:/Users/PiLab/Documents/wipawapat_folder/VGG_TEST/image/abnormal/3/sc
 
 path = 'C:/Users/PiLab/Documents/wipawapat_folder/VGG_TEST/image/normal'
 
+
 number = 1
 dataset_home_new = 'dataset/'
 labeldirs = [
@@ -29,6 +30,7 @@ labeldirs = [
     'nRIRnLSO/', 'abRIRnLSO/', 'nRIRabLSO/', 'abRIRabLSO/',
     'nRSOnLIR/', 'abRSOnLIR/', 'nRSOabLIR', 'abRSOabLIR/'
     ]
+    
 for labeldir in labeldirs:
     number += 1
     newdir = dataset_home_new + labeldir
