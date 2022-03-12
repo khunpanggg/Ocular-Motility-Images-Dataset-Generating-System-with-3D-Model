@@ -123,15 +123,9 @@ box6_l4 = [file for file in natsorted(os.listdir(path + path_p6_l4))]
 
 
 #create folder
-dataset_home_new = 'datasetmergefile_pack9/'
-newdir1 = dataset_home_new + 'normal/'
-newdir2 = dataset_home_new + 'abRnL/'
-newdir3 = dataset_home_new + 'nRabL/'
-newdir4 = dataset_home_new + 'abRabL/'
-os.makedirs(newdir1, exist_ok=True)
-os.makedirs(newdir2, exist_ok=True)
-os.makedirs(newdir3, exist_ok=True)
-os.makedirs(newdir4, exist_ok=True)
+dataset_home_new = 'datasetmergefile_mix_pack9/'
+newdir = dataset_home_new + 'train/'
+os.makedirs(newdir, exist_ok=True)
 
 
 #for label1(normal)
@@ -148,7 +142,7 @@ for i in range(len(box1_l1)):
     row3 = np.hstack((img5, img6))
 
     ver = np.vstack((row1, row2, row3))
-    cv2.imwrite(newdir1 + 'normal.' + str(i+1) + '.jpg', ver)
+    cv2.imwrite(newdir + 'normal.' + str(i+1) + '.jpg', ver)
     # print('normal.' + str(i+1) + '.jpg')
     # cv2.imshow('ver',ver)
     cv2.waitKey(0)
@@ -168,7 +162,7 @@ for i in range(len(box1_l2)):
     row3 = np.hstack((img5, img6))
 
     ver = np.vstack((row1, row2, row3))
-    cv2.imwrite(newdir2 + 'abRnL.' + str(i+1) + '.jpg', ver)
+    cv2.imwrite(newdir + 'abRnL.' + str(i+1) + '.jpg', ver)
     cv2.waitKey(0)
 
 
@@ -186,7 +180,7 @@ for i in range(len(box1_l3)):
     row3 = np.hstack((img5, img6))
 
     ver = np.vstack((row1, row2, row3))
-    cv2.imwrite(newdir3 + 'nRabL.' + str(i+1) + '.jpg', ver)
+    cv2.imwrite(newdir + 'nRabL.' + str(i+1) + '.jpg', ver)
     cv2.waitKey(0)
 
 
@@ -204,6 +198,6 @@ for i in range(len(box1_l4)):
     row3 = np.hstack((img5, img6))
 
     ver = np.vstack((row1, row2, row3))
-    cv2.imwrite(newdir4 + 'abRabL.' + str(i+1) + '.jpg', ver)
+    cv2.imwrite(newdir + 'abRabL.' + str(i+1) + '.jpg', ver)
     cv2.waitKey(0)
     
