@@ -1,3 +1,4 @@
+from unicodedata import name
 import maya.cmds as cmds
 import random as rand
 
@@ -22,9 +23,9 @@ def createUI(windowTitle):
     cmds.frameLayout(label='Setting Gaze', collapsable=True)
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
                         (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
-    cmds.button(label='Set Gaze', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.button(label='Set Gaze', command=setMovementGaze, bgc=[0.4, 0.4, 0.4])
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.button(label='Blend Shape', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.button(label='Set Camera', command=setCamaraGaze, bgc=[0.4, 0.4, 0.4])
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.setParent('..')
     cmds.frameLayout(label='Tool', collapsable=True)
@@ -53,7 +54,7 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.paneLayout(configuration='quad', height=100)
     cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
+                     displayLights='all', camera='faceCam2')
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -82,40 +83,10 @@ def createUI(windowTitle):
 
     # ------------------ Up Gaze ------------------
     cmds.frameLayout(label='Up Gaze')
-    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # cmds.text('SR (IO)', bgc=[0.1, 0.1, 0.1])
-    # cmds.text('SR (IO)', bgc=[0.1, 0.1, 0.1])
-    # cmds.setParent('..')
-    # cmds.paneLayout(configuration='quad', height=100)
-    # cmds.modelEditor(da='smoothShaded', dtx=True,
-    #                  wireframeOnShaded=False, swf=True, displayLights='all')
-    # cmds.setParent('..')
-    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # # RSR
-    # RSRIO = cmds.checkBox('RSRIO', label='normal', value=False,
-    #                                changeCommand=lambda x: action_checkBox('RSRIO', 'radioOver_RSRIO', 'radioUnder_RSRIO'))
-    # collectEyes_RSRIO = cmds.radioCollection('collectEyes_RSRIO')
-    # radioOver_RSRIO = cmds.radioButton(
-    #     'radioOver_RSRIO', label='overaction', select=True'))
-    # radioUnder_RSRIO = cmds.radioButton(
-    #     'radioUnder_RSRIO', label='underacti'))
-    # cmds.setParent('..')
-    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # # LIO
-    # LSRIO = cmds.checkBox('LSRIO', label='normal', value=False,
-    #                                changeCommand=lambda x: action_checkBox('LSRIO', 'radioOver_LSRIO', 'radioUnder_LSRIO'))
-    # collectEyes_LSRIO = cmds.radioCollection('collectEyes_LSRIO')
-    # radioOver_LSRIO = cmds.radioButton(
-    #     'radioOver_LSRIO', label='overaction', select=True'))
-    # radioUnder_LSRIO = cmds.radioButton(
-    #     'radioUnder_LSRIO', label='underacti'))
-    # cmds.setParent('..')
-    # cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam3')
+    cmds.setParent('..')
     cmds.setParent('..')
 
     # ------------------ Left & Up Gaze ------------------
@@ -127,7 +98,7 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.paneLayout(configuration='quad', height=100)
     cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam4')
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -163,7 +134,7 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.paneLayout(configuration='quad', height=100)
     cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam5')
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -194,7 +165,7 @@ def createUI(windowTitle):
     cmds.frameLayout(label='Primary Position')
     cmds.paneLayout(configuration='quad', height=100)
     cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam6')
     cmds.setParent('..')
     cmds.setParent('..')
 
@@ -207,7 +178,7 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.paneLayout(configuration='quad', height=100)
     cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam7')
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -243,7 +214,7 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.paneLayout(configuration='quad', height=100)
     cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam8')
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -279,7 +250,7 @@ def createUI(windowTitle):
     # cmds.setParent('..')
     # cmds.paneLayout(configuration='quad', height=100)
     # cmds.modelEditor(da='smoothShaded', dtx=True,
-    #                  wireframeOnShaded=False, swf=True, displayLights='all')
+    #                  wireframeOnShaded=False, swf=True, displayLights='all', camera = 'faceCam9')
     # cmds.setParent('..')
     # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
     #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -317,7 +288,7 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.paneLayout(configuration='quad', height=100)
     cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all')
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam10')
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -367,11 +338,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=2, columnAttach=((1, 'both', 2)))
     cmds.optionMenuGrp('optionLighting', w=250, label="lightning location :")
     cmds.menuItem(label="Outdoor")
-    cmds.menuItem(label="Skies")
     cmds.menuItem(label="Indoor")
-    cmds.menuItem(label="Studio")
-    cmds.menuItem(label="Nature")
-    cmds.menuItem(label="Urban")
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.separator(height=5, style=None)
     cmds.setParent('..')
@@ -574,66 +541,6 @@ lstCollectEyes = [
 
 ]
 
-# ------------------- setMovementGaze -------------------
-# def setMovementGaze():
-
-
-# ------------------- set Position Of Gaze (NORMAL) -------------------
-
-
-def setNinePositionOfGaze(textfieldAmount):
-    amount = getAmountValue(textfieldAmount)
-    value_noise = []
-    lst_namegaze = []
-    lst_scalegaze = []
-    time_value = 0
-    time_scale = 0
-    all_scale_R_r = []
-    all_scale_R_l = []
-    for _ in range(amount):
-        for x, scale in lst_Nine:
-            time_value += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
-                             v=scale[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
-                             v=scale[1], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
-                             v=scale[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
-                             v=scale[1], t=time_value)
-
-    for i in range(amount):
-        for x, scale in lst_Nine:
-            # print(scale)
-            lst_namegaze.append(x)
-            time_scale += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            value_noise.append(round(rand.uniform(-1, 0.5), 4))
-            if 'Right' in x:
-                scale_R_r = round(scale[0]*(-1)+value_noise[i], 4)
-                scale_L_r = round(scale[1]*(-1)+value_noise[i], 4)
-                all_scale_R_r = [scale, [scale_R_r, scale_L_r]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_r, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_r, t=time_scale)
-                print('R', all_scale_R_r)
-                lst_scalegaze.append(all_scale_R_r)
-            elif 'Right' not in x:
-                scale_R_l = round(scale[0]+value_noise[i], 4)
-                scale_L_l = round(scale[1]+value_noise[i], 4)
-                all_scale_R_l = [scale, [scale_R_l, scale_L_l]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_l, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_l, t=time_scale)
-                print('L', all_scale_R_l)
-                lst_scalegaze.append(all_scale_R_l)
-
-    return time_value, lst_namegaze, lst_scalegaze
-
-
 # ----------------- action_checkBox -----------------
 lstcheckBox = ['RSR', 'LIO', 'RIO', 'LSR', 'RLR', 'LMR',
                'RMR', 'LLR', 'RIR', 'LSO', 'RSO', 'LIR']
@@ -678,13 +585,54 @@ def passValue(DirectionControl, *args):
                 # print(getSelectRadioVal)
     return radioCol
 
+# Test
+# def Gaze():
+#     passValue(lstCollectEyes)
 
-def Gaze():
-    passValue(lstCollectEyes)
+# ------------------- setMovementGaze -------------------
+
+
+def setMovementGaze(self):
+    time_value = 0
+
+    for i, gaze in lst_Nine:
+        time_value += 1
+        cmds.playbackOptions(edit=True, minTime='1', maxTime=time_value)
+        cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
+                         v=gaze[0], t=time_value)
+        cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
+                         v=gaze[1], t=time_value)
+        cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
+                         v=gaze[0], t=time_value)
+        cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
+                         v=gaze[1], t=time_value)
+    # set model
+    for i in range(time_value):
+        no = ""
+        cmds.currentTime(i+1)
+        cmds.select('Geometry'+no)
+        cmds.duplicate('Geometry'+no)
+        cmds.move(100*(i+1), 0, 0)
+        no = str(i)
+    print(time_value)
+
+
+def setCamaraGaze(self):
+    # Create a camera
+    cmds.camera(name='faceCam1', focalLength=70)
+    cmds.group('faceCam1', n='groupfaceCam1')
+    cmds.parent('groupfaceCam1', 'AimEye_M')
+    cmds.setAttr('groupfaceCam1.translate', 0, 0, 0)
+    cmds.parent('groupfaceCam1', world=True)
+    cmds.parent('faceCam1', 'AimEye_M')
+    # Move camera
+    for i in range(1, 10, 1):
+        cmds.select('faceCam'+str(i))
+        cmds.duplicate('faceCam'+str(i))
+        cmds.move(100*(i), 0, 0, moveX=True)
 
 
 # ------------------- set Position Of Gaze (Selected) -------------------
-
 
 def setNinePositionOfGaze(textfieldAmount):
     amount = getAmountValue(textfieldAmount)
