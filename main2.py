@@ -243,40 +243,10 @@ def createUI(windowTitle):
 
     # ------------------ Down Gaze ------------------
     cmds.frameLayout(label='Up Gaze')
-    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # cmds.text('IR (SO)', bgc=[0.1, 0.1, 0.1])
-    # cmds.text('IR (SO)', bgc=[0.1, 0.1, 0.1])
-    # cmds.setParent('..')
-    # cmds.paneLayout(configuration='quad', height=100)
-    # cmds.modelEditor(da='smoothShaded', dtx=True,
-    #                  wireframeOnShaded=False, swf=True, displayLights='all', camera = 'faceCam9')
-    # cmds.setParent('..')
-    # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # # RIR
-    # RIRSO = cmds.checkBox('RIRSO', label='normal', value=False,
-    #                                changeCommand=lambda x: action_checkBox('RIRSO', 'radioOver_RIRSO', 'radioUnder_RIRSO'))
-    # collectEyes_RIRSO = cmds.radioCollection('collectEyes_RIRSO')
-    # radioOver_RIRSO = cmds.radioButton(
-    #     'radioOver_RIRSO', label='overaction', select=True'))
-    # radioUnder_RIRSO = cmds.radioButton('radioUnder_RIRSO', label='underaction',
-    #                         '))
-    # cmds.setParent('..')
-    # cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-    #     (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # # LSO
-    # LIRSO = cmds.checkBox('LSO', label='normal', value=False,
-    #                                changeCommand=lambda x: action_checkBox('LSO', 'radioOver_LIRSO', 'radioUnder_LIRSO'))
-    # collectEyes_LIRSO = cmds.radioCollection('collectEyes_LIRSO')
-    # radioOver_LIRSO = cmds.radioButton(
-    #     'radioOver_LIRSO', label='overaction', select=True'))
-    # radioUnder_LIRSO = cmds.radioButton('radioUnder_LIRSO', label='underaction',
-    #                         '))
-    # cmds.setParent('..')
-    # cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam9')
+    cmds.setParent('..')
     cmds.setParent('..')
 
     # ------------------ Left & Down Gaze ------------------
@@ -340,10 +310,14 @@ def createUI(windowTitle):
     cmds.menuItem(label="Outdoor")
     cmds.menuItem(label="Indoor")
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.separator(height=5, style=None)
     cmds.setParent('..')
     cmds.setParent('..')
 
+    # def setCamara(*args):
+    #     setCamaraGaze()
+    #     if cmds.window(window, exists=True):
+    #         cmds.deleteUI(window)
+    #     createUI('Ocular motility test images generating system')
     def applyButton(*args):
         # Gaze()
 
@@ -377,7 +351,7 @@ def openFile(self):
 
 
 def playblastPreview():
-    cmds.lookThru('camera1')
+    cmds.lookThru('faceCam1')
     cmds.lookThru(q=True)
     cmds.playblast(filename="C:/Users/Khunpang/Documents/maya/projects/Matahuman/movies/man",
                    startTime=1,
@@ -436,8 +410,8 @@ def loadWindowPreview(endframe, textfieldAmount):
 
     rc = cmds.rowColumnLayout(numberOfColumns=2, columnOffset=(
         1, 'both', 5), columnWidth=[(1, 380), (2, 380)])
-    cmds.text('total 9 diagnostic positions of gaze : 6 ')
-    cmds.text('total picture : 36 ')
+    cmds.text('total 9 diagnostic positions of gaze : %d ' % (amount))
+    cmds.text('total picture : %d ' % (amount*9))
     cmds.separator(height=5, style=None)
     cmds.separator(height=5, style=None)
     cmds.button(label='Render', height=30)
@@ -585,10 +559,6 @@ def passValue(DirectionControl, *args):
                 # print(getSelectRadioVal)
     return radioCol
 
-# Test
-# def Gaze():
-#     passValue(lstCollectEyes)
-
 # ------------------- setMovementGaze -------------------
 
 
@@ -631,8 +601,8 @@ def setCamaraGaze(self):
         cmds.duplicate('faceCam'+str(i))
         cmds.move(100*(i), 0, 0, moveX=True)
 
-
 # ------------------- set Position Of Gaze (Selected) -------------------
+
 
 def setNinePositionOfGaze(textfieldAmount):
     amount = getAmountValue(textfieldAmount)
