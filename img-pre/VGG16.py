@@ -20,8 +20,9 @@ width = 224
 num_classes = 24
 trainPath = 'dataset_seperate/train/'
 testPath = 'dataset_seperate/test/'
-trainImg = [trainPath+i for i in os.listdir(trainPath) if os.listdir(os.path.join(trainPath, i))]
-testImg = [testPath+i for i in os.listdir(testPath) if os.listdir(os.path.join(testPath, i))]
+trainImg = [trainPath + i for i in os.listdir(trainPath) if os.listdir(os.path.join(trainPath, i))]
+testImg = [testPath + i for i in os.listdir(testPath) if os.listdir(os.path.join(testPath, i))]
+
 
 def img2datasAndlabels(path):
     Rawimgs = []
@@ -100,27 +101,25 @@ x_test = x_test.astype('float32')
 x_train /= 255
 x_test /= 255
 
-
-
+#ckeck shape
 print(x_train.shape)
 print(x_test.shape)
 print(y_train.shape)
 print(y_test.shape)
 
 
-SIZE = [224,224]
-base_model = tf.keras.applications.VGG16(input_shape = SIZE + [3], include_top = False, weights = 'imagenet')
+#Transfer Learning
+base_model = tf.keras.applications.VGG16(input_shape = (224, 224, 3), include_top = True, weights = 'imagenet')
 
 base_model.trainable = False
+
+base_model = tf.keras.Model(inputs = base_model.input, outputs = base_model.layers[-2].output)
 
 base_model.summary()
 
 model = tf.keras.Sequential([
     base_model,
-    tf.keras.layers.Conv2D(128, (3,3), activation='relu', input_shape = (width,width,3)),
-    tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
     tf.keras.layers.Dropout(0.25),
-    tf.keras.layers.Dense(16),
     tf.keras.layers.Flatten(),
 
     tf.keras.layers.Dense(num_classes, activation='softmax')
@@ -128,12 +127,22 @@ model = tf.keras.Sequential([
 
 model.summary()
 
-model.compile(optimizer = tf.keras.optimizers.Adam(lr=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
-batch_size = 32
-epochs = 45
+#Fine tunning
+print(len(base_model.layers))
+
+for layer in base_model.layers[7:]:
+    layer.trainable = True
+
+model.summary()
+
+model.compile(optimizer = tf.keras.optimizers.Adam(lr=0.00001), loss='categorical_crossentropy', metrics=['accuracy'])
+batch_size = 15
+epochs = 35
 
 history = model.fit(x_train, y_train, batch_size = batch_size, epochs=epochs, validation_data=(x_test, y_test))
 
+
+# "accuracy"
 plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_accuracy'])
 plt.title('model accuracy')
@@ -150,8 +159,8 @@ plt.xlabel('epoch')
 plt.legend(['train', 'validation'], loc='upper left')
 plt.show()
 
-testPath = 'dataset_seperate/test/'
 
+testPath = 'dataset_seperate/test/'
 # each of labels
 testImg = [testPath + f for f in os.listdir(testPath) if os.listdir(os.path.join(testPath, f))]
 rimg = []
@@ -181,24 +190,25 @@ for imagePath in (testImg):
 
             item_final = str(item).split('.')[-3]
             result_final = str(result)
-            print('real:'+str(item))
-            print('predict:'+str(result))
+            # print('real:'+str(item))
+            # print('predict:'+str(result))
             if item_final == result_final:
-                print('true')
-                print('___')
+                # print('true')
+                # print('___')
                 true_box += 1
             elif item_final != result_final:
-                print('false')
-                print('___')
+                # print('false')
+                # print('___')
                 false_box += 1
-    print('true box = ' + str(true_box))
-    print('false box = ' + str(false_box))
+                
+print('true box = ' + str(true_box))
+print('false box = ' + str(false_box))
             # print(item_final)
             # print(result)
             # plt.imshow(ori)
             # plt.show()
 
-x_test_plot = model.predict_classes(x_test, batch_size=128, verbose=0)
+x_test_plot = model.predict_classes(x_test, batch_size=32, verbose=0)
 y_test_plot = np.argmax(y_test, axis=1)
 metrics = pd.DataFrame(model.history.history)
 
