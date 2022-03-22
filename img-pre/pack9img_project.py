@@ -3,7 +3,7 @@ import cv2
 import os
 from natsort import natsorted
 
-path1 = 'Marmoset2/'
+path1 = 'RSR_OVER/'
 
 # path2 = ''
 # path3 = ''
@@ -26,7 +26,7 @@ path1 = 'Marmoset2/'
 
 
 #create folder
-dataset_home_new = 'datasetmergefile_mix_pack9_project/'
+dataset_home_new = 'datasetmergefile_project_RSR_OVER/'
 os.makedirs(dataset_home_new, exist_ok=True)
 
 
@@ -483,7 +483,7 @@ for n in range(len(box1_l1)):
 
     ver = np.vstack((row1, row2, row3))
     ver = cv2.resize(ver, (1280, 720))
-    cv2.imwrite(dataset_home_new + 'normal.' + str(n+1) + '.jpg', ver)
+    cv2.imwrite(dataset_home_new + 'abRSR' + str(n+1) + '.jpg', ver)
     # cv2.imshow('ver', ver)
     # cv2.waitKey(0)
 
