@@ -315,19 +315,14 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.setParent('..')
 
-    # def setCamara(*args):
-    #     setCamaraGaze()
-    #     if cmds.window(window, exists=True):
-    #         cmds.deleteUI(window)
-    #     createUI('Ocular motility test images generating system')
     def applyButton(*args):
-        # setNormalPositionOfGaze(AmoutImages)
-        loadWindowPreview_Abnormal(
-            setNinePositionOfGaze(AmoutImages), AmoutImages)
+        # normal selected
+        # loadWindowPreview(
+        #     setNormalNinePositionOfGaze(AmoutImages), AmoutImages)
 
-        # getValueNine = setNinePositionOfGaze(AmoutImages)
-        # loadWindowPreview_Abnormal(
-        #     getValueNine[0], getValueNine[1], getValueNine[2], AmoutImages)
+        # abnormal selected
+        loadWindowPreview(
+            setAbNinePositionOfGaze(AmoutImages), AmoutImages)
 
     def cancelCallback(*args):
         if cmds.window(window, exists=True):
@@ -369,7 +364,7 @@ def playblastPreview():
                    offScreen=True)
 
 
-def loadWindowPreview(endframe, textfieldAmount):
+def WindowPreview(endframe, textfieldAmount):
 
     def cancelCallback(*args):
         if cmds.window(window, exists=True):
@@ -386,12 +381,10 @@ def loadWindowPreview(endframe, textfieldAmount):
         (1, 250), (2, 250), (3, 250)], columnOffset=[(1, 'both', 2), (2, 'both', 3), (3, 'both', 3)])
 
     count = 0
+    pack = 0
     for i in range(endframe):
-        print(i)
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-                            (1, 250), (2, 250), (3, 250)])
-
-        # print(scaleGaze[i], scaleGaze[num])
+        cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
+                            (1, 250), (2, 250), (3, 250), (4, 250)])
         cmds.picture(image=(
             'C:/Users/Khunpang/Documents/maya/projects/Female Head/movies/female.%04d.jpg' % (i+1)))
         count += 1
@@ -400,10 +393,8 @@ def loadWindowPreview(endframe, textfieldAmount):
             cmds.separator(height=20, style=None)
             cmds.separator(height=20, style=None)
             count = 0
-
-            # cmds.text(('No. %d \n Right: %s Left: %s' % (num+1, scaleGaze[num+i][1][0], scaleGaze[num+i][1][1])),
-            #               font="boldLabelFont", align='center')
-
+            pack += 1
+        cmds.text('No. %d' % pack, font="boldLabelFont", align='center')
         cmds.setParent('..')
 
     cmds.setParent('..')
@@ -425,9 +416,9 @@ def loadWindowPreview(endframe, textfieldAmount):
     cmds.showWindow(window)
 
 
-def loadWindowPreview_Abnormal(endframe, amount):
+def loadWindowPreview(endframe, amount):
     playblastPreview()
-    loadWindowPreview(endframe, amount)
+    WindowPreview(endframe, amount)
 
 # ------------------- getAmountValue -------------------
 
@@ -503,71 +494,76 @@ def passValue(DirectionControl, *args):
                 print(radioCol)
     return radioCol
 
+
+# ----------------- movefaceMuscle -----------------
+def movefaceMuscle(name, gaze, time_value):
+    # set eyes movement 9 gaze to default
+    cmds.setKeyframe('ctrlEye_R.translateX', at='tx', v=gaze[0], t=time_value)
+    cmds.setKeyframe('ctrlEye_R.translateY', at='ty', v=gaze[1], t=time_value)
+    cmds.setKeyframe('ctrlEye_L.translateX', at='tx', v=gaze[0], t=time_value)
+    cmds.setKeyframe('ctrlEye_L.translateY', at='ty', v=gaze[1], t=time_value)
+
+    if 'Up' in name:
+        cmds.setKeyframe('upperLid_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLid_L.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
+                         v=0.4, t=time_value)
+        cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
+                         v=0.4, t=time_value)
+        cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
+                         v=0.4, t=time_value)
+        cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
+                         v=0.4, t=time_value)
+        cmds.setKeyframe('lowerLid_R.translateY', at='ty',
+                         v=-0.2, t=time_value)
+        cmds.setKeyframe('lowerLid_L.translateY', at='ty',
+                         v=-0.2, t=time_value)
+    elif 'Down' in name:
+        cmds.setKeyframe('upperLid_R.translateY', at='ty',
+                         v=0.6, t=time_value)
+        cmds.setKeyframe('upperLid_L.translateY', at='ty',
+                         v=0.6, t=time_value)
+        cmds.setKeyframe('lowerLid_R.translateY', at='ty',
+                         v=0.7, t=time_value)
+        cmds.setKeyframe('lowerLid_L.translateY', at='ty',
+                         v=0.7, t=time_value)
+    else:
+        cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLid_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLid_L.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('lowerLid_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('lowerLid_L.translateY', at='ty',
+                         v=0, t=time_value)
+
 # ------------------- setMovementGaze Preview -------------------
 
 
 def setMovementGaze(self):
     time_value = 0
-
     for name, gaze in lst_Nine:
         time_value += 1
         cmds.playbackOptions(edit=True, minTime='1', maxTime=time_value)
-        cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
-                         v=gaze[0], t=time_value)
-        cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
-                         v=gaze[1], t=time_value)
-        cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
-                         v=gaze[0], t=time_value)
-        cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
-                         v=gaze[1], t=time_value)
-        if 'Up' in name:
-            cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
-                             v=0.4, t=time_value)
-            cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
-                             v=0.4, t=time_value)
-            cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
-                             v=0.4, t=time_value)
-            cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
-                             v=0.4, t=time_value)
-            cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                             v=-0.2, t=time_value)
-            cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                             v=-0.2, t=time_value)
-        elif 'Down' in name:
-            cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                             v=0.6, t=time_value)
-            cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                             v=0.6, t=time_value)
-            cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                             v=0.7, t=time_value)
-            cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                             v=0.7, t=time_value)
-        else:
-            cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
-                             v=0, t=time_value)
-            cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
-                             v=0, t=time_value)
-            cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
-                             v=0, t=time_value)
-            cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
-                             v=0, t=time_value)
-            cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                             v=0, t=time_value)
-            cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                             v=0, t=time_value)
-            cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                             v=0, t=time_value)
-            cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                             v=0, t=time_value)
+        movefaceMuscle(name, gaze, time_value)
     # set model
     for i in range(time_value):
         no = ""
         cmds.currentTime(i+1)
-        cmds.select('Geometry'+no)
-        cmds.duplicate('Geometry'+no)
+        cmds.select('geo'+no)
+        cmds.duplicate('geo'+no)
         cmds.move(100*(i+1), 0, 0)
         no = str(i)
-    print(time_value)
 
 
 def setCamaraGaze(self):
@@ -587,68 +583,17 @@ def setCamaraGaze(self):
 # ------------------- set Position Of Gaze (NORMAL) -------------------
 
 
-def setNormalPositionOfGaze(textfieldAmount):
+def setNormalNinePositionOfGaze(textfieldAmount):
     amount = getAmountValue(textfieldAmount)
-    value_noise = []
     time_value = 0
+    value_noise = []
     for i in range(amount):
         for name, gaze in lst_Nine:
             time_value += 1
             cmds.playbackOptions(edit=True, minTime='1', maxTime=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
-                             v=gaze[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
-                             v=gaze[1], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
-                             v=gaze[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
-                             v=gaze[1], t=time_value)
-            if 'Up' in name:
-                cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
-                                 v=0.4, t=time_value)
-                cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
-                                 v=0.4, t=time_value)
-                cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
-                                 v=0.4, t=time_value)
-                cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
-                                 v=0.4, t=time_value)
-                cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                                 v=-0.2, t=time_value)
-                cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                                 v=-0.2, t=time_value)
-            elif 'Down' in name:
-                cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                                 v=0.6, t=time_value)
-                cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                                 v=0.6, t=time_value)
-                cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                                 v=0.7, t=time_value)
-                cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                                 v=0.7, t=time_value)
-            else:
-                cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                                 v=0, t=time_value)
-
-            value_noise.append(round(rand.uniform(0, 1), 4))
-
+            movefaceMuscle(name, gaze, time_value)
+            # Add noise
+            value_noise.append(round(rand.uniform(0, 0.5), 4))
             cmds.setKeyframe('AimEye_R.translateX', at='tx',
                              v=value_noise[i], t=time_value)
             cmds.setKeyframe('AimEye_L.translateX', at='ty',
@@ -689,7 +634,7 @@ lstActionOU = [
 ]
 
 
-def setNinePositionOfGaze(textfieldAmount):
+def setAbNinePositionOfGaze(textfieldAmount):
 
     amount = getAmountValue(textfieldAmount)
     radioCol = passValue(lstCollectEyes)
@@ -699,68 +644,19 @@ def setNinePositionOfGaze(textfieldAmount):
 
     x_value_lst = []
     y_value_lst = []
+
     # Set Normal Gaze
     for i in range(amount):
         for name, gaze in lst_Nine:
             time_value += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
-                             v=gaze[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
-                             v=gaze[1], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
-                             v=gaze[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
-                             v=gaze[1], t=time_value)
-            if 'Up' in name:
-                cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
-                                 v=0.4, t=time_value)
-                cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
-                                 v=0.4, t=time_value)
-                cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
-                                 v=0.4, t=time_value)
-                cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
-                                 v=0.4, t=time_value)
-                cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                                 v=-0.2, t=time_value)
-                cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                                 v=-0.2, t=time_value)
-            elif 'Down' in name:
-                cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                                 v=0.6, t=time_value)
-                cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                                 v=0.6, t=time_value)
-                cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                                 v=0.7, t=time_value)
-                cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                                 v=0.7, t=time_value)
-            else:
-                cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                                 v=0, t=time_value)
-                cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                                 v=0, t=time_value)
+            cmds.playbackOptions(edit=True, minTime='1', maxTime=time_value)
+            movefaceMuscle(name, gaze, time_value)
 
             # Add value selected
             for name_OU, scale in lstActionOU:
                 if radioCol in name_OU:
                     print('user selected', name_OU, scale)
-                    value_noise.append(round(rand.uniform(0, 0.6), 4))
+                    value_noise.append(round(rand.uniform(0, 0.5), 4))
 
                     for x_value in range(scale[0][0], scale[0][1]):
                         x_value_lst.append(x_value)
@@ -783,9 +679,13 @@ def setNinePositionOfGaze(textfieldAmount):
 
     return time_value
 
-# def bakeSimulation():
-#     cmds.select( 'Head_M', visible=True )
-#     cmds.select("Geometry", hierarchy=True)
+
+def bakeSimulation(time_value):
+    start = cmds.playbackOptions(q=1, min=1)
+    end = cmds.playbackOptions(q=1, max=time_value)
+    cmds.select('Head_M', visible=True)
+    cmds.select('geo', hierarchy=True)
+    cmds.bakeResults('joint*', t=(1, 40), simulation=True)
 
 
 if __name__ == "__main__":
