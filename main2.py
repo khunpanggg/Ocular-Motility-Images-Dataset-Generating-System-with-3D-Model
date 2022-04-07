@@ -63,7 +63,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RSR
-    RSR = cmds.checkBox('RSR', label='normal', value=False,
+    RSR = cmds.checkBox('RSR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('RSR', 'radioOver_RSR', 'radioUnder_RSR'))
     collectEyes_RSR = cmds.radioCollection('collectEyes_RSR')
     radioOver_RSR = cmds.radioButton(
@@ -73,7 +73,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LIO
-    LIO = cmds.checkBox('LIO', label='normal', value=False,
+    LIO = cmds.checkBox('LIO', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('LIO', 'radioOver_LIO', 'radioUnder_LIO'))
     collectEyes_LIO = cmds.radioCollection('collectEyes_LIO')
     radioOver_LIO = cmds.radioButton(
@@ -107,7 +107,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RIO
-    RIO = cmds.checkBox('RIO', label='normal', value=False,
+    RIO = cmds.checkBox('RIO', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('RIO', 'radioOver_RIO', 'radioUnder_RIO'))
     collectEyes_RIO = cmds.radioCollection('collectEyes_RIO')
     radioOver_RIO = cmds.radioButton(
@@ -117,7 +117,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
                         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LSR
-    LSR = cmds.checkBox('LSR', label='normal', value=False,
+    LSR = cmds.checkBox('LSR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('LSR', 'radioOver_LSR', 'radioUnder_LSR'))
     collectEyes_LSR = cmds.radioCollection('collectEyes_LSR')
     radioOver_LSR = cmds.radioButton(
@@ -143,7 +143,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RLR
-    RLR = cmds.checkBox('RLR', label='normal', value=False,
+    RLR = cmds.checkBox('RLR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('RLR', 'radioOver_RLR', 'radioUnder_RLR'))
     collectEyes_RLR = cmds.radioCollection('collectEyes_RLR')
     radioOver_RLR = cmds.radioButton(
@@ -153,7 +153,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LMR
-    LMR = cmds.checkBox('LMR', label='normal', value=False,
+    LMR = cmds.checkBox('LMR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('LMR', 'radioOver_LMR', 'radioUnder_LMR'))
     collectEyes_LMR = cmds.radioCollection('collectEyes_LMR')
     radioOver_LMR = cmds.radioButton(
@@ -187,7 +187,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RMR
-    RMR = cmds.checkBox('RMR', label='normal', value=False,
+    RMR = cmds.checkBox('RMR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('RMR', 'radioOver_RMR', 'radioUnder_RMR'))
     collectEyes_RMR = cmds.radioCollection('collectEyes_RMR')
     radioOver_RMR = cmds.radioButton(
@@ -223,7 +223,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RIR
-    RIR = cmds.checkBox('RIR', label='normal', value=False,
+    RIR = cmds.checkBox('RIR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('RIR', 'radioOver_RIR', 'radioUnder_RIR'))
     collectEyes_RIR = cmds.radioCollection('collectEyes_RIR')
     radioOver_RIR = cmds.radioButton(
@@ -233,7 +233,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LSO
-    LSO = cmds.checkBox('LSO', label='normal', value=False,
+    LSO = cmds.checkBox('LSO', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('LSO', 'radioOver_LSO', 'radioUnder_LSO'))
     collectEyes_LSO = cmds.radioCollection('collectEyes_LSO')
     radioOver_LSO = cmds.radioButton(
@@ -267,7 +267,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # RSO
-    RSO = cmds.checkBox('RSO', label='normal', value=False,
+    RSO = cmds.checkBox('RSO', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('RSO', 'radioOver_RSO', 'radioUnder_RSO'))
     collectEyes_RSO = cmds.radioCollection('collectEyes_RSO')
     radioOver_RSO = cmds.radioButton(
@@ -277,7 +277,7 @@ def createUI(windowTitle):
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LIR
-    LIR = cmds.checkBox('LIR', label='normal', value=False,
+    LIR = cmds.checkBox('LIR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('LIR', 'radioOver_LIR', 'radioUnder_LIR'))
     collectEyes_LIR = cmds.radioCollection('collectEyes_LIR')
     radioOver_LIR = cmds.radioButton(
@@ -429,9 +429,9 @@ def getAmountValue(textfieldAmount):
     return int(currentAmount)
 
 
-lst_Nine = [('Right Up', [-0.8, 0.5]), ('Up gaze', [0, 0.8]), ('Left Up', [0.8, 0.5]),
-            ('Right', [-1, 0]), ('Primary', [0, 0]), ('Left', [1, 0]),
-            ('Right Down', [-1, -1]), ('Downgaze', [0, -0.8]), ('Left Down', [1, -1])]
+lst_Nine = [('Right Up', [-0.8, 0.5]), ('Upgaze main', [0, 0.8]), ('Left Up', [0.8, 0.5]),
+            ('Right', [-1, 0]), ('Primary main', [0, 0]), ('Left', [1, 0]),
+            ('Right Down', [-1, -1]), ('Downgaze main', [0, -0.8]), ('Left Down', [1, -1])]
 
 lstCollectEyes = [
     'collectEyes_RSR',
@@ -603,34 +603,34 @@ def setNormalNinePositionOfGaze(textfieldAmount):
 # ------------------- set Position Of Gaze (Selected) -------------------
 lstActionOU = [
     # OVER ACTION
-    ('radioOver_RSR', [[-1, 5], [1, 5]]),
-    ('radioOver_LIO', [[-2, 0], [0, 2]]),
-    ('radioOver_RLR', [[-5, 0], [0, 0]]),
-    ('radioOver_LMR', [[-5, 0], [0, 0]]),
-    ('radioOver_RIR', [[-2, 0], [-2, 0]]),
-    ('radioOver_LSO', [[-2, 0], [-2, 0]]),
+    ('radioOver_RSR_R', [[-1, 5], [1, 5]]),
+    ('radioOver_LIO_R', [[-2, 0], [0, 2]]),
+    ('radioOver_RLR_R', [[-5, 0], [0, 0]]),
+    ('radioOver_LMR_R', [[-5, 0], [0, 0]]),
+    ('radioOver_RIR_R', [[-2, 0], [-2, 0]]),
+    ('radioOver_LSO_R', [[-2, 0], [-2, 0]]),
 
-    ('radioOver_RIO', [[0, 2], [0, 2]]),
-    ('radioOver_LSR', [[0, 2], [0, 2]]),
-    ('radioOver_RMR', [[0, 5], [0, 0]]),
-    ('radioOver_LLR', [[0, 5], [0, 0]]),
-    ('radioOver_RSO', [[0, 2], [-2, 0]]),
-    ('radioOver_LIR', [[0, 2], [-2, 0]]),
+    ('radioOver_RIO_L', [[0, 2], [0, 2]]),
+    ('radioOver_LSR_L', [[0, 2], [0, 2]]),
+    ('radioOver_RMR_L', [[0, 5], [0, 0]]),
+    ('radioOver_LLR_L', [[0, 5], [0, 0]]),
+    ('radioOver_RSO_L', [[0, 2], [-2, 0]]),
+    ('radioOver_LIR_L', [[0, 2], [-2, 0]]),
 
     # UNDER ACTION
-    ('radioUnder_RSR', [[0, 2], [0, -2]]),
-    ('radioUnder_LIO', [[0, 2], [-2, 0]]),
-    ('radioUnder_RLR', [[0, 5], [0, 0]]),
-    ('radioUnder_LMR', [[0, 5], [0, 0]]),
-    ('radioUnder_RIR', [[0, 5], [0, 5]]),
-    ('radioUnder_LSO', [[0, 5], [0, 5]]),
+    ('radioUnder_RSR_R', [[0, 2], [0, -2]]),
+    ('radioUnder_LIO_R', [[0, 2], [-2, 0]]),
+    ('radioUnder_RLR_R', [[0, 5], [0, 0]]),
+    ('radioUnder_LMR_R', [[0, 5], [0, 0]]),
+    ('radioUnder_RIR_R', [[0, 5], [0, 5]]),
+    ('radioUnder_LSO_R', [[0, 5], [0, 5]]),
 
-    ('radioUnder_RIO', [[-1, 0], [-4, 0]]),
-    ('radioUnder_LSR', [[-4, 0], [-4, 0]]),
-    ('radioUnder_RMR', [[-5, 0], [0, 0]]),
-    ('radioUnder_LLR', [[-5, 0], [0, 0]]),
-    ('radioUnder_RSO', [[-5, 0], [0, 5]]),
-    ('radioUnder_LIR', [[-5, 0], [0, 5]])
+    ('radioUnder_RIO_L', [[-1, 0], [-4, 0]]),
+    ('radioUnder_LSR_L', [[-4, 0], [-4, 0]]),
+    ('radioUnder_RMR_L', [[-5, 0], [0, 0]]),
+    ('radioUnder_LLR_L', [[-5, 0], [0, 0]]),
+    ('radioUnder_RSO_L', [[-5, 0], [0, 5]]),
+    ('radioUnder_LIR_L', [[-5, 0], [0, 5]])
 ]
 
 
@@ -645,37 +645,64 @@ def setAbNinePositionOfGaze(textfieldAmount):
     x_value_lst = []
     y_value_lst = []
 
+    # all checkGaze list
+    checkGaze_R = []
+    checkGaze_L = []
+
+    sixGaze_lst_R = []
+    sixGaze_lst_L = []
+    sixGaze_input_lst = []
+    count = 0
     # Set Normal Gaze
     for i in range(amount):
         for name, gaze in lst_Nine:
             time_value += 1
             cmds.playbackOptions(edit=True, minTime='1', maxTime=time_value)
             movefaceMuscle(name, gaze, time_value)
+            if 'Right' in name or 'main' in name:
+                sixGaze_lst_R.append(time_value)
+            if 'Left' in name or 'main' in name:
+                sixGaze_lst_L.append(time_value)
+            for key in sixGaze_lst_L:
+                sixGaze_input_lst.append(key)
+                if len(sixGaze_input_lst) % 6 == 0:
+                    checkGaze_L.append(sixGaze_input_lst)
+                    sixGaze_input_lst = []
+            # print('checkGaze_L', checkGaze_L)
 
-            # Add value selected
-            for name_OU, scale in lstActionOU:
-                if radioCol in name_OU:
-                    print('user selected', name_OU, scale)
-                    value_noise.append(round(rand.uniform(0, 0.5), 4))
-
-                    for x_value in range(scale[0][0], scale[0][1]):
-                        x_value_lst.append(x_value)
-                    for y_value in range(scale[1][0], scale[1][1]):
-                        y_value_lst.append(y_value)
-
-                    if 'R' == name_OU[-3:][0]:
-                        # print(x[-3:][0])
-                        cmds.setKeyframe('AimEye_R.translateX',
-                                         at='tx', v=x_value_lst[i]+value_noise[i], t=time_value)
-                        cmds.setKeyframe('AimEye_R.translateY',
-                                         at='ty', v=y_value_lst[i]+value_noise[i], t=time_value)
-
-                    elif 'L' == name_OU[-3:][0]:
-                        cmds.setKeyframe('AimEye_L.translateX',
-                                         at='tx', v=x_value_lst[i]+value_noise[i], t=time_value)
-                        cmds.setKeyframe('AimEye_L.translateY',
-                                         at='ty', v=y_value_lst[i]+value_noise[i], t=time_value)
-                        # print(name_OU[-3:][0])
+                # Add value selected
+                for name_OU, scale in lstActionOU:
+                    if radioCol in name_OU:
+                        # print('user selected', name_OU, scale)
+                        for x_value in range(scale[0][0], scale[0][1]):
+                            # value_noise.append(round(rand.uniform(0, 0.5), 4))
+                            x_value_lst.append(x_value)
+                        for y_value in range(scale[1][0], scale[1][1]):
+                            y_value_lst.append(y_value)
+                        if 'R' == name_OU[-1:][0]:
+                            # print("_R_",name_OU[-1:][0])
+                            if ('MR' or 'LR' in name_OU):
+                                print('Yes MR LR and Right gaze')
+                                cmds.setKeyframe('AimEye_R.translateX',
+                                                 at='tx', v=x_value_lst[i]+value_noise[i], t=time_value)
+                            else:
+                                cmds.setKeyframe('AimEye_R.translateX',
+                                                 at='tx', v=x_value_lst[i]+value_noise[i], t=time_value)
+                                cmds.setKeyframe('AimEye_R.translateY',
+                                                 at='ty', v=y_value_lst[i]+value_noise[i], t=time_value)
+                        elif 'L' == name_OU[-1:][0]:
+                            cmds.setKeyframe('AimEye_L.translateX',
+                                             at='tx', v=0, t=time_value)
+                            cmds.setKeyframe('AimEye_L.translateY',
+                                             at='ty', v=0, t=time_value)
+                            if 'LR' in name_OU:
+                                # print('name_OU' ,name_OU)
+                                for index_v, time in enumerate(checkGaze_L):
+                                    value_noise.append(
+                                        round(rand.uniform(0, 0.5), 4))
+                                    # print(x_value_lst[index_v], index_v,time, 'noise', value_noise)
+                                    cmds.setKeyframe('AimEye_L.translateX',
+                                                     at='tx', v=x_value_lst[index_v], t=time)
 
     return time_value
 
