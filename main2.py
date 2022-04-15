@@ -283,7 +283,8 @@ def createUI(windowTitle):
     collectEyes_LIR = cmds.radioCollection('collectEyes_LIR')
     radioOver_LIR_L = cmds.radioButton(
         'radioOver_LIR_L', label='overaction', enable=False)
-    radioUnder_LIR_L = cmds.radioButton('radioUnder_LIR_L', label='underaction')
+    radioUnder_LIR_L = cmds.radioButton(
+        'radioUnder_LIR_L', label='underaction')
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -318,11 +319,11 @@ def createUI(windowTitle):
 
     def applyButton(*args):
         # normal selected
-        setNormalNinePositionOfGaze(AmoutImages)
+        # setNormalNinePositionOfGaze(AmoutImages)
 
         # abnormal selected
-        # loadWindowPreview(
-        #     setAbNinePositionOfGaze(AmoutImages), AmoutImages)
+        loadWindowPreview(
+            setAbNinePositionOfGaze(AmoutImages), AmoutImages)
 
     def cancelCallback(*args):
         if cmds.window(window, exists=True):
@@ -339,16 +340,18 @@ def createUI(windowTitle):
 
 # ------------------ openFile ------------------
 
+
 def openFile(self):
     filename = cmds.fileDialog2(fileMode=1, caption="Import File")
     cmds.file(filename[0], i=True)
 
 # ------------------ loadWindowPreview ------------------
 
+
 def playblastPreview():
     cmds.lookThru('faceCam1')
     cmds.lookThru(q=True)
-    cmds.playblast(filename="C:/Users/PiLab507/Documents/maya/projects/Matahuman/movies/man",
+    cmds.playblast(filename="C:/Users/Khunpang/Documents/maya/projects/Female Head/movies/woman",
                    startTime=1,
                    format="image",
                    viewer=False,
@@ -384,7 +387,7 @@ def WindowPreview(endframe, textfieldAmount):
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
                             (1, 250), (2, 250), (3, 250), (4, 250)])
         cmds.picture(image=(
-            'C:/Users/PiLab507/Documents/maya/projects/Matahuman/movies/man.%04d.jpg' % (i+1)))
+            'C:/Users/Khunpang/Documents/maya/projects/Female Head/movies/woman.%04d.jpg' % (i+1)))
         count += 1
         if count == 9:
             cmds.separator(height=20, style=None)
@@ -419,6 +422,7 @@ def loadWindowPreview(endframe, amount):
     WindowPreview(endframe, amount)
 
 # ------------------- getAmountValue -------------------
+
 
 def getAmountValue(textfieldAmount):
     currentAmount = cmds.textField(textfieldAmount, query=True, text=True)
@@ -609,19 +613,19 @@ lstActionOU = [
 
 
     # UNDER ACTION
-    ('radioUnder_RSR_R', [[0, 2], [0, 0]]),
+    ('radioUnder_RSR_R', [[0, 0], [-5, -1]]),
     ('radioUnder_LIO_R', [[0, 2], [-2, 0]]),
     ('radioUnder_RLR_R', [[2, 8], [0, 0]]),
     ('radioUnder_LMR_R', [[2, 8], [0, 0]]),
-    ('radioUnder_RIR_R', [[0, 5], [0, 0]]),
+    ('radioUnder_RIR_R', [[0, 0], [0, 0]]),
     ('radioUnder_LSO_R', [[0, 5], [0, 5]]),
 
     ('radioUnder_RIO_L', [[-1, 0], [-4, 0]]),
-    ('radioUnder_LSR_L', [[-4, 0], [0, 0]]),
+    ('radioUnder_LSR_L', [[0, 0], [-5, -1]]),
     ('radioUnder_RMR_L', [[-8, -2], [0, 0]]),
     ('radioUnder_LLR_L', [[-8, -2], [0, 0]]),
     ('radioUnder_RSO_L', [[-5, 0], [0, 5]]),
-    ('radioUnder_LIR_L', [[-5, 0], [0, 0]])
+    ('radioUnder_LIR_L', [[0, 0], [0, 0]])
 ]
 
 
@@ -644,6 +648,10 @@ def setAbNinePositionOfGaze(textfieldAmount):
     checkGaze_left_R = []
     checkGaze_left_L = []
 
+    Gaze_up_lst_R = []
+    checkGaze_up_R = []
+    upGaze_input_lst = []
+
     sixGaze_lst_R = []
     sixGaze_lst_L = []
     sixGaze_input_lst = []
@@ -656,8 +664,15 @@ def setAbNinePositionOfGaze(textfieldAmount):
                 sixGaze_lst_R.append(time_value)
             if 'Left' in name or 'main' in name:
                 sixGaze_lst_L.append(time_value)
+
+            if 'Right Up' in name or 'Upgaze main' in name:
+                Gaze_up_lst_R.append(time_value)
+            # if 'Left Up' in name or 'Upgaze main' in name:
+            #     checkGaze_up_R.append(time_value)
+
             if 'main' in name:
                 checkGaze_middle.append(time_value)
+
             if 'Right' not in name:
                 checkGaze_left_R.append(time_value)
             elif 'Left' not in name:
@@ -673,8 +688,16 @@ def setAbNinePositionOfGaze(textfieldAmount):
         if len(sixGaze_input_lst) % 6 == 0:
             checkGaze_L.append(sixGaze_input_lst)
             sixGaze_input_lst = []
+
+    for up_r in Gaze_up_lst_R:
+        upGaze_input_lst.append(up_r)
+        if len(upGaze_input_lst) % 2 == 0:
+            checkGaze_up_R.append(upGaze_input_lst)
+            upGaze_input_lst = []
+
     print('checkGaze_R', checkGaze_R)
     print('checkGaze_L', checkGaze_L)
+    print('checkGaze_up_R', checkGaze_up_R)
     print('checkGaze_middle', checkGaze_middle)
     print('checkGaze_left_R', checkGaze_left_R)
     print('checkGaze_left_L', checkGaze_left_L)
@@ -687,25 +710,27 @@ def setAbNinePositionOfGaze(textfieldAmount):
         # Add value selected
         for name_OU, scale in lstActionOU:
             if radioCol in name_OU:
-                # print('user selected', name_OU, scale)
+                # print('user selected', name_OU,scale)
                 for x_value in range(scale[0][0], scale[0][1]):
                     value_noise.append(round(rand.uniform(0, 0.5), 4))
                     x_value_lst.append(x_value)
                 for y_value in range(scale[1][0], scale[1][1]):
+                    value_noise.append(round(rand.uniform(0, 0.5), 4))
                     y_value_lst.append(y_value)
 
     for name_OU, scale in lstActionOU:
         # Check มุมมองทืศทางที่ตาขยับ เช่น มองไปทาง Right gaze
         if radioCol in name_OU:
-            print('radioCol',radioCol)
+            print('radioCol', radioCol)
             if 'R' == name_OU[-1:][0]:
-                print("_R_",name_OU[-1:][0], name_OU)
+                # print("_R_",name_OU[-1:][0], name_OU)
+
                 # LR / R gaze
                 if 'LR' == name_OU[-4:-2]:
                     print('Yes! LR and R gaze:', name_OU[-4:-2])
                     for index_v, time_left in enumerate(checkGaze_left_R):
-                        print('time_value_2', time_value_2,
-                              'v', 0, 'time', time_left)
+                        # print('time_value_2', time_value_2,
+                        #       'v', 0, 'time', time_left)
                         cmds.setKeyframe('AimEye_R.translateX',
                                          at='tx', v=0, t=time_left)
                         cmds.setKeyframe(
@@ -715,16 +740,17 @@ def setAbNinePositionOfGaze(textfieldAmount):
                             cmds.setKeyframe(
                                 'AimEye_R.translateX', at='tx', v=x_value_lst[index_v]+value_noise[index_v], t=time_2)
                             if time_2 in checkGaze_middle:
-                                print('time_value_2', time_value_2, 'checkGaze_middle' ,'x_value_lst',x_value_lst[index_v]-3, 'time', time_2)
+                                print('time_value_2', time_value_2, 'checkGaze_middle',
+                                      'x_value_lst', x_value_lst[index_v]-3, 'time', time_2)
                                 cmds.setKeyframe(
                                     'AimEye_R.translateX', at='tx', v=(x_value_lst[index_v]-3)+value_noise[index_v], t=time_2)
                 # MR / R gaze
                 elif 'MR' == name_OU[-4:-2]:
                     print('Yes! MR and R gaze:', name_OU[-4:-2])
                     for index_v, time_left in enumerate(checkGaze_left_R):
-                        print('time_value_2', time_value_2, 'v', 0, 'time', time_left)
+                        # print('time_value_2', time_value_2, 'v', 0, 'time', time_left)
                         cmds.setKeyframe('AimEye_L.translateX',
-                                        at='tx', v=0, t=time_left)
+                                         at='tx', v=0, t=time_left)
                         cmds.setKeyframe(
                             'AimEye_L.translateY', at='ty', v=0, t=time_left)
                     for index_v, time in enumerate(checkGaze_R):
@@ -732,16 +758,37 @@ def setAbNinePositionOfGaze(textfieldAmount):
                             cmds.setKeyframe(
                                 'AimEye_L.translateX', at='tx', v=x_value_lst[index_v]+value_noise[index_v], t=time_2)
                             if time_2 in checkGaze_middle:
-                                print('time_value_2', time_value_2, 'checkGaze_middle' ,'x_value_lst',x_value_lst[index_v]-3, 'time', time_2)
+                                print('time_value_2', time_value_2, 'checkGaze_middle',
+                                      'x_value_lst', x_value_lst[index_v]-3, 'time', time_2)
                                 cmds.setKeyframe(
                                     'AimEye_L.translateX', at='tx', v=(x_value_lst[index_v]-2)+value_noise[index_v], t=time_2)
+                # SR / R gaze
+                elif 'SR' == name_OU[-4:-2]:
+                    print('Yes! SR and R gaze:', name_OU[-4:-2])
+                    for index_v, time_left in enumerate(checkGaze_left_R):
+                        # print('time_value_2', time_value_2, 'v', 0, 'time', time_left)
+                        cmds.setKeyframe('AimEye_R.translateX',
+                                         at='tx', v=0, t=time_left)
+                        cmds.setKeyframe(
+                            'AimEye_R.translateY', at='ty', v=0, t=time_left)
+                    for index_v, time in enumerate(checkGaze_up_R):
+                        for time_2 in time:
+                            print('time_value_2', time_value_2, 'y_value_lst',
+                                  y_value_lst[index_v], value_noise[index_v], 'time', time_2)
+                            cmds.setKeyframe(
+                                'AimEye_R.translateY', at='ty', v=y_value_lst[index_v]+value_noise[index_v], t=time_2)
+                            if time_2 in checkGaze_middle:
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateY', at='ty', v=(y_value_lst[index_v]+1)+value_noise[index_v], t=time_2)
+                # # IR / R gaze
 
             elif 'L' == name_OU[-1:][0]:
                 # LR / L gaze
                 if 'LR' == name_OU[-4:-2]:
                     print('Yes! LR and L gaze', name_OU[-4:-2])
                     for index_v, time_left in enumerate(checkGaze_left_L):
-                        print('time_value_2', time_value_2,'v', 0, 'time', time_left)
+                        print('time_value_2', time_value_2,
+                              'v', 0, 'time', time_left)
                         cmds.setKeyframe('AimEye_L.translateX',
                                          at='tx', v=0, t=time_left)
                         cmds.setKeyframe(
@@ -755,13 +802,14 @@ def setAbNinePositionOfGaze(textfieldAmount):
                             if time_2 in checkGaze_middle:
                                 # print('time_value_2', time_value_2, 'x_value_lst',x_value_lst[index_v]+3, 'time', time_2)
                                 cmds.setKeyframe(
-                                'AimEye_L.translateX', at='tx', v=(x_value_lst[index_v]+3)+value_noise[index_v], t=time_2)
+                                    'AimEye_L.translateX', at='tx', v=(x_value_lst[index_v]+3)+value_noise[index_v], t=time_2)
 
                 # MR / L gaze
                 elif 'MR' == name_OU[-4:-2]:
                     print('Yes! MR and L gaze', name_OU[-4:-2])
                     for index_v, time_left in enumerate(checkGaze_left_L):
-                        print('time_value_2', time_value_2,'v', 0, 'time', time_left)
+                        print('time_value_2', time_value_2,
+                              'v', 0, 'time', time_left)
                         cmds.setKeyframe('AimEye_R.translateX',
                                          at='tx', v=0, t=time_left)
                         cmds.setKeyframe(
@@ -772,8 +820,7 @@ def setAbNinePositionOfGaze(textfieldAmount):
                                 'AimEye_R.translateX', at='tx', v=x_value_lst[index_v]+value_noise[index_v], t=time_2)
                             if time_2 in checkGaze_middle:
                                 cmds.setKeyframe(
-                                'AimEye_R.translateX', at='tx', v=(x_value_lst[index_v]+2)+value_noise[index_v], t=time_2)
-
+                                    'AimEye_R.translateX', at='tx', v=(x_value_lst[index_v]+2)+value_noise[index_v], t=time_2)
 
     return time_value
 
