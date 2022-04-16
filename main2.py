@@ -351,7 +351,7 @@ def openFile(self):
 def playblastPreview():
     cmds.lookThru('faceCam1')
     cmds.lookThru(q=True)
-    cmds.playblast(filename="C:/Users/Khunpang/Documents/maya/projects/Female Head/movies/woman",
+    cmds.playblast(filename="C:/Users/PiLab507/Documents/maya/projects/Female Head/movies/woman",
                    startTime=1,
                    format="image",
                    viewer=False,
@@ -387,7 +387,7 @@ def WindowPreview(endframe, textfieldAmount):
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
                             (1, 250), (2, 250), (3, 250), (4, 250)])
         cmds.picture(image=(
-            'C:/Users/Khunpang/Documents/maya/projects/Female Head/movies/woman.%04d.jpg' % (i+1)))
+            'C:/Users/PiLab507/Documents/maya/projects/Female Head/movies/woman.%04d.jpg' % (i+1)))
         count += 1
         if count == 9:
             cmds.separator(height=20, style=None)
@@ -650,6 +650,8 @@ def setAbNinePositionOfGaze(textfieldAmount):
 
     Gaze_up_lst_R = []
     checkGaze_up_R = []
+    Gaze_up_lst_L = []
+    checkGaze_up_L = []
     upGaze_input_lst = []
 
     sixGaze_lst_R = []
@@ -667,8 +669,8 @@ def setAbNinePositionOfGaze(textfieldAmount):
 
             if 'Right Up' in name or 'Upgaze main' in name:
                 Gaze_up_lst_R.append(time_value)
-            # if 'Left Up' in name or 'Upgaze main' in name:
-            #     checkGaze_up_R.append(time_value)
+            if 'Left Up' in name or 'Upgaze main' in name:
+                Gaze_up_lst_L.append(time_value)
 
             if 'main' in name:
                 checkGaze_middle.append(time_value)
@@ -693,6 +695,12 @@ def setAbNinePositionOfGaze(textfieldAmount):
         upGaze_input_lst.append(up_r)
         if len(upGaze_input_lst) % 2 == 0:
             checkGaze_up_R.append(upGaze_input_lst)
+            upGaze_input_lst = []
+    
+    for up_l in Gaze_up_lst_L:
+        upGaze_input_lst.append(up_l)
+        if len(upGaze_input_lst) % 2 == 0:
+            checkGaze_up_L.append(upGaze_input_lst)
             upGaze_input_lst = []
 
     print('checkGaze_R', checkGaze_R)
@@ -821,7 +829,25 @@ def setAbNinePositionOfGaze(textfieldAmount):
                             if time_2 in checkGaze_middle:
                                 cmds.setKeyframe(
                                     'AimEye_R.translateX', at='tx', v=(x_value_lst[index_v]+2)+value_noise[index_v], t=time_2)
-
+                # SR / L gaze
+                elif 'SR' == name_OU[-4:-2]:
+                    print('Yes! SR and L gaze:', name_OU[-4:-2])
+                    for index_v, time_left in enumerate(checkGaze_left_L):
+                        # print('time_value_2', time_value_2, 'v', 0, 'time', time_left)
+                        cmds.setKeyframe('AimEye_L.translateX',
+                                         at='tx', v=0, t=time_left)
+                        cmds.setKeyframe(
+                            'AimEye_L.translateY', at='ty', v=0, t=time_left)
+                    for index_v, time in enumerate(checkGaze_up_L):
+                        for time_2 in time:
+                            print('time_value_2', time_value_2, 'y_value_lst',
+                                  y_value_lst[index_v], value_noise[index_v], 'time', time_2)
+                            cmds.setKeyframe(
+                                'AimEye_L.translateY', at='ty', v=y_value_lst[index_v]+value_noise[index_v], t=time_2)
+                            if time_2 in checkGaze_middle:
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateY', at='ty', v=(y_value_lst[index_v]+1)+value_noise[index_v], t=time_2)
+                #  IR / R gaze
     return time_value
 
 
