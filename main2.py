@@ -629,6 +629,20 @@ lstActionOU = [
 ]
 
 
+def setGazeSelected(AimEye_side, AimEye_translate, checkGaze_left, checkGaze_side, checkGaze_middle, xy_value_lst, value_noise_lst, num_part):
+
+    for index_v, time_left in enumerate(checkGaze_left):
+        cmds.setKeyframe(AimEye_side+'.translateX', v=0, t=time_left)
+        cmds.setKeyframe(AimEye_side+'.translateY', v=0, t=time_left)
+    for index_v, time_lst in enumerate(checkGaze_side):
+        for time_ in time_lst:
+            cmds.setKeyframe(
+                AimEye_side+'.'+AimEye_translate, v=xy_value_lst[index_v]+value_noise_lst[index_v], t=time_)
+            if time_ in checkGaze_middle:
+                cmds.setKeyframe(AimEye_side+'.'+AimEye_translate, v=(
+                    xy_value_lst[index_v]+num_part)+value_noise_lst[index_v], t=time_)
+
+
 def setAbNinePositionOfGaze(textfieldAmount):
 
     amount = getAmountValue(textfieldAmount)
@@ -696,7 +710,7 @@ def setAbNinePositionOfGaze(textfieldAmount):
         if len(upGaze_input_lst) % 2 == 0:
             checkGaze_up_R.append(upGaze_input_lst)
             upGaze_input_lst = []
-    
+
     for up_l in Gaze_up_lst_L:
         upGaze_input_lst.append(up_l)
         if len(upGaze_input_lst) % 2 == 0:
@@ -736,22 +750,25 @@ def setAbNinePositionOfGaze(textfieldAmount):
                 # LR / R gaze
                 if 'LR' == name_OU[-4:-2]:
                     print('Yes! LR and R gaze:', name_OU[-4:-2])
-                    for index_v, time_left in enumerate(checkGaze_left_R):
-                        # print('time_value_2', time_value_2,
-                        #       'v', 0, 'time', time_left)
-                        cmds.setKeyframe('AimEye_R.translateX',
-                                         at='tx', v=0, t=time_left)
-                        cmds.setKeyframe(
-                            'AimEye_R.translateY', at='ty', v=0, t=time_left)
-                    for index_v, time in enumerate(checkGaze_R):
-                        for time_2 in time:
-                            cmds.setKeyframe(
-                                'AimEye_R.translateX', at='tx', v=x_value_lst[index_v]+value_noise[index_v], t=time_2)
-                            if time_2 in checkGaze_middle:
-                                print('time_value_2', time_value_2, 'checkGaze_middle',
-                                      'x_value_lst', x_value_lst[index_v]-3, 'time', time_2)
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateX', at='tx', v=(x_value_lst[index_v]-3)+value_noise[index_v], t=time_2)
+                    setGazeSelected('AimEye_R', 'translateX', checkGaze_left_R,
+                                    checkGaze_R, checkGaze_middle, x_value_lst, value_noise, -3)
+                    # for index_v, time_left in enumerate(checkGaze_left_R):
+                    #     # print('time_value_2', time_value_2,
+                    #     #       'v', 0, 'time', time_left)
+                    #     cmds.setKeyframe('AimEye_R.translateX',
+                    #                      at='tx', v=0, t=time_left)
+                    #     cmds.setKeyframe(
+                    #         'AimEye_R.translateY', at='ty', v=0, t=time_left)
+                    # for index_v, time in enumerate(checkGaze_R):
+                    #     for time_2 in time:
+                    #         cmds.setKeyframe(
+                    #             'AimEye_R.translateX', at='tx', v=x_value_lst[index_v]+value_noise[index_v], t=time_2)
+                    #         if time_2 in checkGaze_middle:
+                    #             print('time_value_2', time_value_2, 'checkGaze_middle',
+                    #                   'x_value_lst', x_value_lst[index_v]-3, 'time', time_2)
+                    #             cmds.setKeyframe(
+                    #                 'AimEye_R.translateX', at='tx', v=(x_value_lst[index_v]-3)+value_noise[index_v], t=time_2)
+
                 # MR / R gaze
                 elif 'MR' == name_OU[-4:-2]:
                     print('Yes! MR and R gaze:', name_OU[-4:-2])
