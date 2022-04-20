@@ -1,4 +1,3 @@
-from cgitb import enable
 import maya.cmds as cmds
 import random as rand
 
@@ -352,10 +351,10 @@ def openFile(self):
 # ------------------ loadWindowPreview ------------------
 
 
-def playblastPreview():
+def playblastPreview(*args):
     cmds.lookThru('faceCam1')
     cmds.lookThru(q=True)
-    cmds.playblast(filename="C:/Users/PiLab507/Documents/maya/projects/Female Head/movies/woman",
+    cmds.playblast(filename="C:/Users/Multimedia-02/Documents/maya/projects/children-boy/movies/boy",
                    startTime=1,
                    format="image",
                    viewer=False,
@@ -391,7 +390,7 @@ def WindowPreview(endframe, textfieldAmount):
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
                             (1, 250), (2, 250), (3, 250), (4, 250)])
         cmds.picture(image=(
-            'C:/Users/PiLab507/Documents/maya/projects/Female Head/movies/woman.%04d.jpg' % (i+1)))
+            'C:/Users/Multimedia-02/Documents/maya/projects/children-boy/movies/boy.%04d.jpg' % (i+1)))
         count += 1
         if count == 9:
             cmds.separator(height=20, style=None)
@@ -785,7 +784,7 @@ def setAbNinePositionOfGaze(textfieldAmount):
                 if 'LR' == name_OU[-4:-2]:
                     print('Yes! LR and R gaze:')
                     setGazeSelected('AimEye_R', 'translateX', checkGaze_left_R,
-                                    checkGaze_R, checkGaze_middle, x_value_lst, value_noise, -3)
+                                    checkGaze_R,   checkGaze_middle, x_value_lst, value_noise, -3)
                 # MR / R gaze
                 elif 'MR' == name_OU[-4:-2]:
                     print('Yes! MR and R gaze:')
@@ -900,7 +899,6 @@ def setAbNinePositionOfGaze(textfieldAmount):
                     setGazeSelected('AimEye_L', 'translateY', checkGaze_left_L,
                                     checkGaze_IR_L, checkGaze_middle, y_value_lst, value_noise, -1)
                 # IO / L gaze
-# IO / R gaze
                 elif 'IO' == name_OU[-4:-2]:
                     if 'Over' in name_OU:
                         print('Yes! IOOA and R gaze:', name_OU)
