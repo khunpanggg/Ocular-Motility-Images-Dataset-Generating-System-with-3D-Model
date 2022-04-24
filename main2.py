@@ -354,7 +354,7 @@ def openFile(self):
 def playblastPreview(*args):
     cmds.lookThru('faceCam1')
     cmds.lookThru(q=True)
-    cmds.playblast(filename="C:/Users/Multimedia-02/Documents/maya/projects/children-boy/movies/boy",
+    cmds.playblast(filename="C:\Users\Khunpang\Documents\maya\projects\children-girl/movies/boy",
                    startTime=1,
                    format="image",
                    viewer=False,
@@ -390,7 +390,7 @@ def WindowPreview(endframe, textfieldAmount):
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
                             (1, 250), (2, 250), (3, 250), (4, 250)])
         cmds.picture(image=(
-            'C:/Users/Multimedia-02/Documents/maya/projects/children-boy/movies/boy.%04d.jpg' % (i+1)))
+            'C:\Users\Khunpang\Documents\maya\projects\children-girl/movies/boy.%04d.jpg' % (i+1)))
         count += 1
         if count == 9:
             cmds.separator(height=20, style=None)
@@ -622,15 +622,15 @@ lstActionOU = [
     ('radioUnder_LMR_R', [[2, 8], [0, 0]]),
     ('radioUnder_RIR_R', [[0, 0], [1, 5]]),
     ('radioUnder_LSO_R', [[-1, 5], [1, 5]]),
-    
+
     ('radioUnder_RIO_L', [[-4, -1], [-3, -1]]),
-    
+
     ('radioUnder_LSR_L', [[0, 0], [-5, -1]]),
     ('radioUnder_RMR_L', [[-8, -2], [0, 0]]),
     ('radioUnder_LLR_L', [[-8, -2], [0, 0]]),
-    
+
     ('radioUnder_RSO_L', [[-3, 2], [1, 3]]),
-    
+
     ('radioUnder_LIR_L', [[0, 0], [1, 5]])
 ]
 
@@ -873,8 +873,10 @@ def setAbNinePositionOfGaze(textfieldAmount):
                                 cmds.setKeyframe(
                                     'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
                                 if time_ in checkGaze_middle:
-                                    cmds.setKeyframe('AimEye_L.translateX', v=value_noise[index_v]-1, t=time_)
-                                    cmds.setKeyframe('AimEye_L.translateY', v=value_noise[index_v]+1, t=time_)
+                                    cmds.setKeyframe(
+                                        'AimEye_L.translateX', v=value_noise[index_v]-1, t=time_)
+                                    cmds.setKeyframe(
+                                        'AimEye_L.translateY', v=value_noise[index_v]+1, t=time_)
 
             elif 'L' == name_OU[-1:][0]:
                 # LR / L gaze
@@ -971,8 +973,10 @@ def setAbNinePositionOfGaze(textfieldAmount):
                                 cmds.setKeyframe(
                                     'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
                                 if time_ in checkGaze_middle:
-                                    cmds.setKeyframe('AimEye_R.translateX', v=value_noise[index_v]-1, t=time_)
-                                    cmds.setKeyframe('AimEye_R.translateY', v=value_noise[index_v]+1, t=time_)
+                                    cmds.setKeyframe(
+                                        'AimEye_R.translateX', v=value_noise[index_v]-1, t=time_)
+                                    cmds.setKeyframe(
+                                        'AimEye_R.translateY', v=value_noise[index_v]+1, t=time_)
 
     return time_value
 
