@@ -1,781 +1,430 @@
-import maya.OpenMaya as om
 import maya.cmds as cmds
-from functools import partial
 import random as rand
-from mtoa.cmds.arnoldRender import arnoldRender
-import mtoa.core as core
-import mtoa.utils as mutils  # skydome
-import maya.app.general.createImageFormats as createImageFormats
-
-# def arnoldOpenMtoARenderView():
-#     core.createOptions()
-#     cmds.arnoldRenderView(mode="open")
-
-
-# def arnoldMtoARenderView():
-#     # core.ACTIVE_CAMERA is not set, anything we could do here ?
-#     # if core.ACTIVE_CAMERA != None:
-#     #    cmds.arnoldRenderView(cam=core.ACTIVE_CAMERA)
-#     # so instead we're calling it without any argument
-#     core.createOptions()
-#     cmds.arnoldRenderView()
-
-
-# # execute both functions
-# arnoldOpenMtoARenderView()
-# arnoldMtoARenderView()
-
-def openFile(self):
-    filename = cmds.fileDialog2(fileMode=1, caption="Import File")
-    cmds.file(filename[0], i=True)
 
 
 def createUI(windowTitle):
-    window = 'MR_Window'
-    size = (400, 400)
-
+    window = 'OC_Window'
     # create new window
     window = cmds.window(window, title=windowTitle,
-                         resizeToFitChildren=True, widthHeight=size, sizeable=True)
+                         resizeToFitChildren=True, sizeable=True)
     cmds.columnLayout(adjustableColumn=True)
-    menuBarLayout = cmds.menuBarLayout()
-    cmds.menu(label='File')
-    cmds.menuItem(label='New')
-    cmds.menuItem(label='Open')
-    cmds.menuItem(label='Close')
+    cmds.rowColumnLayout(numberOfColumns=2, columnAttach=(
+        (1, 'right', 2), (2, 'both', 3)), columnWidth=[(1, 250)], columnOffset=[(1, 'both', 2)])
 
-    cmds.menu(label='Help', helpMenu=True)
-    cmds.menuItem(label='About...')
-
-    # ------------ Position ------------
-    infoColumnLayout = cmds.columnLayout(
-        'infoColumnLayout', adjustableColumn=True, columnOffset=['both', 5], parent=window)
-    cmds.paneLayout(configuration='quad', height=300)
-    # ------------ Viewport ------------
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=True, swf=True)
-    cmds.frameLayout(label='Preparation')
-    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 200), (2, 150)], columnOffset=[(1, 'both', 3)])
-    cmds.separator(height=30, style=None)
-    cmds.button(label='Open Scene', command=openFile)
-    cmds.setParent('..')
-
-    cmds.frameLayout(label='Position')
-    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 200), (2, 200)], columnOffset=[(1, 'right', 3)], rowSpacing=[1, 5])
-    cmds.text('Type of Position :')
-    collection1 = cmds.radioCollection()
-    # Primary Position
-    PriPos = cmds.radioButton(
-        label='Primary Position (1 pattern)', select=True, changeCommand=lambda x: action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, AmoutImages))
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.separator(height=10, style=None)
-    # Cardinal Position
-    CarPos = cmds.radioButton(
-        label='Cardinal Position (7 patterns)', changeCommand=lambda x: action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, AmoutImages))
-    cmds.iconTextButton(
-        style='iconOnly', image1='help.xpm', command=buttonhelp)
-    cmds.separator(height=10, style=None)
-    # 9 Diagnostic  Position
-    DiaPos = cmds.radioButton(
-        label='9 Diagnostic Position (9 patterns)', changeCommand=lambda x: action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, AmoutImages))
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.radioCollection(collection1, edit=True, select=PriPos)
-
-    # ------------ Classify ------------
-    cmds.frameLayout(label='Classify')
-    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 200), (2, 200)], columnOffset=[(1, 'right', 3)], rowSpacing=[1, 5])
-
-    cmds.text('Type of eyes :')
-    collection_eyes = cmds.radioCollection()
-    normal_eyes = cmds.radioButton(
-        label='normal', select=True, changeCommand=lambda x: action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, AmoutImages))
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.separator(height=10, style=None)
-    abnormal_eyes = cmds.radioButton(
-        label='abnormal', changeCommand=lambda x: action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, AmoutImages))
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-    # ------------ Setting for Primary  Position ------------
-    framePriSetting = cmds.frameLayout('framePriSetting',
-                                       label='Setting for Primary  Position', collapsable=False, enable=False)
+    # ------------ Preparation ------------
+    cmds.frameLayout(label='Preparation', collapsable=True, marginWidth=5)
+    cmds.frameLayout(label='Import Flie', collapsable=True)
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 400), (2, 400)], columnOffset=[(1, 'both', 3), (2, 'both', 3)])
-    cmds.text('Right eye')
-    cmds.text('Left eye')
+                        (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
+    cmds.button(label='Open Scene', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
+    cmds.setParent('..')
+    cmds.frameLayout(label='Setting Gaze', collapsable=True)
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+                        (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
+    cmds.button(label='Set Gaze', command=setMovementGaze, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
+    cmds.button(label='Set Camera', command=setCamaraGaze, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
+    cmds.setParent('..')
+    cmds.frameLayout(label='Tool', collapsable=True)
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+                        (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
+    cmds.button(label='Bake Simulation', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
 
-    Pri_TypeofStrabismus_R = cmds.optionMenuGrp(
-        'TypeofStrabismus_R', w=400, label="Type of Strabismus :")
-    cmds.menuItem(label="Esotropia")
-    cmds.menuItem(label="Exotropia")
-
-    Pri_TypeofStrabismus_L = cmds.optionMenuGrp(
-        'TypeofStrabismus_L', w=400, label="Type of Strabismus :")
-    cmds.menuItem(label="Esotropia")
-    cmds.menuItem(label="Exotropia")
-
-    menuRight_H = cmds.optionMenuGrp('Right_H', w=400, label="Horizontal (X) :",
-                                     extraLabel='degree', changeCommand=lambda x: setPreviewDegree(menuRight_H, menuLeft_H,
-                                                                                                   Pri_TypeofStrabismus_R, Pri_TypeofStrabismus_L))
-    cmds.menuItem(label="0")
-    cmds.menuItem(label="15")
-    cmds.menuItem(label="30")
-    cmds.menuItem(label="45")
-
-    menuLeft_H = cmds.optionMenuGrp('Left_H', w=400, label="Horizontal (X) :",
-                                    extraLabel='degree', changeCommand=lambda x: setPreviewDegree(menuRight_H, menuLeft_H,
-                                                                                                  Pri_TypeofStrabismus_R, Pri_TypeofStrabismus_L))
-    cmds.menuItem(label="0")
-    cmds.menuItem(label="15")
-    cmds.menuItem(label="30")
-    cmds.menuItem(label="45")
-
+    cmds.button(label='Reset', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
 
-    # ------------ Setting for 9 diagnostic positions of gaze ------------
-
+    # ------------------ Setting for 9 diagnostic positions of gaze ------------------
     frameDiaSetting = cmds.frameLayout('frameDiaSetting',
-                                       label='Setting for 9 diagnostic positions of gaze', enable=False)
+                                       label='Setting for 9 diagnostic positions of gaze', enable=True, borderVisible=False, collapsable=True)
     cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 400), (2, 400), (3, 400)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
-    frameCarSetting_r_ug = cmds.frameLayout(
-        'frameCarSetting_r_ug', label='Right and up gaze')
-    cmds.text('Right eye:')
-    RU_R_Scale = cmds.intSliderGrp(field=True, label='RSR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(RU_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_r_ug', RU_R_Scale, 'RU_R_Scale'))
-    cmds.text('Left eye:')
-    RU_L_Scale = cmds.intSliderGrp(field=True, label='LIO:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(RU_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_r_ug', RU_L_Scale, 'RU_L_Scale'))
-    cmds.setParent('..')
-    # ------------ Up gaze not use in cardinal of gaze ------------
-    frameCarSetting_ug = cmds.frameLayout(
-        'frameCarSetting_ug', label='Up gaze')
-    cmds.text('Right eye:')
-    Up_R_Scale = cmds.intSliderGrp(field=True, label='RSR/RIO:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(Up_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_ug', Up_R_Scale, 'Up_R_Scale'))
-    cmds.text('Left eye:')
-    Up_L_Scale = cmds.intSliderGrp(field=True, label='LIO/LSR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(Up_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_ug', Up_L_Scale, 'Up_L_Scale'))
-    cmds.setParent('..')
+        (1, 300), (2, 300), (3, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
 
-    frameCarSetting_l_ug = cmds.frameLayout(
-        'frameCarSetting_l_ug', label='Left and up gaze')
-    cmds.text('Right eye:')
-    LU_R_Scale = cmds.intSliderGrp(field=True, label='RIO:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(LU_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_l_ug', LU_R_Scale, 'LU_R_Scale'))
-    cmds.text('Left eye:')
-    LU_L_Scale = cmds.intSliderGrp(field=True, label='LSR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(LU_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_l_ug', LU_L_Scale, 'LU_L_Scale'))
+    # ------------------ Right & Up Gaze ------------------
+    cmds.frameLayout(label='Right & Up Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('RSR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('LIO', bgc=[0.1, 0.1, 0.1])
     cmds.setParent('..')
-
-    frameCarSetting_rg = cmds.frameLayout(
-        'frameCarSetting_rg', label='Right gaze')
-    cmds.text('Right eye:')
-    RG_R_Scale = cmds.intSliderGrp(field=True, label='RLR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(RG_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_rg', RG_R_Scale, 'RG_R_Scale'))
-    cmds.text('Left eye:')
-    RG_L_Scale = cmds.intSliderGrp(field=True, label='LMR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(RG_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_rg', RG_L_Scale, 'RG_L_Scale'))
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     displayLights='all', camera='faceCam2')
     cmds.setParent('..')
-
-    # ------------ Start Primary not use in cardinal of gaze ------------
-    frameCarSetting_pri = cmds.frameLayout(
-        'frameCarSetting_pri', label='Primary Position')
-    cmds.text('Right eye')
-    TypeofStrabismus_R = cmds.optionMenuGrp(
-        'TypeofStrabismus_R', w=400, label="Type of Strabismus :")
-    cmds.menuItem(label="Esotropia")
-    cmds.menuItem(label="Exotropia")
-
-    cmds.optionMenuGrp('Right_H', w=400, label="Horizontal (X) :",
-                       extraLabel='degree', changeCommand=lambda x: setPreviewDegree(menuRight_H, menuLeft_H,
-                                                                                     Pri_TypeofStrabismus_R, Pri_TypeofStrabismus_L))
-    cmds.menuItem(label="0")
-    cmds.menuItem(label="15")
-    cmds.menuItem(label="30")
-    cmds.menuItem(label="45")
-
-    cmds.text('Left eye')
-    TypeofStrabismus_L = cmds.optionMenuGrp('TypeofStrabismus_L', w=400,
-                                            label="Type of Strabismus :")
-    cmds.menuItem(label="Esotropia")
-    cmds.menuItem(label="Exotropia")
-
-    cmds.optionMenuGrp('Left_H', w=400, label="Horizontal (X) :",
-                       extraLabel='degree', changeCommand=lambda x: setPreviewDegree(menuRight_H, menuLeft_H,
-                                                                                     Pri_TypeofStrabismus_R, Pri_TypeofStrabismus_L))
-    cmds.menuItem(label="0")
-    cmds.menuItem(label="15")
-    cmds.menuItem(label="30")
-    cmds.menuItem(label="45")
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # RSR
+    RSR = cmds.checkBox('RSR', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('RSR', 'radioOver_RSR_R', 'radioUnder_RSR_R'))
+    collectEyes_RSR = cmds.radioCollection('collectEyes_RSR')
+    radioOver_RSR = cmds.radioButton(
+        'radioOver_RSR_R', label='overaction', enable=False)
+    radioUnder_RSR = cmds.radioButton('radioUnder_RSR_R', label='underaction')
     cmds.setParent('..')
-    # ------------ END Primary not use in cardinal of gaze ------------
-    frameCarSetting_lg = cmds.frameLayout(
-        'frameCarSetting_lg', label='Left gaze')
-    cmds.text('Right eye:')
-    LG_R_Scale = cmds.intSliderGrp(field=True, label='RMR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(LG_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_lg', LG_R_Scale, 'LG_R_Scale'))
-    cmds.text('Left eye:')
-    LG_L_Scale = cmds.intSliderGrp(field=True, label='LLR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(LG_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_lg', LG_L_Scale, 'LG_L_Scale'))
-    cmds.setParent('..')
-    frameCarSetting_r_dg = cmds.frameLayout(
-        'frameCarSetting_r_dg', label='Right and down gaze')
-    cmds.text('Right eye:')
-    RD_R_Scale = cmds.intSliderGrp(field=True, label='RIR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(RD_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_r_dg', RD_R_Scale, 'RD_R_Scale'))
-    cmds.text('Left eye:')
-    RD_L_Scale = cmds.intSliderGrp(field=True, label='LSO:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(RD_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_r_dg', RD_L_Scale, 'RD_L_Scale'))
-    cmds.setParent('..')
-
-    # ------------ Downgaze not use in cardinal of gaze ------------
-    frameCarSetting_dg = cmds.frameLayout(
-        'frameCarSetting_dg', label='Downgaze')
-    cmds.text('Right eye:')
-    D_R_Scale = cmds.intSliderGrp(field=True, label='IR/SO:', minValue=-4,
-                                  maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(D_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_dg', D_R_Scale, 'D_R_Scale'))
-    cmds.text('Left eye:')
-    D_L_Scale = cmds.intSliderGrp(field=True, label='SO/IR:', minValue=-4,
-                                  maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(D_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_dg', D_L_Scale, 'D_L_Scale'))
-    cmds.setParent('..')
-    frameCarSetting_l_dg = cmds.frameLayout(
-        'frameCarSetting_l_dg', label='Left and down gaze')
-    cmds.text('Right eye:')
-    LD_R_Scale = cmds.intSliderGrp(field=True, label='RSO:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(LD_R_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_l_dg', LD_R_Scale, 'LD_R_Scale'))
-    cmds.text('Left eye:')
-    LD_L_Scale = cmds.intSliderGrp(field=True, label='LIR:', minValue=-4,
-                                   maxValue=4, fieldMinValue=-4, fieldMaxValue=4, value=0)
-    cmds.intSliderGrp(LD_L_Scale, e=True, changeCommand=lambda x: setPreviewSilderPositionOfGaze(
-        'frameCarSetting_l_dg', LD_L_Scale, 'LD_L_Scale'))
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # LIO
+    LIO = cmds.checkBox('LIO', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('LIO', 'radioOver_LIO_R', 'radioUnder_LIO_R'))
+    collectEyes_LIO = cmds.radioCollection('collectEyes_LIO')
+    radioOver_LIO = cmds.radioButton(
+        'radioOver_LIO_R', label='overaction', select=True)
+    radioUnder_LIO = cmds.radioButton('radioUnder_LIO_R', label='underaction')
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
 
-    # ------- Amount -------
-    cmds.paneLayout(configuration='quad')
-    cmds.frameLayout(label='Amount of Images')
+    # ------------------ Up Gaze ------------------
+    cmds.frameLayout(label='Up Gaze')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam3')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    # ------------------ Left & Up Gaze ------------------
+    cmds.frameLayout(label='Left & Up Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('RIO', bgc=[0.1, 0.1, 0.1])
+    cmds.text('LSR', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam4')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # RIO
+    RIO = cmds.checkBox('RIO', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('RIO', 'radioOver_RIO_L', 'radioUnder_RIO_L'))
+    collectEyes_RIO = cmds.radioCollection('collectEyes_RIO')
+    radioOver_RIO = cmds.radioButton(
+        'radioOver_RIO_L', label='overaction', select=True)
+    radioUnder_RIO = cmds.radioButton('radioUnder_RIO_L', label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+                        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # LSR
+    LSR = cmds.checkBox('LSR', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('LSR', 'radioOver_LSR_L', 'radioUnder_LSR_L'))
+    collectEyes_LSR = cmds.radioCollection('collectEyes_LSR')
+    radioOver_LSR = cmds.radioButton(
+        'radioOver_LSR_L', label='overaction', enable=False)
+    radioUnder_LSR = cmds.radioButton('radioUnder_LSR_L', label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    # ------------------ Right Gaze ------------------
+    cmds.frameLayout(label='Right Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('RLR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('LMR', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam5')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # RLR
+    RLR = cmds.checkBox('RLR', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('RLR', 'radioOver_RLR_R', 'radioUnder_RLR_R'))
+    collectEyes_RLR = cmds.radioCollection('collectEyes_RLR')
+    radioOver_RLR = cmds.radioButton(
+        'radioOver_RLR_R', label='overaction', enable=False)
+    radioUnder_RLR = cmds.radioButton('radioUnder_RLR_R', label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # LMR
+    LMR = cmds.checkBox('LMR', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('LMR', 'radioOver_LMR_R', 'radioUnder_LMR_R'))
+    collectEyes_LMR = cmds.radioCollection('collectEyes_LMR')
+    radioOver_LMR = cmds.radioButton(
+        'radioOver_LMR_R', label='overaction', enable=False)
+    radioUnder_LMR = cmds.radioButton('radioUnder_LMR_R', label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    # ------------------ Primary Position ------------------
+    cmds.frameLayout(label='Primary Position')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam6')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    # ------------------ Left Gaze ------------------
+    cmds.frameLayout(label='Left Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('RMR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('LLR', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam7')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # RMR
+    RMR = cmds.checkBox('RMR', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('RMR', 'radioOver_RMR_L', 'radioUnder_RMR_L'))
+    collectEyes_RMR = cmds.radioCollection('collectEyes_RMR')
+    radioOver_RMR = cmds.radioButton(
+        'radioOver_RMR_L', label='overaction', enable=False)
+    radioUnder_RMR = cmds.radioButton('radioUnder_RMR_L', label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # LLR
+    LLR = cmds.checkBox('LLR', label='normal', value=False,
+                        changeCommand=lambda x: action_checkBox('LLR', 'radioOver_LLR_L', 'radioUnder_LLR_L'))
+    collectEyes_LLR = cmds.radioCollection('collectEyes_LLR')
+    radioOver_LLR = cmds.radioButton(
+        'radioOver_LLR_L', label='overaction', enable=False)
+    radioUnder_LLR = cmds.radioButton('radioUnder_LLR_L', label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    # ------------------ Right & Down Gaze ------------------
+    cmds.frameLayout(label='Right & Down Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('RIR', bgc=[0.1, 0.1, 0.1])
+    cmds.text('LSO', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam8')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # RIR
+    RIR = cmds.checkBox('RIR', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('RIR', 'radioOver_RIR_R', 'radioUnder_RIR_R'))
+    collectEyes_RIR = cmds.radioCollection('collectEyes_RIR')
+    radioOver_RIR = cmds.radioButton(
+        'radioOver_RIR_R', label='overaction', enable=False)
+    radioUnder_RIR = cmds.radioButton('radioUnder_RIR_R', label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # LSO
+    LSO = cmds.checkBox('LSO', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('LSO', 'radioOver_LSO_R', 'radioUnder_LSO_R'))
+    collectEyes_LSO = cmds.radioCollection('collectEyes_LSO')
+    radioOver_LSO = cmds.radioButton(
+        'radioOver_LSO_R', label='overaction', select=True)
+    radioUnder_LSO = cmds.radioButton('radioUnder_LSO_R', label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    # ------------------ Down Gaze ------------------
+    cmds.frameLayout(label='Up Gaze')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam9')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    # ------------------ Left & Down Gaze ------------------
+    cmds.frameLayout(label='Left & Down Gaze')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.text('RSO', bgc=[0.1, 0.1, 0.1])
+    cmds.text('LIR', bgc=[0.1, 0.1, 0.1])
+    cmds.setParent('..')
+    cmds.paneLayout(configuration='quad', height=100)
+    cmds.modelEditor(da='smoothShaded', dtx=True,
+                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam10')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # RSO
+    RSO = cmds.checkBox('RSO', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('RSO', 'radioOver_RSO_L', 'radioUnder_RSO_L'))
+    collectEyes_RSO = cmds.radioCollection('collectEyes_RSO')
+    radioOver_RSO = cmds.radioButton(
+        'radioOver_RSO_L', label='overaction', select=True)
+    radioUnder_RSO = cmds.radioButton('radioUnder_RSO_L', label='underaction')
+    cmds.setParent('..')
+    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+    # LIR
+    LIR = cmds.checkBox('LIR', label='normal', value=True,
+                        changeCommand=lambda x: action_checkBox('LIR', 'radioOver_LIR_L', 'radioUnder_LIR_L'))
+    collectEyes_LIR = cmds.radioCollection('collectEyes_LIR')
+    radioOver_LIR_L = cmds.radioButton(
+        'radioOver_LIR_L', label='overaction', enable=False)
+    radioUnder_LIR_L = cmds.radioButton(
+        'radioUnder_LIR_L', label='underaction')
+    cmds.setParent('..')
+    cmds.setParent('..')
+    cmds.setParent('..')
+
+    cmds.setParent('..')
+
+    # ------------------ Amount ------------------
+    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
+        (1, 450), (2, 450)], columnOffset=[(1, 'both', 2)])
+    cmds.frameLayout(label='Amount of Images', collapsable=True)
     cmds.separator(height=5, style=None)
     cmds.rowColumnLayout(numberOfColumns=3, columnAttach=(
-        (1, 'right', 3), (2, 'both', 3), (3, 'both', 3)), columnWidth=[(1, 200), (2, 150)])
-    cmds.text(label='Amount:')
+        (1, 'right', 3), (2, 'both', 3), (3, 'both', 3)), columnWidth=[(1, 100), (2, 150)])
+    cmds.text(label='amount :')
     AmoutImages = cmds.textField()
-
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.separator(height=10, style=None)
 
+    cmds.separator(height=5, style=None)
     cmds.setParent('..')
     cmds.setParent('..')
-    cmds.frameLayout(label='Create Lighting')
-    cmds.optionMenuGrp('optionLighting', w=400, label="HDRIs :",
-                       changeCommand=lambda x: apply_texture())
+
+    # ------------------ Create Lighting ------------------
+    cmds.frameLayout(label='Create Lighting', collapsable=True)
+    cmds.separator(height=5, style=None)
+    cmds.rowColumnLayout(numberOfColumns=2, columnAttach=((1, 'both', 2)))
+    cmds.optionMenuGrp('optionLighting', w=250, label="lightning location :")
     cmds.menuItem(label="Outdoor")
-    cmds.menuItem(label="Skies")
     cmds.menuItem(label="Indoor")
-    cmds.menuItem(label="Studio")
-    cmds.menuItem(label="Nature")
-    cmds.menuItem(label="Urban")
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.setParent('..')
     cmds.setParent('..')
 
     def applyButton(*args):
-        # Abnormal Eyes
-        if cmds.radioButton(abnormal_eyes, query=True, select=True) and cmds.radioButton(PriPos, query=True, select=True):
-            setvaluePrimary(AmoutImages, menuRight_H, menuLeft_H,
-                            Pri_TypeofStrabismus_R, Pri_TypeofStrabismus_L)
-            loadWindowPreview_Abnormal(getAmountValue(AmoutImages))
+        # normal selected
+        # setNormalNinePositionOfGaze(AmoutImages)
 
-        elif cmds.radioButton(abnormal_eyes, query=True, select=True) and cmds.radioButton(CarPos, query=True, select=True):
-            getAmountFrame = setCardinalPositionOfGaze(setDefaultCardinal(RU_R_Scale, RU_L_Scale, LU_R_Scale, LU_L_Scale, RG_R_Scale,
-                                                                          RG_L_Scale, LG_R_Scale, LG_L_Scale, RD_R_Scale, RD_L_Scale, LD_R_Scale, LD_L_Scale), AmoutImages)
-            print('getAmountFrame', getAmountFrame[2])
-            loadWindowPreview_Abnormal(
-                getAmountFrame[0], getAmountFrame[1], getAmountFrame[2], AmoutImages)
+        # abnormal selected
+        loadWindowPreview(
+            setAbNinePositionOfGaze(AmoutImages), AmoutImages)
 
-        # elif cmds.radioButton(abnormal_eyes, query=True, select=True) and cmds.radioButton(DiaPos, query=True, select=True):
-        #     setCardinalPositionOfGaze(collectValueCardinal(RU_R_Scale, RU_L_Scale, LU_R_Scale,
-        #                                                    LU_L_Scale, RG_R_Scale, RG_L_Scale, LG_R_Scale, LG_L_Scale, RD_R_Scale, RD_L_Scale, LD_R_Scale, LD_L_Scale), AmoutImages)
-        #     loadWindowPreview_Abnormal(getAmountValue(AmoutImages))
-
-        # Normal Eyes
-        elif cmds.radioButton(normal_eyes, query=True, select=True) and cmds.radioButton(PriPos, query=True, select=True):
-            setNormalPositionOfGaze(AmoutImages)
-            # loadWindowPreview_Normal(int(setNormalPositionOfGaze()))
-
-        elif cmds.radioButton(normal_eyes, query=True, select=True) and cmds.radioButton(CarPos, query=True, select=True):
-            getValue = setNormalCardinalPositionOfGaze(AmoutImages)
-            print('getValue', getValue[2])
-            loadWindowPreview_Abnormal(
-                getValue[0], getValue[1], getValue[2], AmoutImages)
-            # loadWindowPreview_Normal(int(setNormalCardinalPositionOfGaze()))
-
-        elif cmds.radioButton(normal_eyes, query=True, select=True) and cmds.radioButton(DiaPos, query=True, select=True):
-            getValueNine = setNinePositionOfGaze(AmoutImages)
-            loadWindowPreview(
-                getValueNine[0], getValueNine[1], getValueNine[2], AmoutImages)
-            # loadWindowPreview_Normal(int(setNinePositionOfGaze()))
+    def renderButton(*args):
+        # normal selected
+        setNormalNinePositionOfGaze(AmoutImages)
 
     def cancelCallback(*args):
         if cmds.window(window, exists=True):
             cmds.deleteUI(window)
 
-    def render_seq(startframe=1, endframe=10, renderfn=cmds.render, renderfn_args=None):
-        '''render out a sequence of frames as per global settings
-
-        defaults to using maya.cmds.render for frames 1-10'''
-
-        # save state
-        now = cmds.currentTime(q=True)
-
-        for x in range(startframe, endframe):
-            cmds.currentTime(x)
-            renderfn(renderfn_args)
-
-        # restore state
-        cmds.currentTime(now)
-
-    # ------- Button -------
+    cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 400), (2, 400), (3, 400)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
-    cmds.button(label='Apply', height=40, command=applyButton)
-    cmds.button(label='Render', command=render_seq)
+        (1, 300), (2, 300), (3, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
+    cmds.button(label='Apply', height=30, command=applyButton)
+    cmds.button(label='Render', command=renderButton)
     cmds.button(label='Close', command=cancelCallback)
     cmds.setParent('..')
-    # display new window
-    createLight()
     cmds.showWindow()
 
-
-# create Lighting Skydome
-def apply_texture():
-    selectedMenuItem = cmds.optionMenuGrp('optionLighting', q=True, value=True)
-    i = 0
-    # create a shader
-    shader = cmds.shadingNode("aiSkyDomeLight", asLight=True, n='shaderNode')
-    # a file texture node
-    file_node = cmds.shadingNode(
-        "file", asTexture=True, n="fileTexture_%s" % i)
-    # defines location where texture is
-    file = ("C:/Users/Khunpang/Documents/GitHub/Ocular-Motility-Images-Dataset-Generating-System-with-3D-Model/" +
-            "abandoned_" + selectedMenuItem+".hdr")
-    # a shading group
-    shading_group = cmds.sets(
-        renderable=True, noSurfaceShader=True, empty=True)
-    cmds.select('aiSkyDomeLight1')
-    cmds.setAttr('%s.fileTextureName' % file_node, file, type="string")
-    # connect shader to sg surface shader
-    cmds.connectAttr('%s.outColor' %
-                     shader, '%s.surfaceShader' % shading_group)
-    # connect file texture node to shader's color
-    cmds.connectAttr('%s.outColor' % file_node, '%s.color' % shader)
-    i += 1
+# ------------------ openFile ------------------
 
 
-def createLight():
-    if cmds.objExists('aiSkyDomeLight1'):
-        cmds.select('aiSkyDomeLight1')
+def openFile(self):
+    filename = cmds.fileDialog2(fileMode=1, caption="Import File")
+    cmds.file(filename[0], i=True)
 
-    else:
-        skydome = mutils.createLocator('aiSkyDomeLight', asLight=True)
-        print("Warning: no aiSkyDomeLight exists.")
-        apply_texture()
-
-# ------------------- set Preview Degree -------------------
+# ------------------ loadWindowPreview ------------------
 
 
-def setPreviewDegree(menuRight_H, menuLeft_H, type_selected_R, type_selected_L):
-    lstMenuitemDegree = getMenuitemDegree(menuRight_H, menuLeft_H)
-    lstTypeOfStrabismus = getTypeOfStrabismus(type_selected_R, type_selected_L)
-    # TypeofStrabismus_Right
-    if lstTypeOfStrabismus[0] == 'Esotropia':  # Esotropia_R
-        if lstMenuitemDegree[0] == '0':
-            cmds.setAttr('ctrlEye_R.translateX', 0)
-        elif lstMenuitemDegree[0] == '15':
-            cmds.setAttr('ctrlEye_R.translateX', 0.22)
-        elif lstMenuitemDegree[0] == '30':
-            cmds.setAttr('ctrlEye_R.translateX', 0.59)
-        elif lstMenuitemDegree[0] == '45':
-            cmds.setAttr('ctrlEye_R.translateX', 1)
-    if lstTypeOfStrabismus[0] == 'Exotropia':  # Exotropia_R
-        if lstMenuitemDegree[0] == '0':
-            cmds.setAttr('ctrlEye_R.translateX', 0)
-        elif lstMenuitemDegree[0] == '15':
-            cmds.setAttr('ctrlEye_R.translateX', -0.22)
-        elif lstMenuitemDegree[0] == '30':
-            cmds.setAttr('ctrlEye_R.translateX', -0.59)
-        elif lstMenuitemDegree[0] == '45':
-            cmds.setAttr('ctrlEye_R.translateX', -1)
-    # TypeofStrabismus_Left
-    if lstTypeOfStrabismus[1] == 'Esotropia':  # Esotropia_L
-        if lstMenuitemDegree[1] == '0':
-            cmds.setAttr('ctrlEye_L.translateX', 0)
-        elif lstMenuitemDegree[1] == '15':
-            cmds.setAttr('ctrlEye_L.translateX', -0.22)
-        elif lstMenuitemDegree[1] == '30':
-            cmds.setAttr('ctrlEye_L.translateX', -0.59)
-        elif lstMenuitemDegree[1] == '45':
-            cmds.setAttr('ctrlEye_L.translateX', -1)
-
-    if lstTypeOfStrabismus[1] == 'Exotropia':  # Exotropia_L
-        if lstMenuitemDegree[1] == '0':
-            cmds.setAttr('ctrlEye_L.translateX', 0)
-        elif lstMenuitemDegree[1] == '15':
-            cmds.setAttr('ctrlEye_L.translateX', 0.22)
-        elif lstMenuitemDegree[1] == '30':
-            cmds.setAttr('ctrlEye_L.translateX', 0.59)
-        elif lstMenuitemDegree[1] == '45':
-            cmds.setAttr('ctrlEye_L.translateX', 1)
-
-# ------------------- set Preview Silder Position Of Gaze -------------------
+def playblastPreview(*args):
+    cmds.lookThru('faceCam1')
+    cmds.lookThru(q=True)
+    cmds.playblast(filename="C:\Users\Khunpang\Documents\maya\projects\children-girl/movies/boy",
+                   startTime=1,
+                   format="image",
+                   viewer=False,
+                   compression="jpg",
+                   clearCache=1,
+                   fp=4,
+                   percent=100,
+                   quality=100,
+                   widthHeight=[250, 65],
+                   showOrnaments=False,
+                   offScreen=True)
 
 
-def setPreviewSilderPositionOfGaze(namesilder, ScaleSelected, nameSelected):
-    lst_preview_cardinal = [[-1, 1], [0, 1], [1, 1],
-                            [-1, 0], [1, 0], [-1, -1], [0, -1], [1, -1]]
-    lst_namesilder = ['frameCarSetting_r_ug', 'frameCarSetting_ug', 'frameCarSetting_l_ug', 'frameCarSetting_rg',
-                      'frameCarSetting_lg', 'frameCarSetting_r_dg', 'frameCarSetting_dg', 'frameCarSetting_l_dg']
-    findindex = lst_namesilder.index(namesilder)
-    setGaze = lst_preview_cardinal[findindex]
+def WindowPreview(endframe, textfieldAmount):
 
-    if '_R_' in nameSelected:
-        cmds.setAttr('ctrlEye_R.translateX', setGaze[0])
-        cmds.setAttr('ctrlEye_R.translateY', setGaze[1])
-        if setGaze[0] < 0 and setGaze[1] >= 0:
-            cmds.setAttr('AimEye_R.translateX',
-                         getPreviewSliderValue(ScaleSelected)*(-1))
-        elif setGaze[0] >= 0 or setGaze[1] >= 0:
-            cmds.setAttr('AimEye_R.translateX',
-                         getPreviewSliderValue(ScaleSelected))
-        elif setGaze[0] >= 0 or setGaze[1] < 0:
-            cmds.setAttr('AimEye_R.translateX',
-                         getPreviewSliderValue(ScaleSelected)*(-1))
+    def cancelCallback(*args):
+        if cmds.window(window, exists=True):
+            cmds.deleteUI(window)
 
-        print('yes R')
-    elif '_L_' in nameSelected:
-        cmds.setAttr('ctrlEye_L.translateX', setGaze[0])
-        cmds.setAttr('ctrlEye_L.translateY', setGaze[1])
-        if setGaze[0] < 0 and setGaze[1] >= 0:
-            cmds.setAttr('AimEye_L.translateX',
-                         getPreviewSliderValue(ScaleSelected)*(-1))
-        elif setGaze[0] >= 0 or setGaze[1] >= 0:
-            cmds.setAttr('AimEye_L.translateX',
-                         getPreviewSliderValue(ScaleSelected))
-        elif setGaze[0] > 0 or setGaze[1] < 0:
-            cmds.setAttr('AimEye_L.translateX',
-                         getPreviewSliderValue(ScaleSelected)*(-1))
-
-        print('yes L')
-
-
-def getPreviewSliderValue(ScaleSelected):
-    getScale = cmds.intSliderGrp(ScaleSelected, query=True, value=True)
-    return getScale
-
-# ------------------- set Position Of Gaze (NORMAL) -------------------
-
-
-def setNormalPositionOfGaze(textfieldAmount):
     amount = getAmountValue(textfieldAmount)
-    value_noise = []
+    # create new window
+    window = cmds.window(title='9 Diagnostic Positions of Gaze Preview',
+                         resizeToFitChildren=True, sizeable=True)
 
-    for i in range(amount):
-        cmds.setKeyframe('ctrlEye_R.translateX', at='tx', v=0, t=i+1)
-        cmds.setKeyframe('ctrlEye_R.translateY', at='ty', v=0, t=i+1)
-        cmds.setKeyframe('ctrlEye_L.translateX', at='tx', v=0, t=i+1)
-        cmds.setKeyframe('ctrlEye_L.translateY', at='ty', v=0, t=i+1)
+    form = cmds.formLayout()
+    sl = cmds.scrollLayout(childResizable=True)
+    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
+        (1, 250), (2, 250), (3, 250)], columnOffset=[(1, 'both', 2), (2, 'both', 3), (3, 'both', 3)])
 
-        value_noise.append(round(rand.uniform(-1, 1), 4))
+    count = 0
+    pack = 0
+    for i in range(endframe):
+        cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
+                            (1, 250), (2, 250), (3, 250), (4, 250)])
+        cmds.picture(image=(
+            'C:\Users\Khunpang\Documents\maya\projects\children-girl/movies/boy.%04d.jpg' % (i+1)))
+        count += 1
+        if count == 9:
+            cmds.separator(height=20, style=None)
+            cmds.separator(height=20, style=None)
+            cmds.separator(height=20, style=None)
+            count = 0
+            pack += 1
+        cmds.text('No. %d' % pack, font="boldLabelFont", align='center')
+        cmds.setParent('..')
 
-        cmds.setKeyframe('AimEye_R.translateX', at='tx',
-                         v=value_noise[i], t=i+1)
-        cmds.setKeyframe('AimEye_L.translateX', at='ty',
-                         v=value_noise[i], t=i+1)
+    cmds.setParent('..')
+    cmds.setParent('..')
 
+    rc = cmds.rowColumnLayout(numberOfColumns=2, columnOffset=(
+        1, 'both', 5), columnWidth=[(1, 380), (2, 380)])
+    cmds.text('total 9 diagnostic positions of gaze : %d ' % (amount))
+    cmds.text('total picture : %d ' % (amount*9))
+    cmds.separator(height=5, style=None)
+    cmds.separator(height=5, style=None)
+    cmds.button(label='Render', height=30)
+    cmds.button(label='Back', command=cancelCallback)
+    cmds.setParent("..")
+    cmds.setParent("..")
+    cmds.formLayout(form, edit=True, attachForm=[(sl, 'top', 5), (sl, 'right', 5), (sl, 'left', 5), (
+        sl, 'top', 5), (sl, 'bottom', 60), (rc, 'bottom', 5), (rc, 'left', 5), (rc, 'right', 5)])
 
-lst_cardinal = [('Right Up', [-1, 1]), ('Left Up', [1, 1]), ('Right', [-1, 0]),
-                ('Left', [1, 0]), ('Right Down', [-1, -1]), ('Left Down', [1, -1])]
-
-lst_Nine = [('Right Up', [-1, 1]), ('Up gaze', [0, 1]), ('Left Up', [1, 1]), ('Right', [-1, 0]),
-            ('Primary', [0, 0]), ('Left', [1, 0]), ('Right Down', [-1, -1]), ('Downgaze', [0, -1]), ('Left Down', [1, -1])]
-
-
-def setNormalCardinalPositionOfGaze(textfieldAmount):
-    amount = getAmountValue(textfieldAmount)
-    value_noise = []
-    lst_namegaze = []
-    lst_scalegaze = []
-    time_value = 0
-    time_scale = 0
-    for x, scale in lst_cardinal:
-        for _ in range(amount):
-            time_value += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
-                             v=scale[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
-                             v=scale[1], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
-                             v=scale[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
-                             v=scale[1], t=time_value)
-
-    for x, scale in lst_cardinal:
-        # print(scale)
-        for i in range(amount):
-            lst_namegaze.append(x)
-            time_scale += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            value_noise.append(round(rand.uniform(-1, 1), 4))
-            if 'Right' in x:
-                scale_R_r = round(scale[0]*(-1)+value_noise[i], 4)
-                scale_L_r = round(scale[1]*(-1)+value_noise[i], 4)
-                all_scale_R_r = [scale, [scale_R_r, scale_L_r]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_r, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_r, t=time_scale)
-                print('R', all_scale_R_r)
-                lst_scalegaze.append(all_scale_R_r)
-            elif 'Right' not in x:
-                scale_R_l = round(scale[0]+value_noise[i], 4)
-                scale_L_l = round(scale[1]+value_noise[i], 4)
-                all_scale_R_l = [scale, [scale_R_l, scale_L_l]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_l, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_l, t=time_scale)
-                print('L', all_scale_R_l)
-                lst_scalegaze.append(all_scale_R_l)
-
-    return time_value, lst_namegaze, lst_scalegaze
+    cmds.showWindow(window)
 
 
-def setNinePositionOfGaze(textfieldAmount):
-    amount = getAmountValue(textfieldAmount)
-    value_noise = []
-    lst_namegaze = []
-    lst_scalegaze = []
-    time_value = 0
-    time_scale = 0
-    all_scale_R_r = []
-    all_scale_R_l = []
-    for x, scale in lst_Nine:
-        for _ in range(amount):
-            time_value += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
-                             v=scale[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
-                             v=scale[1], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
-                             v=scale[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
-                             v=scale[1], t=time_value)
+def loadWindowPreview(endframe, amount):
+    playblastPreview()
+    WindowPreview(endframe, amount)
 
-    for x, scale in lst_Nine:
-        # print(scale)
-        for i in range(amount):
-            lst_namegaze.append(x)
-            time_scale += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            value_noise.append(round(rand.uniform(-1, 1), 4))
-            if 'Right' in x:
-                scale_R_r = round(scale[0]*(-1)+value_noise[i], 4)
-                scale_L_r = round(scale[1]*(-1)+value_noise[i], 4)
-                all_scale_R_r = [scale, [scale_R_r, scale_L_r]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_r, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_r, t=time_scale)
-                print('R', all_scale_R_r)
-                lst_scalegaze.append(all_scale_R_r)
-            elif 'Right' not in x:
-                scale_R_l = round(scale[0]+value_noise[i], 4)
-                scale_L_l = round(scale[1]+value_noise[i], 4)
-                all_scale_R_l = [scale, [scale_R_l, scale_L_l]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_l, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_l, t=time_scale)
-                print('L', all_scale_R_l)
-                lst_scalegaze.append(all_scale_R_l)
-
-    return time_value, lst_namegaze, lst_scalegaze
-
-# def setNinePositionOfGaze(textfieldAmount):
-#     amount = getAmountValue(textfieldAmount)
-
-#     lst_Nine = [[-1, 1], [0, 1], [1, 1], [-1, 0],
-#                 [0, 0], [1, 0], [-1, -1], [0, -1], [1, -1]]
-#     value_noise = []
-#     time_value = 0
-#     time_scale = 0
-
-#     for res in lst_Nine:
-#         for _ in range(amount):
-#             time_value += 1
-#             cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
-#                              v=res[0], t=time_value)
-#             cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
-#                              v=res[1], t=time_value)
-#             cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
-#                              v=res[0], t=time_value)
-#             cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
-#                              v=res[1], t=time_value)
-#     for _ in lst_Nine:
-#         for i in range(amount):
-#             time_scale += 1
-#             value_noise.append(round(rand.uniform(-1, 1), 4))
-#             cmds.setKeyframe('AimEye_R.translateX', at='tx',
-#                              v=value_noise[i], t=time_scale)
-#             cmds.setKeyframe('AimEye_L.translateX', at='ty',
-#                              v=value_noise[i], t=time_scale)
-#     return str(len(lst_Nine))
-
-
-# ----------------- set Position Of Gaze (ABNORMAL) -----------------
-
-
-def getSliderValue(Scale_R, Scale_L):
-    lst_scale = []
-    getScale_R = cmds.intSliderGrp(Scale_R, query=True, value=True)
-    getScale_L = cmds.intSliderGrp(Scale_L, query=True, value=True)
-    lst_scale = [getScale_R, getScale_L]
-    # print(lst_scale)
-    return lst_scale
-
-
-def setDefaultCardinal(Scale_R_1, Scale_L_1, Scale_R_2, Scale_L_2, Scale_R_3, Scale_L_3, Scale_R_4, Scale_L_4, Scale_R_5, Scale_L_5, Scale_R_6, Scale_L_6):
-    value1 = getSliderValue(Scale_R_1, Scale_L_1)
-    value2 = getSliderValue(Scale_R_2, Scale_L_2)
-    value3 = getSliderValue(Scale_R_3, Scale_L_3)
-    value4 = getSliderValue(Scale_R_4, Scale_L_4)
-    value5 = getSliderValue(Scale_R_5, Scale_L_5)
-    value6 = getSliderValue(Scale_R_6, Scale_L_6)
-    thisdict = [
-        ('Right Up', value1),
-        ('Left Up', value2),
-        ('Right', value3),
-        ('Left', value4),
-        ('Right Down', value5),
-        ('Left Down', value6)
-    ]
-    return thisdict
-
-
-def setCardinalPositionOfGaze(lst_ScaleSelected, textfieldAmount):
-    amount = getAmountValue(textfieldAmount)
-    lst_namegaze = []
-    lst_scalegaze = []
-    value_noise = []
-    time_value = 0
-    time_scale = 0
-    all_scale_R_r = []
-    all_scale_R_l = []
-
-    for x, value in lst_cardinal:
-        for _ in range(amount):
-            # print(value)
-            time_value += 1
-            cmds.setKeyframe('ctrlEye_R.translateX', at='tx',
-                             v=value[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_R.translateY', at='ty',
-                             v=value[1], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateX', at='tx',
-                             v=value[0], t=time_value)
-            cmds.setKeyframe('ctrlEye_L.translateY', at='ty',
-                             v=value[1], t=time_value)
-            # set Scale Selected
-    for x, scale in lst_ScaleSelected:
-
-        for i in range(amount):
-            lst_namegaze.append(x)
-            # print(len(lst_namegaze))
-            # print(x, scale[1])
-            time_scale += 1
-            cmds.playbackOptions(edit=True, maxTime=time_value)
-            value_noise.append(round(rand.uniform(-1, 1), 4))
-            # print(value_noise)
-            if 'Right' in x:
-                scale_R_r = round(scale[0]*(-1)+value_noise[i], 4)
-                scale_L_r = round(scale[1]*(-1)+value_noise[i], 4)
-                all_scale_R_r = [scale, [scale_R_r, scale_L_r]]
-                print('R', all_scale_R_r)
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_r, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_r, t=time_scale)
-                lst_scalegaze.append(all_scale_R_r)
-            elif 'Right' not in x:
-                scale_R_l = round(scale[0]+value_noise[i], 4)
-                scale_L_l = round(scale[1]+value_noise[i], 4)
-                all_scale_R_l = [scale, [scale_R_l, scale_L_l]]
-                cmds.setKeyframe('AimEye_R.translateX',
-                                 at='tx', v=scale_R_l, t=time_scale)
-                cmds.setKeyframe('AimEye_L.translateX',
-                                 at='tx', v=scale_L_l, t=time_scale)
-                print('L', all_scale_R_l)
-                lst_scalegaze.append(all_scale_R_l)
-
-    return time_value, lst_namegaze, lst_scalegaze
-
-
-# ------------------- get Degree (Primary) -------------------
-
-
-def getMenuitemDegree(menuRight_H, menuLeft_H):
-    lstMenuitemDegree = []
-    getDegree_RH = cmds.optionMenuGrp(menuRight_H, query=True, value=True)
-    getDegree_LH = cmds.optionMenuGrp(menuLeft_H, query=True, value=True)
-    lstMenuitemDegree = [getDegree_RH, getDegree_LH]
-    print(lstMenuitemDegree)
-    return lstMenuitemDegree
-
-
-def getAmountValueNormal(textfieldAmount, positionofgaze):
-    currentAmount = cmds.textField(
-        textfieldAmount, edit=True, text=positionofgaze, editable=False)
-    # print('Amount'+currentAmount)
-    return currentAmount
+# ------------------- getAmountValue -------------------
 
 
 def getAmountValue(textfieldAmount):
@@ -784,268 +433,560 @@ def getAmountValue(textfieldAmount):
     return int(currentAmount)
 
 
-def loopNoiseRandom(textfieldAmount, min_v, max_v):
-    amount = getAmountValue(textfieldAmount)
-    cmds.playbackOptions(edit=True, maxTime=amount)
-    # print(amount)
-    lst = []
-    for i in range(amount):
-        lst.append(round(rand.uniform(min_v, max_v), 4))
-        cmds.setKeyframe('AimEye_R.translateX', at='tx', v=lst[i], t=i+1)
-        cmds.setKeyframe('AimEye_L.translateX', at='tx', v=lst[i], t=i+1)
-    print(lst)
+lst_Nine = [('Right Up', [-0.8, 0.5]), ('Upgaze middle', [0, 0.8]), ('Left Up', [0.8, 0.5]),
+            ('Right', [-1, 0]), ('Primary middle', [0, 0]), ('Left', [1, 0]),
+            ('Right Down', [-1, -1]), ('Downgaze middle', [0, -0.8]), ('Left Down', [1, -1])]
+
+lstCollectEyes = [
+    'collectEyes_RSR',
+    'collectEyes_LIO',
+
+    'collectEyes_RIO',
+    'collectEyes_LSR',
+
+    'collectEyes_RLR',
+    'collectEyes_LMR',
+
+    'collectEyes_RMR',
+    'collectEyes_LLR',
+
+    'collectEyes_RIR',
+    'collectEyes_LSO',
+
+    'collectEyes_RSO',
+    'collectEyes_LIR'
+]
+
+# ----------------- action_checkBox -----------------
+lstcheckBox = ['RSR', 'LIO', 'RIO', 'LSR', 'RLR', 'LMR',
+               'RMR', 'LLR', 'RIR', 'LSO', 'RSO', 'LIR']
 
 
-def getTypeOfStrabismus(type_selected_R, type_selected_L):
-    TypeofStrabismus_R = cmds.optionMenuGrp(
-        type_selected_R, query=True, value=True)
-    TypeofStrabismus_L = cmds.optionMenuGrp(
-        type_selected_L, query=True, value=True)
-    lstTypeOfStrabismus = [TypeofStrabismus_R, TypeofStrabismus_L]
-    # print(lstTypeOfStrabismus)
-    return lstTypeOfStrabismus
-
-
-def setvaluePrimary(textfieldAmount, menuRight_H, menuLeft_H, type_selected_R, type_selected_L):
-    lstMenuitemDegree = getMenuitemDegree(menuRight_H, menuLeft_H)
-    lstTypeOfStrabismus = getTypeOfStrabismus(type_selected_R, type_selected_L)
-    # TypeofStrabismus_Right
-    if lstTypeOfStrabismus[0] == 'Esotropia':  # Esotropia-ตาเขเข้า
-        if lstMenuitemDegree[0] == '0':
-            cmds.setAttr('ctrlEye_R.translateX', 0)
-        elif lstMenuitemDegree[0] == '15':
-            cmds.setAttr('ctrlEye_R.translateX', 0.22)
-            loopNoiseRandom(textfieldAmount, 0, 1)
-        elif lstMenuitemDegree[0] == '30':
-            cmds.setAttr('ctrlEye_R.translateX', 0.59)
-            loopNoiseRandom(textfieldAmount, 0, 1)
-        elif lstMenuitemDegree[0] == '45':
-            cmds.setAttr('ctrlEye_R.translateX', 1)
-            loopNoiseRandom(textfieldAmount, 0, 1)
-    if lstTypeOfStrabismus[0] == 'Exotropia':  # Exotropia-ตาเขออก
-        if lstMenuitemDegree[0] == '0':
-            cmds.setAttr('ctrlEye_R.translateX', 0)
-        elif lstMenuitemDegree[0] == '15':
-            cmds.setAttr('ctrlEye_R.translateX', -0.22)
-            loopNoiseRandom(textfieldAmount, 0, -1)
-        elif lstMenuitemDegree[0] == '30':
-            cmds.setAttr('ctrlEye_R.translateX', -0.59)
-            loopNoiseRandom(textfieldAmount, 0, -1)
-        elif lstMenuitemDegree[0] == '45':
-            cmds.setAttr('ctrlEye_R.translateX', -1)
-            loopNoiseRandom(textfieldAmount, 0, -1)
-    # TypeofStrabismus_Left
-    if lstTypeOfStrabismus[1] == 'Esotropia':  # Esotropia-ตาเขเข้า
-        if lstMenuitemDegree[1] == '0':
-            cmds.setAttr('ctrlEye_L.translateX', 0)
-        elif lstMenuitemDegree[1] == '15':
-            cmds.setAttr('ctrlEye_L.translateX', -0.22)
-            loopNoiseRandom(textfieldAmount, 0, -1)
-        elif lstMenuitemDegree[1] == '30':
-            cmds.setAttr('ctrlEye_L.translateX', -0.59)
-            loopNoiseRandom(textfieldAmount, 0, -1)
-        elif lstMenuitemDegree[1] == '45':
-            cmds.setAttr('ctrlEye_L.translateX', -1)
-            loopNoiseRandom(textfieldAmount, 0, -1)
-    if lstTypeOfStrabismus[1] == 'Exotropia':  # Exotropia-ตาเขออก
-        if lstMenuitemDegree[1] == '0':
-            cmds.setAttr('ctrlEye_L.translateX', 0)
-        elif lstMenuitemDegree[1] == '15':
-            cmds.setAttr('ctrlEye_L.translateX', 0.22)
-            loopNoiseRandom(textfieldAmount, 0, 1)
-        elif lstMenuitemDegree[1] == '30':
-            cmds.setAttr('ctrlEye_L.translateX', 0.59)
-            loopNoiseRandom(textfieldAmount, 0, 1)
-        elif lstMenuitemDegree[1] == '45':
-            cmds.setAttr('ctrlEye_L.translateX', 1)
-            loopNoiseRandom(textfieldAmount, 0, 1)
-
-
-def playblastPreview():
-    cmds.lookThru('camera1')
-    cmds.lookThru(q=True)
-    cmds.playblast(filename="C:/Users/Khunpang/Documents/maya/projects/mermaid/movies/mermaid_model_6",
-                   format="image",
-                   viewer=False,
-                   compression="jpg",
-                   clearCache=1,
-                   fp=4,
-                   percent=100,
-                   quality=100,
-                   widthHeight=[400, 80],
-                   showOrnaments=False,
-                   offScreen=True)
-
-
-def loadWindowPreview(endframe, nameGaze, scaleGaze, textfieldAmount):
-
-    def cancelCallback(*args):
-        if cmds.window(window, exists=True):
-            cmds.deleteUI(window)
-
-    def render_seq(startframe=1, endframe=1, renderfn=cmds.render, renderfn_args=None):
-        # save state
-        now = cmds.currentTime(q=True)
-
-        for x in range(startframe, endframe):
-            cmds.currentTime(x)
-            renderfn(renderfn_args)
-
-        # restore state
-        editor = 'renderView'
-        formatManager = createImageFormats.ImageFormats()
-        # formatManager.pushRenderGlobalsForDesc("JPEG")
-        arnoldRender(1, 1, True, True, 'camera1', ' -layer defaultRenderLayer')
-
-        cmds.setAttr("defaultArnoldDriver.ai_translator", "jpg", type="string")
-        cmds.setAttr("defaultArnoldDriver.pre", "file_name", type="string")
-
-        arnoldRender(400, 80, True, True, 'camera1',
-                     ' -layer defaultRenderLayer')
-
-        cmds.renderWindowEditor(
-            editor, e=True, writeImage='C:/Users/Khunpang/Documents/maya/projects/mermaid/images/testImage.jpg')
-        formatManager.popRenderGlobals()
-        cmds.currentTime(now)
-
-    amount = getAmountValue(textfieldAmount)
-    size = (810, 400)
-    # create new window
-    window = cmds.window(title='Preview',
-                         resizeToFitChildren=True, widthHeight=size, sizeable=False)
-
-    form = cmds.formLayout()
-    tabs = cmds.shelfTabLayout(
-        'mainShelfTab', image='help.png', imageVisible=True)
-    cmds.formLayout(form, edit=True, attachForm=(
-        (tabs, 'top', 0), (tabs, 'left', 0), (tabs, 'bottom', 50), (tabs, 'right', 0)))
-
-    for i in range(endframe):
-        # cmds.shelfLayout('%s' % nameGaze[i], cellWidthHeight=[300, 50])
-        if i % amount == 0:
-            cmds.shelfLayout(
-                '%s' % nameGaze[i], cellWidthHeight=[400, 80])
-            for num in range(amount):
-                # print(scaleGaze[i], scaleGaze[num])
-                cmds.picture(
-                    image=('C:/Users/Khunpang/Documents/maya/projects/mermaid/movies/mermaid_model_6.%04d.jpg' % (i+1)))
-                cmds.text(('No. %d \n Right: %s Left: %s' % (num+1, scaleGaze[num+i][1][0], scaleGaze[num+i][1][1])),
-                          font="boldLabelFont", align='center')
-            cmds.setParent('..')
-
-    cmds.setParent('..')
-    ButtonRender = cmds.rowColumnLayout(numberOfColumns=2, columnOffset=(
-        1, 'both', 5), columnWidth=[(1, 400), (2, 400)])
-    cmds.button(label='Render', height=40, command=render_seq)
-    cmds.button(label='Close', command=cancelCallback)
-    cmds.formLayout(form, edit=True, attachForm=(
-        (ButtonRender, 'top', 0), (ButtonRender, 'left', 0), (ButtonRender, 'bottom', 0), (ButtonRender, 'right', 0)), attachControl=(ButtonRender, 'top', 2, tabs))
-
-    cmds.showWindow(window)
-
-
-def loadWindowPreview_Normal(endframe, nameGaze, scaleGaze, amount):
-    playblastPreview()
-    loadWindowPreview(endframe, nameGaze, scaleGaze, amount)
-
-
-def loadWindowPreview_Abnormal(endframe, nameGaze, scaleGaze, amount):
-    playblastPreview()
-    loadWindowPreview(endframe, nameGaze, scaleGaze, amount)
-
-
-def buttonhelp():
-    size = (400, 400)
-    # create new window
-    window = cmds.window(title='Help',
-                         resizeToFitChildren=True, widthHeight=size, sizeable=False)
-    cmds.columnLayout(adjustableColumn=True)
-    cmds.picture(
-        image=('C:/Users/Khunpang/Documents/maya/projects/mermaid/images/help/Cardinal Position.jpg'))
-    cmds.showWindow(window)
-
-
-def action_radioButton(PriPos, CarPos, DiaPos, normal_eyes, abnormal_eyes, textfieldAmount):
-    # normal_eyes
-    if cmds.radioButton(normal_eyes, query=True, select=True):
-        if cmds.radioButton(PriPos, query=True, select=True):
-            framePriSetting = cmds.frameLayout(
-                'framePriSetting', edit=True, enable=False)
-            frameDiaSetting = cmds.frameLayout(
-                'frameDiaSetting', edit=True, enable=False)
-            print("PriPos / normal_eyes")
-        elif cmds.radioButton(CarPos, query=True, select=True):
-            framePriSetting = cmds.frameLayout(
-                'framePriSetting', edit=True, enable=False)
-            frameDiaSetting = cmds.frameLayout(
-                'frameDiaSetting', edit=True, enable=False)
-            print("CarPos / normal_eyes")
-        elif cmds.radioButton(DiaPos, query=True, select=True):
-            framePriSetting = cmds.frameLayout(
-                'framePriSetting', edit=True, enable=False)
-            frameDiaSetting = cmds.frameLayout(
-                'frameDiaSetting', edit=True, enable=False)
-            print("DiaPos / normal_eyes")
-    # abnormal_eyes
-    elif cmds.radioButton(abnormal_eyes, query=True, select=True):
-        # cmds.textField(
-        #     textfieldAmount, editable=True, edit=True, text='')
-        if cmds.radioButton(PriPos, query=True, select=True):
-            framePriSetting = cmds.frameLayout(
-                'framePriSetting', edit=True, enable=True)
-            frameDiaSetting = cmds.frameLayout(
-                'frameDiaSetting', edit=True, enable=False)
-            print("PriPos / abnormal_eyes")
-        elif cmds.radioButton(CarPos, query=True, select=True):
-            framePriSetting = cmds.frameLayout(
-                'framePriSetting', edit=True, enable=False)
-            frameDiaSetting = cmds.frameLayout(
-                'frameDiaSetting', edit=True, enable=True)
-            frameCarSetting_r_ug = cmds.frameLayout(
-                'frameCarSetting_r_ug', edit=True, enable=True)
-            frameCarSetting_l_ug = cmds.frameLayout(
-                'frameCarSetting_l_ug', edit=True, enable=True)
-            frameCarSetting_rg = cmds.frameLayout(
-                'frameCarSetting_rg', edit=True, enable=True)
-            frameCarSetting_lg = cmds.frameLayout(
-                'frameCarSetting_lg', edit=True, enable=True)
-            frameCarSetting_r_dg = cmds.frameLayout(
-                'frameCarSetting_r_dg', edit=True, enable=True)
-            frameCarSetting_l_dg = cmds.frameLayout(
-                'frameCarSetting_l_dg', edit=True, enable=True)
-            frameCarSetting_ug = cmds.frameLayout(
-                'frameCarSetting_ug', edit=True, enable=False)
-            frameCarSetting_pri = cmds.frameLayout(
-                'frameCarSetting_pri', edit=True, enable=False)
-            frameCarSetting_dg = cmds.frameLayout(
-                'frameCarSetting_dg', edit=True, enable=False)
-            print("CarPos / abnormal_eyes")
-        elif cmds.radioButton(DiaPos, query=True, select=True):
-            framePriSetting = cmds.frameLayout(
-                'framePriSetting', edit=True, enable=False)
-            frameDiaSetting = cmds.frameLayout(
-                'frameDiaSetting', edit=True, enable=True)
-            frameCarSetting_r_ug = cmds.frameLayout(
-                'frameCarSetting_r_ug', edit=True, enable=True)
-            frameCarSetting_l_ug = cmds.frameLayout(
-                'frameCarSetting_l_ug', edit=True, enable=True)
-            frameCarSetting_rg = cmds.frameLayout(
-                'frameCarSetting_rg', edit=True, enable=True)
-            frameCarSetting_lg = cmds.frameLayout(
-                'frameCarSetting_lg', edit=True, enable=True)
-            frameCarSetting_r_dg = cmds.frameLayout(
-                'frameCarSetting_r_dg', edit=True, enable=True)
-            frameCarSetting_l_dg = cmds.frameLayout(
-                'frameCarSetting_l_dg', edit=True, enable=True)
-            frameCarSetting_ug = cmds.frameLayout(
-                'frameCarSetting_ug', edit=True, enable=True)
-            frameCarSetting_pri = cmds.frameLayout(
-                'frameCarSetting_pri', edit=True, enable=True)
-            frameCarSetting_dg = cmds.frameLayout(
-                'frameCarSetting_dg', edit=True, enable=True)
-            print("DiaPos / abnormal_eyes")
+def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
+    if cmds.checkBox(checkBoxValue, query=True, value=True):
+        for _, j in enumerate(lstcheckBox):
+            if j == checkBoxValue:
+                cmds.radioButton(radioSelected1, edit=True, enable=False)
+                cmds.radioButton(radioSelected2, edit=True, enable=False)
     else:
-        print("No function")
+        cmds.radioButton(radioSelected1, edit=True, enable=True)
+        cmds.radioButton(radioSelected2, edit=True, enable=True)
+
+
+# ----------------- action_radioButton -----------------
+lstcheckNormal = []
+lstcheckDisorder = []
+
+
+def passValue(DirectionControl, *args):
+    for j in lstcheckBox:
+        checkboxVal = cmds.checkBox(j, query=True, value=True)
+        # print(j, checkbox)
+        if checkboxVal == True:
+            lstcheckNormal.append(j)
+        else:
+            lstcheckDisorder.append(j)
+    print('Normal', lstcheckNormal)
+    print('Disorder', lstcheckDisorder)
+
+    for i in range(len(DirectionControl)):
+        for j in lstcheckDisorder:
+            if j in DirectionControl[i]:
+                print(DirectionControl[i])
+                radioCol = cmds.radioCollection(
+                    DirectionControl[i], query=True, sl=True)
+                print(radioCol)
+    return radioCol
+
+
+# ----------------- movefaceMuscle -----------------
+def movefaceMuscle(name, gaze, time_value):
+    # set eyes movement 9 gaze to default
+    cmds.setKeyframe('ctrlEye_R.translateX', at='tx', v=gaze[0], t=time_value)
+    cmds.setKeyframe('ctrlEye_R.translateY', at='ty', v=gaze[1], t=time_value)
+    cmds.setKeyframe('ctrlEye_L.translateX', at='tx', v=gaze[0], t=time_value)
+    cmds.setKeyframe('ctrlEye_L.translateY', at='ty', v=gaze[1], t=time_value)
+
+    if 'Up' in name:
+        cmds.setKeyframe('upperLid_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLid_L.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
+                         v=0.4, t=time_value)
+        cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
+                         v=0.4, t=time_value)
+        cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
+                         v=0.4, t=time_value)
+        cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
+                         v=0.4, t=time_value)
+        cmds.setKeyframe('lowerLid_R.translateY', at='ty',
+                         v=-0.2, t=time_value)
+        cmds.setKeyframe('lowerLid_L.translateY', at='ty',
+                         v=-0.2, t=time_value)
+    elif 'Down' in name:
+        cmds.setKeyframe('upperLid_R.translateY', at='ty',
+                         v=0.6, t=time_value)
+        cmds.setKeyframe('upperLid_L.translateY', at='ty',
+                         v=0.6, t=time_value)
+        cmds.setKeyframe('lowerLid_R.translateY', at='ty',
+                         v=0.7, t=time_value)
+        cmds.setKeyframe('lowerLid_L.translateY', at='ty',
+                         v=0.7, t=time_value)
+    else:
+        cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLid_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('upperLid_L.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('lowerLid_R.translateY', at='ty',
+                         v=0, t=time_value)
+        cmds.setKeyframe('lowerLid_L.translateY', at='ty',
+                         v=0, t=time_value)
+
+# ------------------- setMovementGaze Preview -------------------
+
+
+def setMovementGaze(self):
+    time_value = 0
+    for name, gaze in lst_Nine:
+        time_value += 1
+        cmds.playbackOptions(edit=True, minTime='1', maxTime=time_value)
+        movefaceMuscle(name, gaze, time_value)
+    # set model
+    for i in range(time_value):
+        no = ""
+        cmds.currentTime(i+1)
+        cmds.select('geo'+no)
+        cmds.duplicate('geo'+no)
+        cmds.move(100*(i+1), 0, 0)
+        no = str(i)
+
+
+def setCamaraGaze(self):
+    # Create a camera
+    cmds.camera(name='faceCam1', focalLength=70)
+    cmds.group('faceCam1', n='groupfaceCam1')
+    cmds.parent('groupfaceCam1', 'AimEye_M')
+    cmds.setAttr('groupfaceCam1.translate', 0, 0, 0)
+    cmds.parent('groupfaceCam1', world=True)
+    cmds.parent('faceCam1', 'AimEye_M')
+    # Move camera
+    for i in range(1, 10, 1):
+        cmds.select('faceCam'+str(i))
+        cmds.duplicate('faceCam'+str(i))
+        cmds.move(100*(i), 0, 0, moveX=True)
+
+# ------------------- set Position Of Gaze (NORMAL) -------------------
+
+
+def setNormalNinePositionOfGaze(textfieldAmount):
+    amount = getAmountValue(textfieldAmount)
+    time_value = 0
+    value_noise = []
+    for i in range(amount):
+        for name, gaze in lst_Nine:
+            time_value += 1
+            cmds.playbackOptions(edit=True, minTime='1', maxTime=time_value)
+            movefaceMuscle(name, gaze, time_value)
+            # Add noise
+            value_noise.append(round(rand.uniform(0, 0.5), 4))
+            cmds.setKeyframe('AimEye_R.translateX', at='tx',
+                             v=value_noise[i], t=time_value)
+            cmds.setKeyframe('AimEye_L.translateX', at='ty',
+                             v=value_noise[i], t=time_value)
+
+
+# ------------------- set Position Of Gaze (Selected) -------------------
+lstActionOU = [
+    # [value X], [value Y]
+    # OVER ACTION
+    ('radioOver_LIO_R', [[-4, 2], [1, 5]]),
+    ('radioOver_LSO_R', [[-3, 2], [-3, -1]]),
+
+    ('radioOver_RIO_L', [[1, 4], [1, 4]]),
+    ('radioOver_RSO_L', [[-4, -1], [-2, -1]]),
+
+
+    # UNDER ACTION
+    ('radioUnder_RSR_R', [[0, 0], [-5, -1]]),
+    ('radioUnder_LIO_R', [[-3, 2], [-3, -1]]),
+    ('radioUnder_RLR_R', [[2, 8], [0, 0]]),
+    ('radioUnder_LMR_R', [[2, 8], [0, 0]]),
+    ('radioUnder_RIR_R', [[0, 0], [1, 5]]),
+    ('radioUnder_LSO_R', [[-1, 5], [1, 5]]),
+
+    ('radioUnder_RIO_L', [[-4, -1], [-3, -1]]),
+
+    ('radioUnder_LSR_L', [[0, 0], [-5, -1]]),
+    ('radioUnder_RMR_L', [[-8, -2], [0, 0]]),
+    ('radioUnder_LLR_L', [[-8, -2], [0, 0]]),
+
+    ('radioUnder_RSO_L', [[-3, 2], [1, 3]]),
+
+    ('radioUnder_LIR_L', [[0, 0], [1, 5]])
+]
+
+
+def setGazeSelected(AimEye_side, AimEye_translate, checkGaze_left, checkGaze_side, checkGaze_middle, xy_value_lst, value_noise_lst, num_part):
+
+    for index_v, time_left in enumerate(checkGaze_left):
+        cmds.setKeyframe(AimEye_side+'.translateX', v=0, t=time_left)
+        cmds.setKeyframe(AimEye_side+'.translateY', v=0, t=time_left)
+    for index_v, time_lst in enumerate(checkGaze_side):
+        for time_ in time_lst:
+            cmds.setKeyframe(
+                AimEye_side+'.'+AimEye_translate, v=xy_value_lst[index_v]+value_noise_lst[index_v], t=time_)
+            if time_ in checkGaze_middle:
+                cmds.setKeyframe(AimEye_side+'.'+AimEye_translate, v=(
+                    xy_value_lst[index_v]+num_part)+value_noise_lst[index_v], t=time_)
+
+
+def setAbNinePositionOfGaze(textfieldAmount):
+
+    amount = getAmountValue(textfieldAmount)
+    radioCol = passValue(lstCollectEyes)
+
+    value_noise = []
+    time_value = 0
+    time_value_2 = 0
+
+    # value AimEyes
+    x_value_lst = []
+    y_value_lst = []
+
+    # all checkGaze list
+    checkGaze_R = []
+    checkGaze_L = []
+    checkGaze_middle = []
+    checkGaze_left_R = []
+    checkGaze_left_L = []
+
+    # SR
+    Gaze_up_lst_R = []
+    checkGaze_up_R = []
+    Gaze_up_lst_L = []
+    checkGaze_up_L = []
+    upGaze_input_lst = []
+
+    # IR
+    gaze_IR_lst_R = []
+    checkGaze_IR_R = []
+    gaze_IR_lst_L = []
+    checkGaze_IR_L = []
+    gaze_IR_input_lst = []
+
+    sixGaze_lst_R = []
+    sixGaze_lst_L = []
+    sixGaze_input_lst = []
+
+    # Set Normal Gaze
+    for _ in range(amount):
+        for name, gaze in lst_Nine:
+            time_value += 1
+            if 'Right' in name or 'middle' in name:
+                sixGaze_lst_R.append(time_value)
+            if 'Left' in name or 'middle' in name:
+                sixGaze_lst_L.append(time_value)
+            # SR
+            if 'Right Up' in name or 'Upgaze middle' in name or 'Primary' in name:
+                Gaze_up_lst_R.append(time_value)
+            if 'Left Up' in name or 'Upgaze middle' in name or 'Primary' in name:
+                Gaze_up_lst_L.append(time_value)
+            # IR
+            if 'Right Up' in name or 'Right Down' in name or 'middle' in name or 'Left Up' in name:
+                gaze_IR_lst_R.append(time_value)
+            if 'Left Up' in name or 'Left Down' in name or 'middle' in name or 'Right Up' in name:
+                gaze_IR_lst_L.append(time_value)
+            # middle
+            if 'middle' in name:
+                checkGaze_middle.append(time_value)
+
+            if 'Right' not in name:
+                checkGaze_left_R.append(time_value)
+            elif 'Left' not in name:
+                checkGaze_left_L.append(time_value)
+    for r in sixGaze_lst_R:
+        sixGaze_input_lst.append(r)
+        if len(sixGaze_input_lst) % 6 == 0:
+            checkGaze_R.append(sixGaze_input_lst)
+            sixGaze_input_lst = []
+
+    for l in sixGaze_lst_L:
+        sixGaze_input_lst.append(l)
+        if len(sixGaze_input_lst) % 6 == 0:
+            checkGaze_L.append(sixGaze_input_lst)
+            sixGaze_input_lst = []
+    # SR
+    for up_r in Gaze_up_lst_R:
+        upGaze_input_lst.append(up_r)
+        if len(upGaze_input_lst) % 3 == 0:
+            checkGaze_up_R.append(upGaze_input_lst)
+            upGaze_input_lst = []
+
+    for up_l in Gaze_up_lst_L:
+        upGaze_input_lst.append(up_l)
+        if len(upGaze_input_lst) % 3 == 0:
+            checkGaze_up_L.append(upGaze_input_lst)
+            upGaze_input_lst = []
+    # IR
+    for gIR_r in gaze_IR_lst_R:
+        gaze_IR_input_lst.append(gIR_r)
+        if len(gaze_IR_input_lst) % 6 == 0:
+            checkGaze_IR_R.append(gaze_IR_input_lst)
+            gaze_IR_input_lst = []
+    for gIR_l in gaze_IR_lst_L:
+        gaze_IR_input_lst.append(gIR_l)
+        if len(gaze_IR_input_lst) % 6 == 0:
+            checkGaze_IR_L.append(gaze_IR_input_lst)
+            gaze_IR_input_lst = []
+
+    print('checkGaze_R', checkGaze_R)
+    print('checkGaze_L', checkGaze_L)
+    print('checkGaze_up_R', checkGaze_up_R)
+    print('checkGaze_up_L', checkGaze_up_L)
+    print('checkGaze_middle', checkGaze_middle)
+    print('checkGaze_left_R', checkGaze_left_R)
+    print('checkGaze_left_L', checkGaze_left_L)
+    print('checkGaze_IR_R', checkGaze_IR_R)
+
+    for _ in range(amount):
+        for name, gaze in lst_Nine:
+            time_value_2 += 1
+            cmds.playbackOptions(edit=True, minTime='1', maxTime=time_value_2)
+            movefaceMuscle(name, gaze, time_value_2)
+        # Add value selected
+        for name_OU, scale in lstActionOU:
+            if radioCol in name_OU:
+                # print('user selected', name_OU,scale)
+                for x_value in range(scale[0][0], scale[0][1]):
+                    value_noise.append(round(rand.uniform(0, 0.5), 4))
+                    x_value_lst.append(x_value)
+                for y_value in range(scale[1][0], scale[1][1]):
+                    value_noise.append(round(rand.uniform(0, 0.5), 4))
+                    y_value_lst.append(y_value)
+
+    for name_OU, scale in lstActionOU:
+        # Check มุมมองทืศทางที่ตาขยับ เช่น มองไปทาง Right gaze
+        if radioCol in name_OU:
+            print('radioCol', radioCol)
+            if 'R' == name_OU[-1:][0]:
+                # print("_R",name_OU[-1:][0], name_OU)
+
+                # LR / R gaze
+                if 'LR' == name_OU[-4:-2]:
+                    print('Yes! LR and R gaze:')
+                    setGazeSelected('AimEye_R', 'translateX', checkGaze_left_R,
+                                    checkGaze_R,   checkGaze_middle, x_value_lst, value_noise, -3)
+                # MR / R gaze
+                elif 'MR' == name_OU[-4:-2]:
+                    print('Yes! MR and R gaze:')
+                    setGazeSelected('AimEye_L', 'translateX', checkGaze_left_R,
+                                    checkGaze_R, checkGaze_middle, x_value_lst, value_noise, -2)
+                # SR / R gaze
+                elif 'SR' == name_OU[-4:-2]:
+                    print('Yes! SR and R gaze:')
+                    setGazeSelected('AimEye_R', 'translateY', checkGaze_left_R,
+                                    checkGaze_up_R, checkGaze_middle, y_value_lst, value_noise, 1)
+                # IR / R gaze
+                elif 'IR' == name_OU[-4:-2]:
+                    print('Yes! IR and R gaze:')
+                    setGazeSelected('AimEye_R', 'translateY', checkGaze_left_R,
+                                    checkGaze_IR_R, checkGaze_middle, y_value_lst, value_noise, -1)
+                # IO / R gaze
+                elif 'IO' == name_OU[-4:-2]:
+                    if 'Over' in name_OU:
+                        print('Yes! IOOA and R gaze:', name_OU)
+                        for index_v, time_left in enumerate(checkGaze_left_R):
+                            cmds.setKeyframe(
+                                'AimEye_L.translateX', v=0, t=time_left)
+                            cmds.setKeyframe(
+                                'AimEye_L.translateY', v=0, t=time_left)
+                        for index_v, time_lst in enumerate(checkGaze_R):
+                            for time_ in time_lst:
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
+                                if time_ in checkGaze_middle:
+                                    cmds.setKeyframe('AimEye_L.translateX', v=(
+                                        x_value_lst[index_v]+1)+value_noise[index_v], t=time_)
+                                    cmds.setKeyframe('AimEye_L.translateY', v=(
+                                        y_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                    elif 'Under' in name_OU:
+                        print('Yes! IOUA and R gaze:', name_OU)
+                        for index_v, time_left in enumerate(checkGaze_left_R):
+                            cmds.setKeyframe(
+                                'AimEye_L.translateX', v=0, t=time_left)
+                            cmds.setKeyframe(
+                                'AimEye_L.translateY', v=0, t=time_left)
+                        for index_v, time_lst in enumerate(checkGaze_R):
+                            for time_ in time_lst:
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
+                                if time_ in checkGaze_middle:
+                                    cmds.setKeyframe('AimEye_L.translateX', v=(
+                                        x_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                                    cmds.setKeyframe('AimEye_L.translateY', v=(
+                                        y_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                # SO / R gaze
+                elif 'SO' == name_OU[-4:-2]:
+                    print('Yes! SO and R gaze:')
+                    if 'Over' in name_OU:
+                        print('Yes! SOOA and R gaze:', name_OU)
+                        for index_v, time_left in enumerate(checkGaze_left_R):
+                            cmds.setKeyframe(
+                                'AimEye_L.translateX', v=0, t=time_left)
+                            cmds.setKeyframe(
+                                'AimEye_L.translateY', v=0, t=time_left)
+                        for index_v, time_lst in enumerate(checkGaze_R):
+                            for time_ in time_lst:
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
+                                if time_ in checkGaze_middle:
+                                    cmds.setKeyframe('AimEye_L.translateX', v=(
+                                        x_value_lst[index_v]+1)+value_noise[index_v], t=time_)
+                                    cmds.setKeyframe('AimEye_L.translateY', v=(
+                                        y_value_lst[index_v]+1)+value_noise[index_v], t=time_)
+                    elif 'Under' in name_OU:
+                        print('Yes! SOUA and R gaze:', name_OU)
+                        for index_v, time_left in enumerate(checkGaze_left_R):
+                            cmds.setKeyframe(
+                                'AimEye_L.translateX', v=0, t=time_left)
+                            cmds.setKeyframe(
+                                'AimEye_L.translateY', v=0, t=time_left)
+                        for index_v, time_lst in enumerate(checkGaze_R):
+                            for time_ in time_lst:
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
+                                cmds.setKeyframe(
+                                    'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
+                                if time_ in checkGaze_middle:
+                                    cmds.setKeyframe(
+                                        'AimEye_L.translateX', v=value_noise[index_v]-1, t=time_)
+                                    cmds.setKeyframe(
+                                        'AimEye_L.translateY', v=value_noise[index_v]+1, t=time_)
+
+            elif 'L' == name_OU[-1:][0]:
+                # LR / L gaze
+                if 'LR' == name_OU[-4:-2]:
+                    print('Yes! LR and L gaze')
+                    setGazeSelected('AimEye_L', 'translateX', checkGaze_left_L,
+                                    checkGaze_L, checkGaze_middle, x_value_lst, value_noise, 3)
+
+                # MR / L gaze
+                elif 'MR' == name_OU[-4:-2]:
+                    print('Yes! MR and L gaze')
+                    setGazeSelected('AimEye_R', 'translateX', checkGaze_left_L,
+                                    checkGaze_L, checkGaze_middle, x_value_lst, value_noise, 2)
+                # SR / L gaze
+                elif 'SR' == name_OU[-4:-2]:
+                    print('Yes! SR and L gaze:')
+                    setGazeSelected('AimEye_L', 'translateY', checkGaze_left_L,
+                                    checkGaze_up_L, checkGaze_middle, y_value_lst, value_noise, 1)
+                #  IR / L gaze
+                elif 'IR' == name_OU[-4:-2]:
+                    print('Yes! IR and L gaze:')
+                    setGazeSelected('AimEye_L', 'translateY', checkGaze_left_L,
+                                    checkGaze_IR_L, checkGaze_middle, y_value_lst, value_noise, -1)
+                # IO / L gaze
+                elif 'IO' == name_OU[-4:-2]:
+                    if 'Over' in name_OU:
+                        print('Yes! IOOA and R gaze:', name_OU)
+                        for index_v, time_left in enumerate(checkGaze_left_L):
+                            cmds.setKeyframe(
+                                'AimEye_R.translateX', v=0, t=time_left)
+                            cmds.setKeyframe(
+                                'AimEye_R.translateY', v=0, t=time_left)
+                        for index_v, time_lst in enumerate(checkGaze_L):
+                            for time_ in time_lst:
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
+                                if time_ in checkGaze_middle:
+                                    cmds.setKeyframe('AimEye_R.translateX', v=(
+                                        x_value_lst[index_v]-2)+value_noise[index_v], t=time_)
+                                    cmds.setKeyframe('AimEye_R.translateY', v=(
+                                        y_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                    elif 'Under' in name_OU:
+                        print('Yes! IOUA and R gaze:', name_OU)
+                        for index_v, time_left in enumerate(checkGaze_left_L):
+                            cmds.setKeyframe(
+                                'AimEye_R.translateX', v=0, t=time_left)
+                            cmds.setKeyframe(
+                                'AimEye_R.translateY', v=0, t=time_left)
+                        for index_v, time_lst in enumerate(checkGaze_L):
+                            for time_ in time_lst:
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
+                                if time_ in checkGaze_middle:
+                                    cmds.setKeyframe('AimEye_R.translateX', v=(
+                                        x_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                                    cmds.setKeyframe('AimEye_R.translateY', v=(
+                                        y_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                # SO / L gaze
+                elif 'SO' == name_OU[-4:-2]:
+                    print('Yes! SO and R gaze:')
+                    if 'Over' in name_OU:
+                        print('Yes! SOOA and R gaze:', name_OU)
+                        for index_v, time_left in enumerate(checkGaze_left_L):
+                            cmds.setKeyframe(
+                                'AimEye_R.translateX', v=0, t=time_left)
+                            cmds.setKeyframe(
+                                'AimEye_R.translateY', v=0, t=time_left)
+                        for index_v, time_lst in enumerate(checkGaze_L):
+                            for time_ in time_lst:
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
+                                if time_ in checkGaze_middle:
+                                    cmds.setKeyframe('AimEye_R.translateX', v=(
+                                        x_value_lst[index_v]+1)+value_noise[index_v], t=time_)
+                                    cmds.setKeyframe('AimEye_R.translateY', v=(
+                                        y_value_lst[index_v]+1)+value_noise[index_v], t=time_)
+                    elif 'Under' in name_OU:
+                        print('Yes! SOUA and R gaze:', name_OU)
+                        for index_v, time_left in enumerate(checkGaze_left_L):
+                            cmds.setKeyframe(
+                                'AimEye_R.translateX', v=0, t=time_left)
+                            cmds.setKeyframe(
+                                'AimEye_R.translateY', v=0, t=time_left)
+                        for index_v, time_lst in enumerate(checkGaze_L):
+                            for time_ in time_lst:
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
+                                cmds.setKeyframe(
+                                    'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
+                                if time_ in checkGaze_middle:
+                                    cmds.setKeyframe(
+                                        'AimEye_R.translateX', v=value_noise[index_v]-1, t=time_)
+                                    cmds.setKeyframe(
+                                        'AimEye_R.translateY', v=value_noise[index_v]+1, t=time_)
+
+    return time_value
+
+
+def bakeSimulation(time_value):
+    start = cmds.playbackOptions(q=1, min=1)
+    end = cmds.playbackOptions(q=1, max=time_value)
+    cmds.select('Head_M', visible=True)
+    cmds.select('geo', hierarchy=True)
+    cmds.bakeResults('joint*', t=(1, 40), simulation=True)
 
 
 if __name__ == "__main__":
