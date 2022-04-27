@@ -354,7 +354,7 @@ def openFile(self):
 def playblastPreview(*args):
     cmds.lookThru('faceCam1')
     cmds.lookThru(q=True)
-    cmds.playblast(filename="C:\Users\Khunpang\Documents\maya\projects\children-girl/movies/boy",
+    cmds.playblast(filename="C:/Users/Khunpang/Documents/maya/projects/children-girl/movies/boy",
                    startTime=1,
                    format="image",
                    viewer=False,
@@ -390,7 +390,7 @@ def WindowPreview(endframe, textfieldAmount):
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[
                             (1, 250), (2, 250), (3, 250), (4, 250)])
         cmds.picture(image=(
-            'C:\Users\Khunpang\Documents\maya\projects\children-girl/movies/boy.%04d.jpg' % (i+1)))
+            'C:/Users/Khunpang/Documents/maya/projects/children-girl/movies/boy.%04d.jpg' % (i+1)))
         count += 1
         if count == 9:
             cmds.separator(height=20, style=None)
@@ -506,24 +506,14 @@ def movefaceMuscle(name, gaze, time_value):
     cmds.setKeyframe('ctrlEye_R.translateY', at='ty', v=gaze[1], t=time_value)
     cmds.setKeyframe('ctrlEye_L.translateX', at='tx', v=gaze[0], t=time_value)
     cmds.setKeyframe('ctrlEye_L.translateY', at='ty', v=gaze[1], t=time_value)
-
+    face_lst = [('upperLid', 0), ('upperLidBase', 0.4),
+                ('EyeBrowRegion', 0.4), ('lowerLid', -0.2)]
     if 'Up' in name:
-        cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
-                         v=0.4, t=time_value)
-        cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
-                         v=0.4, t=time_value)
-        cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
-                         v=0.4, t=time_value)
-        cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
-                         v=0.4, t=time_value)
-        cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                         v=-0.2, t=time_value)
-        cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                         v=-0.2, t=time_value)
+        for i in face_lst:
+            cmds.setKeyframe(i[0]+'_R.translateY', at='ty',
+                             v=i[1], t=time_value)
+            cmds.setKeyframe(i[0]+'_L.translateY', at='ty',
+                             v=i[1], t=time_value)
     elif 'Down' in name:
         cmds.setKeyframe('upperLid_R.translateY', at='ty',
                          v=0.6, t=time_value)
@@ -534,22 +524,11 @@ def movefaceMuscle(name, gaze, time_value):
         cmds.setKeyframe('lowerLid_L.translateY', at='ty',
                          v=0.7, t=time_value)
     else:
-        cmds.setKeyframe('upperLidBase_R.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('upperLidBase_L.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('EyeBrowRegion_R.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('EyeBrowRegion_L.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('upperLid_R.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('upperLid_L.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('lowerLid_R.translateY', at='ty',
-                         v=0, t=time_value)
-        cmds.setKeyframe('lowerLid_L.translateY', at='ty',
-                         v=0, t=time_value)
+        for i in face_lst:
+            cmds.setKeyframe(i[0]+'_R.translateY', at='ty',
+                             v=0, t=time_value)
+            cmds.setKeyframe(i[0]+'_L.translateY', at='ty',
+                             v=0, t=time_value)
 
 # ------------------- setMovementGaze Preview -------------------
 
@@ -649,6 +628,24 @@ def setGazeSelected(AimEye_side, AimEye_translate, checkGaze_left, checkGaze_sid
                     xy_value_lst[index_v]+num_part)+value_noise_lst[index_v], t=time_)
 
 
+def setGazeObSelected(AimEye_side, checkGaze_left, checkGaze_side, checkGaze_middle, x_value_lst, y_value_lst, value_noise_lst, num_part):
+
+    for index_v, time_left in enumerate(checkGaze_left):
+        cmds.setKeyframe(AimEye_side+'.translateX', v=0, t=time_left)
+        cmds.setKeyframe(AimEye_side+'.translateY', v=0, t=time_left)
+    for index_v, time_lst in enumerate(checkGaze_side):
+        for time_ in time_lst:
+            cmds.setKeyframe(
+                AimEye_side+'.translateX', v=x_value_lst[index_v]+value_noise_lst[index_v], t=time_)
+            cmds.setKeyframe(
+                AimEye_side+'.translateY', v=y_value_lst[index_v]+value_noise_lst[index_v], t=time_)
+            if time_ in checkGaze_middle:
+                cmds.setKeyframe(AimEye_side+'.translateX', v=(
+                    x_value_lst[index_v]+num_part)+value_noise_lst[index_v], t=time_)
+                cmds.setKeyframe(AimEye_side+'.translateY', v=(
+                    y_value_lst[index_v]+num_part)+value_noise_lst[index_v], t=time_)
+
+
 def setAbNinePositionOfGaze(textfieldAmount):
 
     amount = getAmountValue(textfieldAmount)
@@ -708,7 +705,7 @@ def setAbNinePositionOfGaze(textfieldAmount):
             # middle
             if 'middle' in name:
                 checkGaze_middle.append(time_value)
-
+            # check gaze left
             if 'Right' not in name:
                 checkGaze_left_R.append(time_value)
             elif 'Left' not in name:
@@ -750,12 +747,9 @@ def setAbNinePositionOfGaze(textfieldAmount):
 
     print('checkGaze_R', checkGaze_R)
     print('checkGaze_L', checkGaze_L)
-    print('checkGaze_up_R', checkGaze_up_R)
-    print('checkGaze_up_L', checkGaze_up_L)
     print('checkGaze_middle', checkGaze_middle)
     print('checkGaze_left_R', checkGaze_left_R)
     print('checkGaze_left_L', checkGaze_left_L)
-    print('checkGaze_IR_R', checkGaze_IR_R)
 
     for _ in range(amount):
         for name, gaze in lst_Nine:
@@ -804,79 +798,26 @@ def setAbNinePositionOfGaze(textfieldAmount):
                 elif 'IO' == name_OU[-4:-2]:
                     if 'Over' in name_OU:
                         print('Yes! IOOA and R gaze:', name_OU)
-                        for index_v, time_left in enumerate(checkGaze_left_R):
-                            cmds.setKeyframe(
-                                'AimEye_L.translateX', v=0, t=time_left)
-                            cmds.setKeyframe(
-                                'AimEye_L.translateY', v=0, t=time_left)
-                        for index_v, time_lst in enumerate(checkGaze_R):
-                            for time_ in time_lst:
-                                cmds.setKeyframe(
-                                    'AimEye_L.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
-                                cmds.setKeyframe(
-                                    'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
-                                if time_ in checkGaze_middle:
-                                    cmds.setKeyframe('AimEye_L.translateX', v=(
-                                        x_value_lst[index_v]+1)+value_noise[index_v], t=time_)
-                                    cmds.setKeyframe('AimEye_L.translateY', v=(
-                                        y_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                        setGazeObSelected('AimEye_L', checkGaze_left_R, checkGaze_R,
+                                          checkGaze_middle, x_value_lst, y_value_lst, value_noise, 1)
+
                     elif 'Under' in name_OU:
                         print('Yes! IOUA and R gaze:', name_OU)
-                        for index_v, time_left in enumerate(checkGaze_left_R):
-                            cmds.setKeyframe(
-                                'AimEye_L.translateX', v=0, t=time_left)
-                            cmds.setKeyframe(
-                                'AimEye_L.translateY', v=0, t=time_left)
-                        for index_v, time_lst in enumerate(checkGaze_R):
-                            for time_ in time_lst:
-                                cmds.setKeyframe(
-                                    'AimEye_L.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
-                                cmds.setKeyframe(
-                                    'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
-                                if time_ in checkGaze_middle:
-                                    cmds.setKeyframe('AimEye_L.translateX', v=(
-                                        x_value_lst[index_v]//2)+value_noise[index_v], t=time_)
-                                    cmds.setKeyframe('AimEye_L.translateY', v=(
-                                        y_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                        setGazeObSelected('AimEye_L', checkGaze_left_R, checkGaze_R,
+                                          checkGaze_middle, x_value_lst, y_value_lst, value_noise, -2)
+
                 # SO / R gaze
                 elif 'SO' == name_OU[-4:-2]:
                     print('Yes! SO and R gaze:')
                     if 'Over' in name_OU:
                         print('Yes! SOOA and R gaze:', name_OU)
-                        for index_v, time_left in enumerate(checkGaze_left_R):
-                            cmds.setKeyframe(
-                                'AimEye_L.translateX', v=0, t=time_left)
-                            cmds.setKeyframe(
-                                'AimEye_L.translateY', v=0, t=time_left)
-                        for index_v, time_lst in enumerate(checkGaze_R):
-                            for time_ in time_lst:
-                                cmds.setKeyframe(
-                                    'AimEye_L.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
-                                cmds.setKeyframe(
-                                    'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
-                                if time_ in checkGaze_middle:
-                                    cmds.setKeyframe('AimEye_L.translateX', v=(
-                                        x_value_lst[index_v]+1)+value_noise[index_v], t=time_)
-                                    cmds.setKeyframe('AimEye_L.translateY', v=(
-                                        y_value_lst[index_v]+1)+value_noise[index_v], t=time_)
+                        setGazeObSelected('AimEye_L', checkGaze_left_R, checkGaze_R,
+                                          checkGaze_middle, x_value_lst, y_value_lst, value_noise, 1)
+
                     elif 'Under' in name_OU:
                         print('Yes! SOUA and R gaze:', name_OU)
-                        for index_v, time_left in enumerate(checkGaze_left_R):
-                            cmds.setKeyframe(
-                                'AimEye_L.translateX', v=0, t=time_left)
-                            cmds.setKeyframe(
-                                'AimEye_L.translateY', v=0, t=time_left)
-                        for index_v, time_lst in enumerate(checkGaze_R):
-                            for time_ in time_lst:
-                                cmds.setKeyframe(
-                                    'AimEye_L.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
-                                cmds.setKeyframe(
-                                    'AimEye_L.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
-                                if time_ in checkGaze_middle:
-                                    cmds.setKeyframe(
-                                        'AimEye_L.translateX', v=value_noise[index_v]-1, t=time_)
-                                    cmds.setKeyframe(
-                                        'AimEye_L.translateY', v=value_noise[index_v]+1, t=time_)
+                        setGazeObSelected('AimEye_L', checkGaze_left_R, checkGaze_R,
+                                          checkGaze_middle, x_value_lst, y_value_lst, value_noise, -1)
 
             elif 'L' == name_OU[-1:][0]:
                 # LR / L gaze
@@ -904,79 +845,25 @@ def setAbNinePositionOfGaze(textfieldAmount):
                 elif 'IO' == name_OU[-4:-2]:
                     if 'Over' in name_OU:
                         print('Yes! IOOA and R gaze:', name_OU)
-                        for index_v, time_left in enumerate(checkGaze_left_L):
-                            cmds.setKeyframe(
-                                'AimEye_R.translateX', v=0, t=time_left)
-                            cmds.setKeyframe(
-                                'AimEye_R.translateY', v=0, t=time_left)
-                        for index_v, time_lst in enumerate(checkGaze_L):
-                            for time_ in time_lst:
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
-                                if time_ in checkGaze_middle:
-                                    cmds.setKeyframe('AimEye_R.translateX', v=(
-                                        x_value_lst[index_v]-2)+value_noise[index_v], t=time_)
-                                    cmds.setKeyframe('AimEye_R.translateY', v=(
-                                        y_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                        setGazeObSelected('AimEye_R', checkGaze_left_L, checkGaze_L,
+                                          checkGaze_middle, x_value_lst, y_value_lst, value_noise, -2)
+
                     elif 'Under' in name_OU:
                         print('Yes! IOUA and R gaze:', name_OU)
-                        for index_v, time_left in enumerate(checkGaze_left_L):
-                            cmds.setKeyframe(
-                                'AimEye_R.translateX', v=0, t=time_left)
-                            cmds.setKeyframe(
-                                'AimEye_R.translateY', v=0, t=time_left)
-                        for index_v, time_lst in enumerate(checkGaze_L):
-                            for time_ in time_lst:
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
-                                if time_ in checkGaze_middle:
-                                    cmds.setKeyframe('AimEye_R.translateX', v=(
-                                        x_value_lst[index_v]//2)+value_noise[index_v], t=time_)
-                                    cmds.setKeyframe('AimEye_R.translateY', v=(
-                                        y_value_lst[index_v]//2)+value_noise[index_v], t=time_)
+                        setGazeObSelected('AimEye_R', checkGaze_left_L, checkGaze_L,
+                                          checkGaze_middle, x_value_lst, y_value_lst, value_noise, -2)
                 # SO / L gaze
                 elif 'SO' == name_OU[-4:-2]:
                     print('Yes! SO and R gaze:')
                     if 'Over' in name_OU:
                         print('Yes! SOOA and R gaze:', name_OU)
-                        for index_v, time_left in enumerate(checkGaze_left_L):
-                            cmds.setKeyframe(
-                                'AimEye_R.translateX', v=0, t=time_left)
-                            cmds.setKeyframe(
-                                'AimEye_R.translateY', v=0, t=time_left)
-                        for index_v, time_lst in enumerate(checkGaze_L):
-                            for time_ in time_lst:
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
-                                if time_ in checkGaze_middle:
-                                    cmds.setKeyframe('AimEye_R.translateX', v=(
-                                        x_value_lst[index_v]+1)+value_noise[index_v], t=time_)
-                                    cmds.setKeyframe('AimEye_R.translateY', v=(
-                                        y_value_lst[index_v]+1)+value_noise[index_v], t=time_)
+                        setGazeObSelected('AimEye_R', checkGaze_left_L, checkGaze_L,
+                                          checkGaze_middle, x_value_lst, y_value_lst, value_noise, 1)
+
                     elif 'Under' in name_OU:
                         print('Yes! SOUA and R gaze:', name_OU)
-                        for index_v, time_left in enumerate(checkGaze_left_L):
-                            cmds.setKeyframe(
-                                'AimEye_R.translateX', v=0, t=time_left)
-                            cmds.setKeyframe(
-                                'AimEye_R.translateY', v=0, t=time_left)
-                        for index_v, time_lst in enumerate(checkGaze_L):
-                            for time_ in time_lst:
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateX', v=x_value_lst[index_v]+value_noise[index_v], t=time_)
-                                cmds.setKeyframe(
-                                    'AimEye_R.translateY', v=y_value_lst[index_v]+value_noise[index_v], t=time_)
-                                if time_ in checkGaze_middle:
-                                    cmds.setKeyframe(
-                                        'AimEye_R.translateX', v=value_noise[index_v]-1, t=time_)
-                                    cmds.setKeyframe(
-                                        'AimEye_R.translateY', v=value_noise[index_v]+1, t=time_)
+                        setGazeObSelected('AimEye_R', checkGaze_left_L, checkGaze_L,
+                                          checkGaze_middle, x_value_lst, y_value_lst, value_noise, -1)
 
     return time_value
 
