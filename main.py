@@ -68,7 +68,8 @@ def createUI(windowTitle):
     collectEyes_RSR = cmds.radioCollection('collectEyes_RSR')
     radioOver_RSR = cmds.radioButton(
         'radioOver_RSR_R', label='overaction', enable=False)
-    radioUnder_RSR = cmds.radioButton('radioUnder_RSR_R', label='underaction')
+    radioUnder_RSR = cmds.radioButton(
+        'radioUnder_RSR_R', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -77,8 +78,9 @@ def createUI(windowTitle):
                         changeCommand=lambda x: action_checkBox('LIO', 'radioOver_LIO_R', 'radioUnder_LIO_R'))
     collectEyes_LIO = cmds.radioCollection('collectEyes_LIO')
     radioOver_LIO = cmds.radioButton(
-        'radioOver_LIO_R', label='overaction', select=True)
-    radioUnder_LIO = cmds.radioButton('radioUnder_LIO_R', label='underaction')
+        'radioOver_LIO_R', label='overaction', enable=False)
+    radioUnder_LIO = cmds.radioButton(
+        'radioUnder_LIO_R', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -111,8 +113,9 @@ def createUI(windowTitle):
                         changeCommand=lambda x: action_checkBox('RIO', 'radioOver_RIO_L', 'radioUnder_RIO_L'))
     collectEyes_RIO = cmds.radioCollection('collectEyes_RIO')
     radioOver_RIO = cmds.radioButton(
-        'radioOver_RIO_L', label='overaction', select=True)
-    radioUnder_RIO = cmds.radioButton('radioUnder_RIO_L', label='underaction')
+        'radioOver_RIO_L', label='overaction', enable=False)
+    radioUnder_RIO = cmds.radioButton(
+        'radioUnder_RIO_L', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
                         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -122,7 +125,8 @@ def createUI(windowTitle):
     collectEyes_LSR = cmds.radioCollection('collectEyes_LSR')
     radioOver_LSR = cmds.radioButton(
         'radioOver_LSR_L', label='overaction', enable=False)
-    radioUnder_LSR = cmds.radioButton('radioUnder_LSR_L', label='underaction')
+    radioUnder_LSR = cmds.radioButton(
+        'radioUnder_LSR_L', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -148,7 +152,8 @@ def createUI(windowTitle):
     collectEyes_RLR = cmds.radioCollection('collectEyes_RLR')
     radioOver_RLR = cmds.radioButton(
         'radioOver_RLR_R', label='overaction', enable=False)
-    radioUnder_RLR = cmds.radioButton('radioUnder_RLR_R', label='underaction')
+    radioUnder_RLR = cmds.radioButton(
+        'radioUnder_RLR_R', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -158,7 +163,8 @@ def createUI(windowTitle):
     collectEyes_LMR = cmds.radioCollection('collectEyes_LMR')
     radioOver_LMR = cmds.radioButton(
         'radioOver_LMR_R', label='overaction', enable=False)
-    radioUnder_LMR = cmds.radioButton('radioUnder_LMR_R', label='underaction')
+    radioUnder_LMR = cmds.radioButton(
+        'radioUnder_LMR_R', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -192,17 +198,19 @@ def createUI(windowTitle):
     collectEyes_RMR = cmds.radioCollection('collectEyes_RMR')
     radioOver_RMR = cmds.radioButton(
         'radioOver_RMR_L', label='overaction', enable=False)
-    radioUnder_RMR = cmds.radioButton('radioUnder_RMR_L', label='underaction')
+    radioUnder_RMR = cmds.radioButton(
+        'radioUnder_RMR_L', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
     # LLR
-    LLR = cmds.checkBox('LLR', label='normal', value=False,
+    LLR = cmds.checkBox('LLR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('LLR', 'radioOver_LLR_L', 'radioUnder_LLR_L'))
     collectEyes_LLR = cmds.radioCollection('collectEyes_LLR')
     radioOver_LLR = cmds.radioButton(
         'radioOver_LLR_L', label='overaction', enable=False)
-    radioUnder_LLR = cmds.radioButton('radioUnder_LLR_L', label='underaction')
+    radioUnder_LLR = cmds.radioButton(
+        'radioUnder_LLR_L', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -228,7 +236,8 @@ def createUI(windowTitle):
     collectEyes_RIR = cmds.radioCollection('collectEyes_RIR')
     radioOver_RIR = cmds.radioButton(
         'radioOver_RIR_R', label='overaction', enable=False)
-    radioUnder_RIR = cmds.radioButton('radioUnder_RIR_R', label='underaction')
+    radioUnder_RIR = cmds.radioButton(
+        'radioUnder_RIR_R', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -237,8 +246,9 @@ def createUI(windowTitle):
                         changeCommand=lambda x: action_checkBox('LSO', 'radioOver_LSO_R', 'radioUnder_LSO_R'))
     collectEyes_LSO = cmds.radioCollection('collectEyes_LSO')
     radioOver_LSO = cmds.radioButton(
-        'radioOver_LSO_R', label='overaction', select=True)
-    radioUnder_LSO = cmds.radioButton('radioUnder_LSO_R', label='underaction')
+        'radioOver_LSO_R', label='overaction', enable=False)
+    radioUnder_LSO = cmds.radioButton(
+        'radioUnder_LSO_R', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -271,8 +281,9 @@ def createUI(windowTitle):
                         changeCommand=lambda x: action_checkBox('RSO', 'radioOver_RSO_L', 'radioUnder_RSO_L'))
     collectEyes_RSO = cmds.radioCollection('collectEyes_RSO')
     radioOver_RSO = cmds.radioButton(
-        'radioOver_RSO_L', label='overaction', select=True)
-    radioUnder_RSO = cmds.radioButton('radioUnder_RSO_L', label='underaction')
+        'radioOver_RSO_L', label='overaction', enable=False)
+    radioUnder_RSO = cmds.radioButton(
+        'radioUnder_RSO_L', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
         (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
@@ -283,7 +294,7 @@ def createUI(windowTitle):
     radioOver_LIR_L = cmds.radioButton(
         'radioOver_LIR_L', label='overaction', enable=False)
     radioUnder_LIR_L = cmds.radioButton(
-        'radioUnder_LIR_L', label='underaction')
+        'radioUnder_LIR_L', label='underaction', enable=False)
     cmds.setParent('..')
     cmds.setParent('..')
     cmds.setParent('..')
@@ -318,11 +329,13 @@ def createUI(windowTitle):
 
     def applyButton(*args):
         # normal selected
-        # setNormalNinePositionOfGaze(AmoutImages)
+        if cmds.checkBox(query=True, value=True):
+            print('normal')
+            # setNormalNinePositionOfGaze(AmoutImages)
 
         # abnormal selected
-        loadWindowPreview(
-            setAbNinePositionOfGaze(AmoutImages), AmoutImages)
+        # loadWindowPreview(
+        #     setAbNinePositionOfGaze(AmoutImages), AmoutImages)
 
     def renderButton(*args):
         # normal selected
@@ -461,16 +474,23 @@ lstCollectEyes = [
 lstcheckBox = ['RSR', 'LIO', 'RIO', 'LSR', 'RLR', 'LMR',
                'RMR', 'LLR', 'RIR', 'LSO', 'RSO', 'LIR']
 
+count_checkbox = 0
+
 
 def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
+
     if cmds.checkBox(checkBoxValue, query=True, value=True):
         for _, j in enumerate(lstcheckBox):
             if j == checkBoxValue:
                 cmds.radioButton(radioSelected1, edit=True, enable=False)
                 cmds.radioButton(radioSelected2, edit=True, enable=False)
     else:
-        cmds.radioButton(radioSelected1, edit=True, enable=True)
-        cmds.radioButton(radioSelected2, edit=True, enable=True)
+        if checkBoxValue[2] == 'R':
+            cmds.radioButton(radioSelected1, edit=True, enable=False)
+            cmds.radioButton(radioSelected2, edit=True, enable=True)
+        else:
+            cmds.radioButton(radioSelected1, edit=True, enable=True)
+            cmds.radioButton(radioSelected2, edit=True, enable=True)
 
 
 # ----------------- action_radioButton -----------------
@@ -500,6 +520,7 @@ def passValue(DirectionControl, *args):
 
 
 # ----------------- movefaceMuscle -----------------
+
 def movefaceMuscle(name, gaze, time_value):
     # set eyes movement 9 gaze to default
     cmds.setKeyframe('ctrlEye_R.translateX', at='tx', v=gaze[0], t=time_value)
@@ -800,7 +821,6 @@ def setAbNinePositionOfGaze(textfieldAmount):
                         print('Yes! IOOA and R gaze:', name_OU)
                         setGazeObSelected('AimEye_L', checkGaze_left_R, checkGaze_R,
                                           checkGaze_middle, x_value_lst, y_value_lst, value_noise, 1)
-
                     elif 'Under' in name_OU:
                         print('Yes! IOUA and R gaze:', name_OU)
                         setGazeObSelected('AimEye_L', checkGaze_left_R, checkGaze_R,
@@ -813,7 +833,6 @@ def setAbNinePositionOfGaze(textfieldAmount):
                         print('Yes! SOOA and R gaze:', name_OU)
                         setGazeObSelected('AimEye_L', checkGaze_left_R, checkGaze_R,
                                           checkGaze_middle, x_value_lst, y_value_lst, value_noise, 1)
-
                     elif 'Under' in name_OU:
                         print('Yes! SOUA and R gaze:', name_OU)
                         setGazeObSelected('AimEye_L', checkGaze_left_R, checkGaze_R,
@@ -847,7 +866,6 @@ def setAbNinePositionOfGaze(textfieldAmount):
                         print('Yes! IOOA and R gaze:', name_OU)
                         setGazeObSelected('AimEye_R', checkGaze_left_L, checkGaze_L,
                                           checkGaze_middle, x_value_lst, y_value_lst, value_noise, -2)
-
                     elif 'Under' in name_OU:
                         print('Yes! IOUA and R gaze:', name_OU)
                         setGazeObSelected('AimEye_R', checkGaze_left_L, checkGaze_L,
@@ -859,7 +877,6 @@ def setAbNinePositionOfGaze(textfieldAmount):
                         print('Yes! SOOA and R gaze:', name_OU)
                         setGazeObSelected('AimEye_R', checkGaze_left_L, checkGaze_L,
                                           checkGaze_middle, x_value_lst, y_value_lst, value_noise, 1)
-
                     elif 'Under' in name_OU:
                         print('Yes! SOUA and R gaze:', name_OU)
                         setGazeObSelected('AimEye_R', checkGaze_left_L, checkGaze_L,
