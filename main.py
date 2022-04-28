@@ -885,12 +885,11 @@ def setAbNinePositionOfGaze(textfieldAmount):
     return time_value
 
 
-def bakeSimulation(time_value):
+def bakeSimu(self):
     start = cmds.playbackOptions(q=1, min=1)
-    end = cmds.playbackOptions(q=1, max=time_value)
-    cmds.select('Head_M', visible=True)
-    cmds.select('geo', hierarchy=True)
-    cmds.bakeResults('joint*', t=(1, 40), simulation=True)
+    end = cmds.playbackOptions(q=1, max=1)
+    cmds.select('geo', 'Head_M', hierarchy=True)
+    cmds.bakeResults(t=(start, end), simulation=True)
 
 
 if __name__ == "__main__":
