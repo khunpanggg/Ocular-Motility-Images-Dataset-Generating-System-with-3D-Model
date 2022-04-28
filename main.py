@@ -329,9 +329,9 @@ def createUI(windowTitle):
 
     def applyButton(*args):
         # normal selected
-        if cmds.checkBox(query=True, value=True):
-            print('normal')
-            # setNormalNinePositionOfGaze(AmoutImages)
+
+        print(lstcheck)
+        # setNormalNinePositionOfGaze(AmoutImages)
 
         # abnormal selected
         # loadWindowPreview(
@@ -475,6 +475,7 @@ lstcheckBox = ['RSR', 'LIO', 'RIO', 'LSR', 'RLR', 'LMR',
                'RMR', 'LLR', 'RIR', 'LSO', 'RSO', 'LIR']
 
 count_checkbox = 0
+lstcheck = []
 
 
 def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
@@ -484,6 +485,7 @@ def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
             if j == checkBoxValue:
                 cmds.radioButton(radioSelected1, edit=True, enable=False)
                 cmds.radioButton(radioSelected2, edit=True, enable=False)
+                lstcheck.append(j)
     else:
         if checkBoxValue[2] == 'R':
             cmds.radioButton(radioSelected1, edit=True, enable=False)
@@ -605,16 +607,12 @@ def setNormalNinePositionOfGaze(textfieldAmount):
 
 
 # ------------------- set Position Of Gaze (Selected) -------------------
-lstActionOU = [
-    # [value X], [value Y]
+lstActionOU = [  # [value X], [value Y]
     # OVER ACTION
     ('radioOver_LIO_R', [[-4, 2], [1, 5]]),
     ('radioOver_LSO_R', [[-3, 2], [-3, -1]]),
-
     ('radioOver_RIO_L', [[1, 4], [1, 4]]),
     ('radioOver_RSO_L', [[-4, -1], [-2, -1]]),
-
-
     # UNDER ACTION
     ('radioUnder_RSR_R', [[0, 0], [-5, -1]]),
     ('radioUnder_LIO_R', [[-3, 2], [-3, -1]]),
@@ -622,15 +620,11 @@ lstActionOU = [
     ('radioUnder_LMR_R', [[2, 8], [0, 0]]),
     ('radioUnder_RIR_R', [[0, 0], [1, 5]]),
     ('radioUnder_LSO_R', [[-1, 5], [1, 5]]),
-
     ('radioUnder_RIO_L', [[-4, -1], [-3, -1]]),
-
     ('radioUnder_LSR_L', [[0, 0], [-5, -1]]),
     ('radioUnder_RMR_L', [[-8, -2], [0, 0]]),
     ('radioUnder_LLR_L', [[-8, -2], [0, 0]]),
-
     ('radioUnder_RSO_L', [[-3, 2], [1, 3]]),
-
     ('radioUnder_LIR_L', [[0, 0], [1, 5]])
 ]
 
