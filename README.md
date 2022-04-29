@@ -4,5 +4,5 @@ The main objective of this work is to develop a system to create an image datase
 
 System Requirement
 ```
-(https://via.placeholder.com/15/f03c15/000000?text=+) require Autodesk Maya
+require Autodesk Maya
 ```
