@@ -328,14 +328,17 @@ def createUI(windowTitle):
     cmds.setParent('..')
 
     def applyButton(*args):
-        # normal selected
-
-        print(lstcheck)
-        # setNormalNinePositionOfGaze(AmoutImages)
-
-        # abnormal selected
-        # loadWindowPreview(
-        #     setAbNinePositionOfGaze(AmoutImages), AmoutImages)
+        count_checked = 0
+        for i in lstcheckBox:
+            if cmds.checkBox(i, query=True, value=True):
+                count_checked += 1
+                if count_checked == len(lstcheckBox):
+                    print('normal eyes')
+                    loadWindowPreview(setNormalNinePositionOfGaze(AmoutImages), AmoutImages)
+            else:
+                print('abnormal eyes')
+                loadWindowPreview(setAbNinePositionOfGaze(
+                    AmoutImages), AmoutImages)
 
     def renderButton(*args):
         # normal selected
@@ -439,7 +442,6 @@ def loadWindowPreview(endframe, amount):
 
 # ------------------- getAmountValue -------------------
 
-
 def getAmountValue(textfieldAmount):
     currentAmount = cmds.textField(textfieldAmount, query=True, text=True)
     # print('Amount'+currentAmount)
@@ -450,42 +452,21 @@ lst_Nine = [('Right Up', [-0.8, 0.5]), ('Upgaze middle', [0, 0.8]), ('Left Up', 
             ('Right', [-1, 0]), ('Primary middle', [0, 0]), ('Left', [1, 0]),
             ('Right Down', [-1, -1]), ('Downgaze middle', [0, -0.8]), ('Left Down', [1, -1])]
 
-lstCollectEyes = [
-    'collectEyes_RSR',
-    'collectEyes_LIO',
-
-    'collectEyes_RIO',
-    'collectEyes_LSR',
-
-    'collectEyes_RLR',
-    'collectEyes_LMR',
-
-    'collectEyes_RMR',
-    'collectEyes_LLR',
-
-    'collectEyes_RIR',
-    'collectEyes_LSO',
-
-    'collectEyes_RSO',
-    'collectEyes_LIR'
-]
+lstCollectEyes = ['collectEyes_RSR', 'collectEyes_LIO', 'collectEyes_RIO', 'collectEyes_LSR', 'collectEyes_RLR', 'collectEyes_LMR',
+                  'collectEyes_RMR', 'collectEyes_LLR', 'collectEyes_RIR', 'collectEyes_LSO', 'collectEyes_RSO', 'collectEyes_LIR']
 
 # ----------------- action_checkBox -----------------
 lstcheckBox = ['RSR', 'LIO', 'RIO', 'LSR', 'RLR', 'LMR',
                'RMR', 'LLR', 'RIR', 'LSO', 'RSO', 'LIR']
 
-count_checkbox = 0
-lstcheck = []
-
 
 def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
-
     if cmds.checkBox(checkBoxValue, query=True, value=True):
         for _, j in enumerate(lstcheckBox):
             if j == checkBoxValue:
                 cmds.radioButton(radioSelected1, edit=True, enable=False)
                 cmds.radioButton(radioSelected2, edit=True, enable=False)
-                lstcheck.append(j)
+                numcheckbox += 1
     else:
         if checkBoxValue[2] == 'R':
             cmds.radioButton(radioSelected1, edit=True, enable=False)
@@ -555,7 +536,6 @@ def movefaceMuscle(name, gaze, time_value):
 
 # ------------------- setMovementGaze Preview -------------------
 
-
 def setMovementGaze(self):
     time_value = 0
     for name, gaze in lst_Nine:
@@ -571,7 +551,6 @@ def setMovementGaze(self):
         cmds.move(100*(i+1), 0, 0)
         no = str(i)
 
-
 def setCamaraGaze(self):
     # Create a camera
     cmds.camera(name='faceCam1', focalLength=70)
@@ -586,8 +565,15 @@ def setCamaraGaze(self):
         cmds.duplicate('faceCam'+str(i))
         cmds.move(100*(i), 0, 0, moveX=True)
 
-# ------------------- set Position Of Gaze (NORMAL) -------------------
+# ------------------ bakeSimulation ------------------
 
+def bakeSimu(self):
+    start = cmds.playbackOptions(q=1, min=1)
+    end = cmds.playbackOptions(q=1, max=1)
+    cmds.select('geo', 'Head_M', hierarchy=True)
+    cmds.bakeResults(t=(start, end), simulation=True)
+
+# ------------------- set Position Of Gaze (NORMAL) -------------------
 
 def setNormalNinePositionOfGaze(textfieldAmount):
     amount = getAmountValue(textfieldAmount)
@@ -604,9 +590,10 @@ def setNormalNinePositionOfGaze(textfieldAmount):
                              v=value_noise[i], t=time_value)
             cmds.setKeyframe('AimEye_L.translateX', at='ty',
                              v=value_noise[i], t=time_value)
-
+    return time_value
 
 # ------------------- set Position Of Gaze (Selected) -------------------
+
 lstActionOU = [  # [value X], [value Y]
     # OVER ACTION
     ('radioOver_LIO_R', [[-4, 2], [1, 5]]),
@@ -628,12 +615,13 @@ lstActionOU = [  # [value X], [value Y]
     ('radioUnder_LIR_L', [[0, 0], [1, 5]])
 ]
 
-
-def setGazeSelected(AimEye_side, AimEye_translate, checkGaze_left, checkGaze_side, checkGaze_middle, xy_value_lst, value_noise_lst, num_part):
-
-    for index_v, time_left in enumerate(checkGaze_left):
+def setGazeleft(AimEye_side, checkGaze_left):
+    for _, time_left in enumerate(checkGaze_left):
         cmds.setKeyframe(AimEye_side+'.translateX', v=0, t=time_left)
         cmds.setKeyframe(AimEye_side+'.translateY', v=0, t=time_left)
+
+def setGazeSelected(AimEye_side, AimEye_translate, checkGaze_left, checkGaze_side, checkGaze_middle, xy_value_lst, value_noise_lst, num_part):
+    setGazeleft(AimEye_side, checkGaze_left)
     for index_v, time_lst in enumerate(checkGaze_side):
         for time_ in time_lst:
             cmds.setKeyframe(
@@ -644,10 +632,7 @@ def setGazeSelected(AimEye_side, AimEye_translate, checkGaze_left, checkGaze_sid
 
 
 def setGazeObSelected(AimEye_side, checkGaze_left, checkGaze_side, checkGaze_middle, x_value_lst, y_value_lst, value_noise_lst, num_part):
-
-    for index_v, time_left in enumerate(checkGaze_left):
-        cmds.setKeyframe(AimEye_side+'.translateX', v=0, t=time_left)
-        cmds.setKeyframe(AimEye_side+'.translateY', v=0, t=time_left)
+    setGazeleft(AimEye_side, checkGaze_left)
     for index_v, time_lst in enumerate(checkGaze_side):
         for time_ in time_lst:
             cmds.setKeyframe(
@@ -725,6 +710,7 @@ def setAbNinePositionOfGaze(textfieldAmount):
                 checkGaze_left_R.append(time_value)
             elif 'Left' not in name:
                 checkGaze_left_L.append(time_value)
+
     for r in sixGaze_lst_R:
         sixGaze_input_lst.append(r)
         if len(sixGaze_input_lst) % 6 == 0:
@@ -877,14 +863,6 @@ def setAbNinePositionOfGaze(textfieldAmount):
                                           checkGaze_middle, x_value_lst, y_value_lst, value_noise, -1)
 
     return time_value
-
-
-def bakeSimu(self):
-    start = cmds.playbackOptions(q=1, min=1)
-    end = cmds.playbackOptions(q=1, max=1)
-    cmds.select('geo', 'Head_M', hierarchy=True)
-    cmds.bakeResults(t=(start, end), simulation=True)
-
 
 if __name__ == "__main__":
     createUI('Ocular motility test images generating system')
