@@ -9,19 +9,22 @@ def createUI(windowTitle):
                          resizeToFitChildren=True, sizeable=True)
     cmds.columnLayout(adjustableColumn=True)
     cmds.rowColumnLayout(numberOfColumns=2, columnAttach=(
-        (1, 'right', 2), (2, 'both', 3)), columnWidth=[(1, 250)], columnOffset=[(1, 'both', 2)])
+        (1, 'left', 2), (2, 'both', 2)), columnWidth=[(1, 200)], columnOffset=[(1, 'both', 1)])
 
     # ------------ Preparation ------------
     cmds.frameLayout(label='Preparation', collapsable=True, marginWidth=5)
     cmds.frameLayout(label='Import Flie', collapsable=True)
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-                        (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
+                        (1, 100), (2, 80)], columnOffset=[(1, 'both', 5), (2, 'left', 10)], bgc=[0.2, 0.2, 0.2], rowAttach=[(1, "top", 2), (2, "top", 2)])
+    cmds.button(label='Set Project', command=openFile, bgc=[0.4, 0.4, 0.4])
+    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.button(label='Open Scene', command=openFile, bgc=[0.4, 0.4, 0.4])
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.setParent('..')
+
     cmds.frameLayout(label='Setting Gaze', collapsable=True)
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-                        (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
+                        (1, 100), (2, 80)], columnOffset=[(1, 'both', 5), (2, 'left', 10)], bgc=[0.2, 0.2, 0.2], rowAttach=[(1, "top", 2), (2, "top", 2)])
     cmds.button(label='Set Gaze', command=setMovementGaze, bgc=[0.4, 0.4, 0.4])
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
     cmds.button(label='Set Camera', command=setCamaraGaze, bgc=[0.4, 0.4, 0.4])
@@ -29,8 +32,8 @@ def createUI(windowTitle):
     cmds.setParent('..')
     cmds.frameLayout(label='Tool', collapsable=True)
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-                        (1, 125), (2, 125)], columnOffset=[(1, 'both', 10)], bgc=[0.2, 0.2, 0.2])
-    cmds.button(label='Bake Simulation', command=openFile, bgc=[0.4, 0.4, 0.4])
+                        (1, 100), (2, 80)], columnOffset=[(1, 'both', 5), (2, 'left', 10)], bgc=[0.2, 0.2, 0.2], rowAttach=[(1, "top", 2), (2, "top", 2)])
+    cmds.button(label='Bake Simulation', command=bakeSimu, bgc=[0.4, 0.4, 0.4])
     cmds.iconTextButton(style='iconOnly', image1='help.xpm')
 
     cmds.button(label='Reset', command=openFile, bgc=[0.4, 0.4, 0.4])
@@ -59,9 +62,9 @@ def createUI(windowTitle):
                      displayLights='all', camera='faceCam2')
     cmds.setParent('..')
     cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)], bgc=[0.4, 0.4, 0.4])
     cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
+        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)], bgc=[0.7, 0.4, 0.4])
     # RSR
     RSR = cmds.checkBox('RSR', label='normal', value=True,
                         changeCommand=lambda x: action_checkBox('RSR', 'radioOver_RSR_R', 'radioUnder_RSR_R'))
@@ -334,7 +337,8 @@ def createUI(windowTitle):
                 count_checked += 1
                 if count_checked == len(lstcheckBox):
                     print('normal eyes')
-                    loadWindowPreview(setNormalNinePositionOfGaze(AmoutImages), AmoutImages)
+                    loadWindowPreview(setNormalNinePositionOfGaze(
+                        AmoutImages), AmoutImages)
             else:
                 print('abnormal eyes')
                 loadWindowPreview(setAbNinePositionOfGaze(
@@ -442,6 +446,7 @@ def loadWindowPreview(endframe, amount):
 
 # ------------------- getAmountValue -------------------
 
+
 def getAmountValue(textfieldAmount):
     currentAmount = cmds.textField(textfieldAmount, query=True, text=True)
     # print('Amount'+currentAmount)
@@ -456,6 +461,7 @@ lstCollectEyes = ['collectEyes_RSR', 'collectEyes_LIO', 'collectEyes_RIO', 'coll
                   'collectEyes_RMR', 'collectEyes_LLR', 'collectEyes_RIR', 'collectEyes_LSO', 'collectEyes_RSO', 'collectEyes_LIR']
 
 # ----------------- action_checkBox -----------------
+
 lstcheckBox = ['RSR', 'LIO', 'RIO', 'LSR', 'RLR', 'LMR',
                'RMR', 'LLR', 'RIR', 'LSO', 'RSO', 'LIR']
 
@@ -477,6 +483,7 @@ def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
 
 
 # ----------------- action_radioButton -----------------
+
 lstcheckNormal = []
 lstcheckDisorder = []
 
@@ -536,6 +543,7 @@ def movefaceMuscle(name, gaze, time_value):
 
 # ------------------- setMovementGaze Preview -------------------
 
+
 def setMovementGaze(self):
     time_value = 0
     for name, gaze in lst_Nine:
@@ -550,6 +558,7 @@ def setMovementGaze(self):
         cmds.duplicate('geo'+no)
         cmds.move(100*(i+1), 0, 0)
         no = str(i)
+
 
 def setCamaraGaze(self):
     # Create a camera
@@ -567,6 +576,7 @@ def setCamaraGaze(self):
 
 # ------------------ bakeSimulation ------------------
 
+
 def bakeSimu(self):
     start = cmds.playbackOptions(q=1, min=1)
     end = cmds.playbackOptions(q=1, max=1)
@@ -574,6 +584,7 @@ def bakeSimu(self):
     cmds.bakeResults(t=(start, end), simulation=True)
 
 # ------------------- set Position Of Gaze (NORMAL) -------------------
+
 
 def setNormalNinePositionOfGaze(textfieldAmount):
     amount = getAmountValue(textfieldAmount)
@@ -593,6 +604,7 @@ def setNormalNinePositionOfGaze(textfieldAmount):
     return time_value
 
 # ------------------- set Position Of Gaze (Selected) -------------------
+
 
 lstActionOU = [  # [value X], [value Y]
     # OVER ACTION
@@ -615,10 +627,12 @@ lstActionOU = [  # [value X], [value Y]
     ('radioUnder_LIR_L', [[0, 0], [1, 5]])
 ]
 
+
 def setGazeleft(AimEye_side, checkGaze_left):
     for _, time_left in enumerate(checkGaze_left):
         cmds.setKeyframe(AimEye_side+'.translateX', v=0, t=time_left)
         cmds.setKeyframe(AimEye_side+'.translateY', v=0, t=time_left)
+
 
 def setGazeSelected(AimEye_side, AimEye_translate, checkGaze_left, checkGaze_side, checkGaze_middle, xy_value_lst, value_noise_lst, num_part):
     setGazeleft(AimEye_side, checkGaze_left)
@@ -863,6 +877,7 @@ def setAbNinePositionOfGaze(textfieldAmount):
                                           checkGaze_middle, x_value_lst, y_value_lst, value_noise, -1)
 
     return time_value
+
 
 if __name__ == "__main__":
     createUI('Ocular motility test images generating system')
