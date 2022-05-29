@@ -1,365 +1,7 @@
 import maya.cmds as cmds
 import random as rand
 
-
-def createUI(windowTitle):
-    window = 'OC_Window'
-    # create new window
-    window = cmds.window(window, title=windowTitle,
-                         resizeToFitChildren=True, sizeable=True)
-    cmds.columnLayout(adjustableColumn=True)
-    cmds.rowColumnLayout(numberOfColumns=2, columnAttach=(
-        (1, 'left', 2), (2, 'both', 2)), columnWidth=[(1, 200)], columnOffset=[(1, 'both', 1)])
-
-    # ------------ Preparation ------------
-    cmds.frameLayout(label='Preparation', collapsable=True, marginWidth=5)
-    cmds.frameLayout(label='Import Flie', collapsable=True)
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-                        (1, 100), (2, 80)], columnOffset=[(1, 'both', 5), (2, 'left', 10)], bgc=[0.2, 0.2, 0.2], rowAttach=[(1, "top", 2), (2, "top", 2)])
-    cmds.button(label='Set Project', command=openFile, bgc=[0.4, 0.4, 0.4])
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.button(label='Open Scene', command=openFile, bgc=[0.4, 0.4, 0.4])
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.setParent('..')
-
-    cmds.frameLayout(label='Setting Gaze', collapsable=True)
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-                        (1, 100), (2, 80)], columnOffset=[(1, 'both', 5), (2, 'left', 10)], bgc=[0.2, 0.2, 0.2], rowAttach=[(1, "top", 2), (2, "top", 2)])
-    cmds.button(label='Set Gaze', command=setMovementGaze, bgc=[0.4, 0.4, 0.4])
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.button(label='Set Camera', command=setCamaraGaze, bgc=[0.4, 0.4, 0.4])
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.setParent('..')
-    cmds.frameLayout(label='Tool', collapsable=True)
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-                        (1, 100), (2, 80)], columnOffset=[(1, 'both', 5), (2, 'left', 10)], bgc=[0.2, 0.2, 0.2], rowAttach=[(1, "top", 2), (2, "top", 2)])
-    cmds.button(label='Bake Simulation', command=bakeSimu, bgc=[0.4, 0.4, 0.4])
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-
-    cmds.button(label='Reset', command=openFile, bgc=[0.4, 0.4, 0.4])
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Setting for 9 diagnostic positions of gaze ------------------
-    frameDiaSetting = cmds.frameLayout('frameDiaSetting',
-                                       label='Setting for 9 diagnostic positions of gaze', enable=True, borderVisible=False, collapsable=True)
-    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 300), (2, 300), (3, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
-
-    # ------------------ Right & Up Gaze ------------------
-    cmds.frameLayout(label='Right & Up Gaze')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('RSR', bgc=[0.1, 0.1, 0.1])
-    cmds.text('LIO', bgc=[0.1, 0.1, 0.1])
-    cmds.setParent('..')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     displayLights='all', camera='faceCam2')
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)], bgc=[0.4, 0.4, 0.4])
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)], bgc=[0.7, 0.4, 0.4])
-    # RSR
-    RSR = cmds.checkBox('RSR', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('RSR', 'radioOver_RSR_R', 'radioUnder_RSR_R'))
-    collectEyes_RSR = cmds.radioCollection('collectEyes_RSR')
-    radioOver_RSR = cmds.radioButton(
-        'radioOver_RSR_R', label='overaction', enable=False)
-    radioUnder_RSR = cmds.radioButton(
-        'radioUnder_RSR_R', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # LIO
-    LIO = cmds.checkBox('LIO', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('LIO', 'radioOver_LIO_R', 'radioUnder_LIO_R'))
-    collectEyes_LIO = cmds.radioCollection('collectEyes_LIO')
-    radioOver_LIO = cmds.radioButton(
-        'radioOver_LIO_R', label='overaction', enable=False)
-    radioUnder_LIO = cmds.radioButton(
-        'radioUnder_LIO_R', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Up Gaze ------------------
-    cmds.frameLayout(label='Up Gaze')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam3')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Left & Up Gaze ------------------
-    cmds.frameLayout(label='Left & Up Gaze')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('RIO', bgc=[0.1, 0.1, 0.1])
-    cmds.text('LSR', bgc=[0.1, 0.1, 0.1])
-    cmds.setParent('..')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam4')
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # RIO
-    RIO = cmds.checkBox('RIO', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('RIO', 'radioOver_RIO_L', 'radioUnder_RIO_L'))
-    collectEyes_RIO = cmds.radioCollection('collectEyes_RIO')
-    radioOver_RIO = cmds.radioButton(
-        'radioOver_RIO_L', label='overaction', enable=False)
-    radioUnder_RIO = cmds.radioButton(
-        'radioUnder_RIO_L', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-                        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # LSR
-    LSR = cmds.checkBox('LSR', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('LSR', 'radioOver_LSR_L', 'radioUnder_LSR_L'))
-    collectEyes_LSR = cmds.radioCollection('collectEyes_LSR')
-    radioOver_LSR = cmds.radioButton(
-        'radioOver_LSR_L', label='overaction', enable=False)
-    radioUnder_LSR = cmds.radioButton(
-        'radioUnder_LSR_L', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Right Gaze ------------------
-    cmds.frameLayout(label='Right Gaze')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('RLR', bgc=[0.1, 0.1, 0.1])
-    cmds.text('LMR', bgc=[0.1, 0.1, 0.1])
-    cmds.setParent('..')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam5')
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # RLR
-    RLR = cmds.checkBox('RLR', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('RLR', 'radioOver_RLR_R', 'radioUnder_RLR_R'))
-    collectEyes_RLR = cmds.radioCollection('collectEyes_RLR')
-    radioOver_RLR = cmds.radioButton(
-        'radioOver_RLR_R', label='overaction', enable=False)
-    radioUnder_RLR = cmds.radioButton(
-        'radioUnder_RLR_R', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # LMR
-    LMR = cmds.checkBox('LMR', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('LMR', 'radioOver_LMR_R', 'radioUnder_LMR_R'))
-    collectEyes_LMR = cmds.radioCollection('collectEyes_LMR')
-    radioOver_LMR = cmds.radioButton(
-        'radioOver_LMR_R', label='overaction', enable=False)
-    radioUnder_LMR = cmds.radioButton(
-        'radioUnder_LMR_R', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Primary Position ------------------
-    cmds.frameLayout(label='Primary Position')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam6')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Left Gaze ------------------
-    cmds.frameLayout(label='Left Gaze')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('RMR', bgc=[0.1, 0.1, 0.1])
-    cmds.text('LLR', bgc=[0.1, 0.1, 0.1])
-    cmds.setParent('..')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam7')
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # RMR
-    RMR = cmds.checkBox('RMR', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('RMR', 'radioOver_RMR_L', 'radioUnder_RMR_L'))
-    collectEyes_RMR = cmds.radioCollection('collectEyes_RMR')
-    radioOver_RMR = cmds.radioButton(
-        'radioOver_RMR_L', label='overaction', enable=False)
-    radioUnder_RMR = cmds.radioButton(
-        'radioUnder_RMR_L', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # LLR
-    LLR = cmds.checkBox('LLR', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('LLR', 'radioOver_LLR_L', 'radioUnder_LLR_L'))
-    collectEyes_LLR = cmds.radioCollection('collectEyes_LLR')
-    radioOver_LLR = cmds.radioButton(
-        'radioOver_LLR_L', label='overaction', enable=False)
-    radioUnder_LLR = cmds.radioButton(
-        'radioUnder_LLR_L', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Right & Down Gaze ------------------
-    cmds.frameLayout(label='Right & Down Gaze')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('RIR', bgc=[0.1, 0.1, 0.1])
-    cmds.text('LSO', bgc=[0.1, 0.1, 0.1])
-    cmds.setParent('..')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam8')
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # RIR
-    RIR = cmds.checkBox('RIR', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('RIR', 'radioOver_RIR_R', 'radioUnder_RIR_R'))
-    collectEyes_RIR = cmds.radioCollection('collectEyes_RIR')
-    radioOver_RIR = cmds.radioButton(
-        'radioOver_RIR_R', label='overaction', enable=False)
-    radioUnder_RIR = cmds.radioButton(
-        'radioUnder_RIR_R', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # LSO
-    LSO = cmds.checkBox('LSO', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('LSO', 'radioOver_LSO_R', 'radioUnder_LSO_R'))
-    collectEyes_LSO = cmds.radioCollection('collectEyes_LSO')
-    radioOver_LSO = cmds.radioButton(
-        'radioOver_LSO_R', label='overaction', enable=False)
-    radioUnder_LSO = cmds.radioButton(
-        'radioUnder_LSO_R', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Down Gaze ------------------
-    cmds.frameLayout(label='Up Gaze')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam9')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Left & Down Gaze ------------------
-    cmds.frameLayout(label='Left & Down Gaze')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.text('RSO', bgc=[0.1, 0.1, 0.1])
-    cmds.text('LIR', bgc=[0.1, 0.1, 0.1])
-    cmds.setParent('..')
-    cmds.paneLayout(configuration='quad', height=100)
-    cmds.modelEditor(da='smoothShaded', dtx=True,
-                     wireframeOnShaded=False, swf=True, displayLights='all', camera='faceCam10')
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # RSO
-    RSO = cmds.checkBox('RSO', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('RSO', 'radioOver_RSO_L', 'radioUnder_RSO_L'))
-    collectEyes_RSO = cmds.radioCollection('collectEyes_RSO')
-    radioOver_RSO = cmds.radioButton(
-        'radioOver_RSO_L', label='overaction', enable=False)
-    radioUnder_RSO = cmds.radioButton(
-        'radioUnder_RSO_L', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=1, columnWidth=[
-        (1, 150), (2, 150)], columnOffset=[(1, 'both', 2)])
-    # LIR
-    LIR = cmds.checkBox('LIR', label='normal', value=True,
-                        changeCommand=lambda x: action_checkBox('LIR', 'radioOver_LIR_L', 'radioUnder_LIR_L'))
-    collectEyes_LIR = cmds.radioCollection('collectEyes_LIR')
-    radioOver_LIR_L = cmds.radioButton(
-        'radioOver_LIR_L', label='overaction', enable=False)
-    radioUnder_LIR_L = cmds.radioButton(
-        'radioUnder_LIR_L', label='underaction', enable=False)
-    cmds.setParent('..')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    cmds.setParent('..')
-
-    # ------------------ Amount ------------------
-    cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[
-        (1, 450), (2, 450)], columnOffset=[(1, 'both', 2)])
-    cmds.frameLayout(label='Amount of Images', collapsable=True)
-    cmds.separator(height=5, style=None)
-    cmds.rowColumnLayout(numberOfColumns=3, columnAttach=(
-        (1, 'right', 3), (2, 'both', 3), (3, 'both', 3)), columnWidth=[(1, 100), (2, 150)])
-    cmds.text(label='amount :')
-    AmoutImages = cmds.textField()
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-
-    cmds.separator(height=5, style=None)
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    # ------------------ Create Lighting ------------------
-    cmds.frameLayout(label='Create Lighting', collapsable=True)
-    cmds.separator(height=5, style=None)
-    cmds.rowColumnLayout(numberOfColumns=2, columnAttach=((1, 'both', 2)))
-    cmds.optionMenuGrp('optionLighting', w=250, label="lightning location :")
-    cmds.menuItem(label="Outdoor")
-    cmds.menuItem(label="Indoor")
-    cmds.iconTextButton(style='iconOnly', image1='help.xpm')
-    cmds.setParent('..')
-    cmds.setParent('..')
-
-    def applyButton(*args):
-        count_checked = 0
-        for i in lstcheckBox:
-            if cmds.checkBox(i, query=True, value=True):
-                count_checked += 1
-                if count_checked == len(lstcheckBox):
-                    print('normal eyes')
-                    loadWindowPreview(setNormalNinePositionOfGaze(
-                        AmoutImages), AmoutImages)
-            else:
-                print('abnormal eyes')
-                loadWindowPreview(setAbNinePositionOfGaze(
-                    AmoutImages), AmoutImages)
-
-    def renderButton(*args):
-        # normal selected
-        setNormalNinePositionOfGaze(AmoutImages)
-
-    def cancelCallback(*args):
-        if cmds.window(window, exists=True):
-            cmds.deleteUI(window)
-
-    cmds.setParent('..')
-    cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[
-        (1, 300), (2, 300), (3, 300)], columnOffset=[(1, 'both', 3), (2, 'both', 3), (3, 'both', 3)])
-    cmds.button(label='Apply', height=30, command=applyButton)
-    cmds.button(label='Render', command=renderButton)
-    cmds.button(label='Close', command=cancelCallback)
-    cmds.setParent('..')
-    cmds.showWindow()
+from mainUI import MainUI
 
 # ------------------ openFile ------------------
 
@@ -457,6 +99,7 @@ lst_Nine = [('Right Up', [-0.8, 0.5]), ('Upgaze middle', [0, 0.8]), ('Left Up', 
             ('Right', [-1, 0]), ('Primary middle', [0, 0]), ('Left', [1, 0]),
             ('Right Down', [-1, -1]), ('Downgaze middle', [0, -0.8]), ('Left Down', [1, -1])]
 
+# need fix later, coupling name
 lstCollectEyes = ['collectEyes_RSR', 'collectEyes_LIO', 'collectEyes_RIO', 'collectEyes_LSR', 'collectEyes_RLR', 'collectEyes_LMR',
                   'collectEyes_RMR', 'collectEyes_LLR', 'collectEyes_RIR', 'collectEyes_LSO', 'collectEyes_RSO', 'collectEyes_LIR']
 
@@ -464,22 +107,6 @@ lstCollectEyes = ['collectEyes_RSR', 'collectEyes_LIO', 'collectEyes_RIO', 'coll
 
 lstcheckBox = ['RSR', 'LIO', 'RIO', 'LSR', 'RLR', 'LMR',
                'RMR', 'LLR', 'RIR', 'LSO', 'RSO', 'LIR']
-
-
-def action_checkBox(checkBoxValue, radioSelected1, radioSelected2):
-    if cmds.checkBox(checkBoxValue, query=True, value=True):
-        for _, j in enumerate(lstcheckBox):
-            if j == checkBoxValue:
-                cmds.radioButton(radioSelected1, edit=True, enable=False)
-                cmds.radioButton(radioSelected2, edit=True, enable=False)
-                numcheckbox += 1
-    else:
-        if checkBoxValue[2] == 'R':
-            cmds.radioButton(radioSelected1, edit=True, enable=False)
-            cmds.radioButton(radioSelected2, edit=True, enable=True)
-        else:
-            cmds.radioButton(radioSelected1, edit=True, enable=True)
-            cmds.radioButton(radioSelected2, edit=True, enable=True)
 
 
 # ----------------- action_radioButton -----------------
@@ -685,86 +312,58 @@ def setAbNinePositionOfGaze(textfieldAmount):
     checkGaze_up_R = []
     Gaze_up_lst_L = []
     checkGaze_up_L = []
-    upGaze_input_lst = []
 
     # IR
     gaze_IR_lst_R = []
     checkGaze_IR_R = []
     gaze_IR_lst_L = []
     checkGaze_IR_L = []
-    gaze_IR_input_lst = []
 
     sixGaze_lst_R = []
     sixGaze_lst_L = []
-    sixGaze_input_lst = []
 
-    # Set Normal Gaze
-    for _ in range(amount):
-        for name, gaze in lst_Nine:
-            time_value += 1
-            if 'Right' in name or 'middle' in name:
-                sixGaze_lst_R.append(time_value)
-            if 'Left' in name or 'middle' in name:
-                sixGaze_lst_L.append(time_value)
-            # SR
-            if 'Right Up' in name or 'Upgaze middle' in name or 'Primary' in name:
-                Gaze_up_lst_R.append(time_value)
-            if 'Left Up' in name or 'Upgaze middle' in name or 'Primary' in name:
-                Gaze_up_lst_L.append(time_value)
-            # IR
-            if 'Right Up' in name or 'Right Down' in name or 'middle' in name or 'Left Up' in name:
-                gaze_IR_lst_R.append(time_value)
-            if 'Left Up' in name or 'Left Down' in name or 'middle' in name or 'Right Up' in name:
-                gaze_IR_lst_L.append(time_value)
-            # middle
-            if 'middle' in name:
-                checkGaze_middle.append(time_value)
-            # check gaze left
-            if 'Right' not in name:
-                checkGaze_left_R.append(time_value)
-            elif 'Left' not in name:
-                checkGaze_left_L.append(time_value)
+    # set Gaze Position
+    lst_Nine = [('Right Up', [-0.8, 0.5]), ('Upgaze middle', [0, 0.8]), ('Left Up', [0.8, 0.5]),
+                ('Right', [-1, 0]), ('Primary middle',
+                                     [0, 0]), ('Left', [1, 0]),
+                ('Right Down', [-1, -1]), ('Downgaze middle', [0, -0.8]), ('Left Down', [1, -1])]
 
-    for r in sixGaze_lst_R:
-        sixGaze_input_lst.append(r)
-        if len(sixGaze_input_lst) % 6 == 0:
-            checkGaze_R.append(sixGaze_input_lst)
-            sixGaze_input_lst = []
+    # should calculate which time that show each gaze
+    # Right Up = 1
+    # Upgaze middle = 2
+    # Left Up = 3
+    # Right = 4
+    # Primary middle = 5
+    # Left = 6
+    # Right Down = 7
+    # Downgaze middle = 8
+    # Left Down = 9
+    #
+    # ex. if amount = 2, let i to be each round of "amount"
+    # the gaze list should be ...
+    #  - sixGaze_lst_R = [1, 2, 4, 5, 7, 8, 10, 11, 13, 14, 16, 17]
+    #    (i*9+1, i*9+2, i*9+4, i*9+5, i*9+7, i*9+8)
+    #  - sixGaze_lst_L = [2, 3, 5, 6, 8, 9, 11, 12, 14, 15, 17, 18]
+    #    (i*9+2, i*9+3, i*9+5, i*9+6, i*9+8, i*9+9)
+    #  - Gaze_up_lst_R = [1, 2, 5, 10, 11, 14]
+    #    (i*9+1, i*9+2, i*9+5)
+    for i in range(amount):
 
-    for l in sixGaze_lst_L:
-        sixGaze_input_lst.append(l)
-        if len(sixGaze_input_lst) % 6 == 0:
-            checkGaze_L.append(sixGaze_input_lst)
-            sixGaze_input_lst = []
-    # SR
-    for up_r in Gaze_up_lst_R:
-        upGaze_input_lst.append(up_r)
-        if len(upGaze_input_lst) % 3 == 0:
-            checkGaze_up_R.append(upGaze_input_lst)
-            upGaze_input_lst = []
+        sixGaze_lst_R.append(i*9+1, i*9+2, i*9+4, i*9+5, i*9+7, i*9+8)
+        sixGaze_lst_L.append(i*9+2, i*9+3, i*9+5, i*9+6, i*9+8, i*9+9)
+        # SR Case
+        Gaze_up_lst_R.append(i*9+1, i*9+2, i*9+5)
+        Gaze_up_lst_L.append(i*9+1, i*9+2, i*9+5)
+        # IR Case
+        gaze_IR_lst_R.append(i*9+1, i*9+2, i*9+3, i*9+5, i*9+7, i*9+8)
+        gaze_IR_lst_L.append(i*9+1, i*9+2, i*9+3, i*9+5, i*9+8, i*9+9)
 
-    for up_l in Gaze_up_lst_L:
-        upGaze_input_lst.append(up_l)
-        if len(upGaze_input_lst) % 3 == 0:
-            checkGaze_up_L.append(upGaze_input_lst)
-            upGaze_input_lst = []
-    # IR
-    for gIR_r in gaze_IR_lst_R:
-        gaze_IR_input_lst.append(gIR_r)
-        if len(gaze_IR_input_lst) % 6 == 0:
-            checkGaze_IR_R.append(gaze_IR_input_lst)
-            gaze_IR_input_lst = []
-    for gIR_l in gaze_IR_lst_L:
-        gaze_IR_input_lst.append(gIR_l)
-        if len(gaze_IR_input_lst) % 6 == 0:
-            checkGaze_IR_L.append(gaze_IR_input_lst)
-            gaze_IR_input_lst = []
+        # checkGaze_middle
+        checkGaze_middle.append(i*9+2, i*9+5, i*8)
 
-    print('checkGaze_R', checkGaze_R)
-    print('checkGaze_L', checkGaze_L)
-    print('checkGaze_middle', checkGaze_middle)
-    print('checkGaze_left_R', checkGaze_left_R)
-    print('checkGaze_left_L', checkGaze_left_L)
+        # checkGaze_left
+        checkGaze_left_R.append(i*9+3, i*9+6, i*9+9)
+        checkGaze_left_L.append(i*9+1, i*9+4, i*9+7)
 
     for _ in range(amount):
         for name, gaze in lst_Nine:
@@ -880,4 +479,4 @@ def setAbNinePositionOfGaze(textfieldAmount):
 
 
 if __name__ == "__main__":
-    createUI('Ocular motility test images generating system')
+    MainUI('Ocular motility test images generating system')

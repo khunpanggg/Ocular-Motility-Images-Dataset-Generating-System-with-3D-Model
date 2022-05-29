@@ -1,0 +1,38 @@
+import maya.cmds as cmds
+
+
+class setAb9PositionOfGaze:
+
+    def __init__(self):
+        amount = getAmountValue(textfieldAmount)
+        radioCol = passValue(lstCollectEyes)
+
+    def checkGaze(self, amount):
+        # all checkGaze list
+        checkGaze_middle = []
+        checkGaze_left_R = []
+        checkGaze_left_L = []
+        #
+        sixGaze_lst_R = []
+        sixGaze_lst_L = []
+        # SR
+        Gaze_up_lst_R = []
+        Gaze_up_lst_L = []
+        # IR
+        gaze_IR_lst_R = []
+        gaze_IR_lst_L = []
+
+        for i in range(amount):
+            sixGaze_lst_R.extend([i*9+1, i*9+2, i*9+4, i*9+5, i*9+7, i*9+8])
+            sixGaze_lst_L.extend([i*9+2, i*9+3, i*9+5, i*9+6, i*9+8, i*9+9])
+            # SR Case
+            Gaze_up_lst_R.extend([i*9+1, i*9+2, i*9+5])
+            Gaze_up_lst_L.extend([i*9+1, i*9+2, i*9+5])
+            # IR Case
+            gaze_IR_lst_R.extend([i*9+1, i*9+2, i*9+3, i*9+5, i*9+7, i*9+8])
+            gaze_IR_lst_L.extend([i*9+1, i*9+2, i*9+3, i*9+5, i*9+8, i*9+9])
+            # checkGaze_middle
+            checkGaze_middle.extend([i*9+2, i*9+5, i*8])
+            # checkGaze_left
+            checkGaze_left_R.extend([i*9+3, i*9+6, i*9+9])
+            checkGaze_left_L.extend([i*9+1, i*9+4, i*9+7])
